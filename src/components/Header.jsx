@@ -24,24 +24,29 @@ function Header() {
   const SHOW_UP_THRESHOLD = 6;
   const HIDE_DOWN_THRESHOLD = 6;
 
-  // SADECE BURAYI değiştiriyorum: label + href
+  // Menü
   const menuItems = [
     { label: "Hakkımda", href: "#hakkimda" },
     { label: "Hizmetler", href: "#hizmetler" },
     { label: "İletişim",  href: "#contact" },
   ];
 
-  // Yumuşak kaydırma — yapıyı bozmaz
+  // Yumuşak kaydırma
   const handleNav = (href) => (e) => {
     e.preventDefault();
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // Logo tıklandığında en üste kaydır
+  // Logo → HERO (yoksa en üste)
   const handleLogoClick = (e) => {
     e.preventDefault();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const hero = document.querySelector("#hero");
+    if (hero) {
+      hero.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   useEffect(() => {
@@ -53,9 +58,8 @@ function Header() {
         const y = window.scrollY;
         const dy = y - lastYRef.current;
 
-        if (y <= 12) {
-          setIsVisible(true);
-        } else {
+        if (y <= 12) setIsVisible(true);
+        else {
           if (dy < -SHOW_UP_THRESHOLD) setIsVisible(true);
           if (dy > HIDE_DOWN_THRESHOLD) setIsVisible(false);
         }
@@ -78,38 +82,22 @@ function Header() {
         fixed top-0 left-0 w-full z-50
         transition-all duration-400 ease-[cubic-bezier(.22,1,.36,1)]
         ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-0 pointer-events-none"}
-        bg-neutral-950/70 backdrop-blur-sm
+        bg-neutral-950/80 backdrop-blur-sm          /* saydamlığı %10 azaltıldı (70% → 80%) */
         shadow-[0_8px_24px_rgba(0,0,0,0)]
-        pt-[env(safe-area-inset-top)]  /* iOS notch alanını da aynı saydamlıkla doldur */
+        pt-[env(safe-area-inset-top)]               /* üst güvenli alanı da aynı arka planla kapla */
       `}
-      style={{
-        // Eski Safari için fallback
-        paddingTop:
-          "env(safe-area-inset-top, 0px)",
-      }}
+      style={{ paddingTop: "env(safe-area-inset-top, 0px)" }} /* eski Safari fallback */
     >
-      {/* Safe-area üst doldurma (eski cihazlar için ekstra garanti) */}
-      <span
-        aria-hidden
-        className="pointer-events-none block md:hidden absolute inset-x-0 top-0"
-        style={{
-          height: "env(safe-area-inset-top, 0px)",
-          background: "rgba(10,10,10,10)", // bg-neutral-950/70 eşdeğeri (tasarımı değiştirmeden üst boşluğu doldurur)
-          WebkitBackdropFilter: "blur(4px)",
-          backdropFilter: "blur(4px)",
-        }}
-      />
-
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-0">
         {/* Masaüstü */}
         <div className="hidden md:flex items-center py-[0.64rem] relative">
           {/* Logo (sol) */}
           <a
-            href="#top"
+            href="#hero"
             onClick={handleLogoClick}
             className="flex items-center pt-5 pl-4"
-            aria-label="Sayfanın en üstüne dön"
-            title="En üste dön"
+            aria-label="Hero bölümüne dön"
+            title="Hero"
           >
             <img
               src="/ardalogo.svg"
@@ -118,7 +106,7 @@ function Header() {
             />
           </a>
 
-          {/* Menü (ortada mutlak merkezli) */}
+          {/* Menü (ortada) */}
           <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6 whitespace-nowrap">
             {menuItems.map((item, idx) => (
               <a
@@ -132,7 +120,7 @@ function Header() {
             ))}
           </nav>
 
-          {/* Sağda sadece yazı linki */}
+          {/* Sağ: Telefon */}
           <a
             href="tel:+905334409803"
             className="ml-auto flex items-center gap-2 text-orange-500 hover:text-orange-400 transition text-sm font-semibold"
@@ -142,15 +130,15 @@ function Header() {
           </a>
         </div>
 
-        {/* Mobil: logo - menü (ortada) - telefon aynı satırda (ORİJİNAL) */}
+        {/* Mobil */}
         <div className="md:hidden relative flex items-center h-14">
           {/* Logo (sol) */}
           <a
-            href="#top"
+            href="#hero"
             onClick={handleLogoClick}
             className="flex items-center min-w-0"
-            aria-label="Sayfanın en üstüne dön"
-            title="En üste dön"
+            aria-label="Hero bölümüne dön"
+            title="Hero"
           >
             <img
               src="/ardalogo.svg"
