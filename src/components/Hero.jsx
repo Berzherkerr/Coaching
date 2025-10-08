@@ -8,7 +8,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative w-full h-screen flex items-end justify-center overflow-hidden bg-black">
+    <section id="hero" className="relative w-full h-screen flex items-end justify-center overflow-hidden bg-black">
       <video
         className="absolute inset-0 w-full h-full object-cover"
         src="/herovido.mp4"
