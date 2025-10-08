@@ -1,3 +1,4 @@
+// src/components/Header.jsx
 import { useEffect, useRef, useState } from "react";
 
 function PhoneIcon({ className = "h-4 w-4" }) {
@@ -37,6 +38,12 @@ function Header() {
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  // Logo tıklandığında en üste kaydır
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   useEffect(() => {
     lastYRef.current = window.scrollY;
 
@@ -73,19 +80,43 @@ function Header() {
         ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-0 pointer-events-none"}
         bg-neutral-950/70 backdrop-blur-sm
         shadow-[0_8px_24px_rgba(0,0,0,0)]
+        pt-[env(safe-area-inset-top)]  /* iOS notch alanını da aynı saydamlıkla doldur */
       `}
+      style={{
+        // Eski Safari için fallback
+        paddingTop:
+          "env(safe-area-inset-top, 0px)",
+      }}
     >
+      {/* Safe-area üst doldurma (eski cihazlar için ekstra garanti) */}
+      <span
+        aria-hidden
+        className="pointer-events-none block md:hidden absolute inset-x-0 top-0"
+        style={{
+          height: "env(safe-area-inset-top, 0px)",
+          background: "rgba(10,10,10,10)", // bg-neutral-950/70 eşdeğeri (tasarımı değiştirmeden üst boşluğu doldurur)
+          WebkitBackdropFilter: "blur(4px)",
+          backdropFilter: "blur(4px)",
+        }}
+      />
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-0">
         {/* Masaüstü */}
         <div className="hidden md:flex items-center py-[0.64rem] relative">
           {/* Logo (sol) */}
-          <div className="flex items-center pt-5 pl-4">
+          <a
+            href="#top"
+            onClick={handleLogoClick}
+            className="flex items-center pt-5 pl-4"
+            aria-label="Sayfanın en üstüne dön"
+            title="En üste dön"
+          >
             <img
               src="/ardalogo.svg"
               alt="İnanç Hoca Logo"
               className="h-12 -ml-8 w-auto scale-[6] origin-left filter invert brightness-0"
             />
-          </div>
+          </a>
 
           {/* Menü (ortada mutlak merkezli) */}
           <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6 whitespace-nowrap">
@@ -114,13 +145,19 @@ function Header() {
         {/* Mobil: logo - menü (ortada) - telefon aynı satırda (ORİJİNAL) */}
         <div className="md:hidden relative flex items-center h-14">
           {/* Logo (sol) */}
-          <div className="flex items-center min-w-0">
+          <a
+            href="#top"
+            onClick={handleLogoClick}
+            className="flex items-center min-w-0"
+            aria-label="Sayfanın en üstüne dön"
+            title="En üste dön"
+          >
             <img
               src="/ardalogo.svg"
               alt="İnanç Hoca Logo"
               className="h-15 -mb-2.5 -ml-1 w-auto filter invert brightness-0"
             />
-          </div>
+          </a>
 
           {/* Menü merkezde */}
           <nav

@@ -36,9 +36,9 @@ function InitialsAvatar({ name }) {
   );
 }
 
-/* Kart ölçüleri */
+/* Kart ölçüleri (yükseklik +%15) */
 const CARD_W = 300;
-const CARD_H = 170;
+const CARD_H = 196; // 170 * 1.15
 const GAP = 16;
 
 export default function GoogleReviews({
@@ -144,12 +144,14 @@ export default function GoogleReviews({
           <div className="rounded-2xl bg-neutral-900 border border-neutral-800 shadow-lg p-5 sm:p-8 mb-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 sm:gap-6">
               {/* Sol: Logo + Puan */}
-              <div className="flex items-center md:items-start gap-4">
+              <div className="flex items-center gap-4">
                 <div className="h-10 w-10 sm:h-12 sm:w-12 flex items-center justify-center rounded-xl bg-neutral-800">
                   <GoogleG className="h-6 w-6 sm:h-7 sm:w-7" />
                 </div>
-                <div className="text-center md:text-left">
-                  <div className="flex items-center justify-center md:justify-start gap-3">
+
+                {/* Mobil ve masaüstünde AYNI düzen: 5.0 yanında yıldızlar, '59 yorum' sayının altında */}
+                <div className="flex flex-col items-start">
+                  <div className="flex items-center gap-3">
                     <span className="text-white font-semibold text-lg sm:text-xl">
                       {typeof shownRating === "number" ? shownRating.toFixed(1) : "—"}
                     </span>
@@ -238,11 +240,11 @@ export default function GoogleReviews({
                   <div className="mt-2"><Stars rating={r.rating} /></div>
 
                   <p
-                    className="mt-2 text-[13px] leading-snug text-neutral-300 flex-1 overflow-hidden"
+                    className="mt-2 text-[12px] leading-snug text-neutral-300 flex-1 overflow-hidden"
                     style={{
                       display: "-webkit-box",
                       WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 3,
+                      WebkitLineClamp: 5,
                     }}
                     title={r.text}
                   >
