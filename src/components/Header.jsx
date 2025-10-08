@@ -167,7 +167,7 @@ function Header() {
 
           {/* Telefon (sağ) — sadece ikon */}
           <a
-            href="tel:+90XXXXXXXXXX"
+            href="tel:+905334409803"
             className="ml-auto flex items-center text-orange-500 hover:text-orange-400 transition"
             aria-label="Ara"
             title="Ara"
