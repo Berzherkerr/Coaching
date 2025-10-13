@@ -16,7 +16,7 @@ const paketler = [
       "Online başlangıç danışmanlığı",
       "Haftalık kontrol ve değerlendirme",
     ],
-    fiyat: "1500",
+    fiyat: "3000",
     etiket: null,
     // Koyu tema: mavi
     renk:
@@ -29,7 +29,7 @@ const paketler = [
       "Görüntülü görüşme ile birebir seanslar",
       "Haftalık kontrol ve değerlendirme",
     ],
-    fiyat: "3000",
+    fiyat: "5000",
     etiket: "EN ÇOK TERCİH EDİLEN",
     // Koyu tema: mor
     renk:
@@ -42,7 +42,7 @@ const paketler = [
       "Spor salonunda beraber antreman",
       "Vücut ölçüm ve analiz seansları",
     ],
-    fiyat: "5000",
+    fiyat: "15000",
     etiket: "EN İYİ SONUÇ",
     // Koyu tema: turuncu/amber
     renk:
