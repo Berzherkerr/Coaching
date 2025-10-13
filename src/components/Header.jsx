@@ -35,7 +35,7 @@ function Header() {
   const menuItems = [
     { label: "Hakkımda", href: "#hakkimda" },
     { label: "Hizmetler", href: "#hizmetler" },
-    { label: "İletişim", href: "#contact" },
+    { label: "Fiyatlar", href: "#fiyatlar" },
   ];
 
   // Menüdekiyle aynı davranış + fallback: hedef yoksa en üste kaydır
