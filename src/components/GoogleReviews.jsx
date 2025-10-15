@@ -2,38 +2,19 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import MotionReveal from "./MotionReveal";
 
-/* Google G ikonu — yüksek kalite, marka-doğru oranlar */
-function GoogleG({ className = "h-5 w-5", ariaHidden = true }) {
+/* Google G — DIŞ KAYNAKTAN (Iconify CDN), renkli resmi logo */
+function GoogleG({ className = "h-6 w-6", ariaHidden = true }) {
   return (
-    <svg
-      viewBox="0 0 48 48"
-      className={className}
+    <img
+      src="https://api.iconify.design/logos/google-icon.svg"
+      alt="Google"
       aria-hidden={ariaHidden}
-      focusable="false"
-      shapeRendering="geometricPrecision"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* Mavi */}
-      <path
-        fill="#4285F4"
-        d="M48 24c0-1.64-.14-3.2-.41-4.71H24v8.92h13.35c-.6 3.2-2.38 5.9-5.03 7.72v6.38h8.12C45.44 38.16 48 31.6 48 24z"
-      />
-      {/* Yeşil */}
-      <path
-        fill="#34A853"
-        d="M24 48c6.44 0 11.86-2.12 15.82-5.73l-8.12-6.38c-2.27 1.54-5.18 2.46-7.7 2.46-6.35 0-11.74-4.28-13.66-10.05H1.46v6.53C5.48 41.96 14 48 24 48z"
-      />
-      {/* Sarı */}
-      <path
-        fill="#FBBC05"
-        d="M10.34 28.3A14.94 14.94 0 0 1 9.08 23c0-1.84.34-3.6.96-5.22V11.2H1.46A23.9 23.9 0 0 0 0 23c0 4.57.5 8.98 1.46 12.79l8.88-7.5z"
-      />
-      {/* Kırmızı */}
-      <path
-        fill="#EA4335"
-        d="M24 9.6c3.62 0 6.86 1.25 9.42 3.71l6.84-6.84C36.02 2.28 30.5 0 24 0 14 0 5.48 6.04 1.46 14.21l8.58 6.57C12.96 13.88 17.65 9.6 24 9.6z"
-      />
-    </svg>
+      loading="lazy"
+      decoding="async"
+      referrerPolicy="no-referrer"
+      className={className}
+      style={{ imageRendering: "crisp-edges" }}
+    />
   );
 }
 
@@ -169,10 +150,11 @@ export default function GoogleReviews({
               {/* Sol: Logo + Puan */}
               <div className="flex items-center gap-4">
                 <div className="h-10 w-10 sm:h-12 sm:w-12 flex items-center justify-center rounded-xl bg-neutral-800">
-                  <GoogleG className="h-6 w-6 sm:h-7 sm:w-7" />
+                  {/* Boyutları piksel-grid’e oturttum (24px / 32px) */}
+                  <GoogleG className="h-6 w-6 sm:h-8 sm:w-8" />
                 </div>
 
-                {/* Mobil ve masaüstünde AYNI düzen: 5.0 yanında yıldızlar, '59 yorum' sayının altında */}
+                {/* Mobil ve masaüstünde AYNI düzen */}
                 <div className="flex flex-col items-start">
                   <div className="flex items-center gap-3">
                     <span className="text-white font-semibold text-lg sm:text-xl">
@@ -257,7 +239,8 @@ export default function GoogleReviews({
                         <div className="text-xs text-neutral-400">{r.relative_time_description}</div>
                       </div>
                     </div>
-                    <GoogleG className="h-5 w-5" />
+                    {/* Küçük logo — 24px net */}
+                    <GoogleG className="h-6 w-6" />
                   </div>
 
                   <div className="mt-2"><Stars rating={r.rating} /></div>
