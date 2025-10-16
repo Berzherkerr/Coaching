@@ -132,6 +132,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
     () => (reviews.length || 1) * (CARD_W + GAP),
     [reviews.length]
   );
+
   useEffect(() => {
     const step = (ts) => {
       if (!lastTsRef.current) lastTsRef.current = ts;
@@ -253,21 +254,21 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
             onTouchStart={onPointerDown}
             onTouchEnd={onPointerUp}
           >
-            {/* Kenarlara fade efektleri */}
+            {/* Kenarlara fade efektleri — kenara TAM dayalı, çizgi bırakmaz */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-y-0 left-0 w-10 sm:w-16 z-10"
+              className="pointer-events-none absolute inset-y-0 left-[-1px] w-12 sm:w-20 z-20"
               style={{
                 background:
-                  "linear-gradient(to right, rgba(10,10,10,1), rgba(10,10,10,0))",
+                  "linear-gradient(to right, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
               }}
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-y-0 right-0 w-10 sm:w-16 z-10"
+              className="pointer-events-none absolute inset-y-0 right-[-1px] w-12 sm:w-20 z-20"
               style={{
                 background:
-                  "linear-gradient(to left, rgba(10,10,10,1), rgba(10,10,10,0))",
+                  "linear-gradient(to left, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
               }}
             />
 
