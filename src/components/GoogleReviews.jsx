@@ -127,9 +127,6 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
 
   const ctaStars = Math.round(Number(shownRating) || 0);
 
-  // FADE genişliği (yalnızca kenarlardan, orta tam görünür)
-  const fadeW = isMobile ? 56 : 96;
-
   return (
     <section className="w-full pt-5 pb-20 px-4 sm:px-8 lg:px-20 select-none bg-neutral-950">
       <div className="max-w-6xl mx-auto">
@@ -188,31 +185,73 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
 
         {/* Kayar kartlar */}
         <MotionReveal delay={120}>
+          {/* relative + isolate: overlay'ler üstte dursun, dikiş kalmasın */}
           <div
-            className="relative overflow-hidden"
+            className="relative overflow-hidden bg-neutral-950"
             onMouseDown={onPointerDown}
             onMouseUp={onPointerUp}
             onMouseLeave={onPointerUp}
             onTouchStart={onPointerDown}
             onTouchEnd={onPointerUp}
-            /* fade overlay'lerinin doğru katmanda çalışması için */
             style={{ isolation: "isolate" }}
           >
-            {/* SOL FADE — kenara tam dayalı, çizgi bırakmaz */}
+            {/* SOL FADE – container padding’ini de aşacak şekilde 3 breakpoint */}
+            {/* mobile (px-4) */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-0 bottom-0 left-0 z-20"
+              className="pointer-events-none absolute top-0 bottom-0 left-0 z-30 block sm:hidden"
               style={{
-                width: fadeW,
+                left: "-16px",           // -(px-4)
+                width: "112px",          // geniş fade
                 background: "linear-gradient(to right, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
               }}
             />
-            {/* SAĞ FADE — kenara tam dayalı */}
+            {/* sm (px-8) */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-0 bottom-0 right-0 z-20"
+              className="pointer-events-none absolute top-0 bottom-0 left-0 z-30 hidden sm:block lg:hidden"
               style={{
-                width: fadeW,
+                left: "-32px",           // -(sm:px-8)
+                width: "160px",
+                background: "linear-gradient(to right, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
+              }}
+            />
+            {/* lg (px-20) */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute top-0 bottom-0 left-0 z-30 hidden lg:block"
+              style={{
+                left: "-80px",           // -(lg:px-20)
+                width: "220px",
+                background: "linear-gradient(to right, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
+              }}
+            />
+
+            {/* SAĞ FADE – simetri */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute top-0 bottom-0 right-0 z-30 block sm:hidden"
+              style={{
+                right: "-16px",
+                width: "112px",
+                background: "linear-gradient(to left, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
+              }}
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute top-0 bottom-0 right-0 z-30 hidden sm:block lg:hidden"
+              style={{
+                right: "-32px",
+                width: "160px",
+                background: "linear-gradient(to left, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
+              }}
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute top-0 bottom-0 right-0 z-30 hidden lg:block"
+              style={{
+                right: "-80px",
+                width: "220px",
                 background: "linear-gradient(to left, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
               }}
             />
