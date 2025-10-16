@@ -1,17 +1,63 @@
+<!-- index.html (Vite kök dosyası) -->
 <!doctype html>
-<html lang="en">
+<html lang="tr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logoh.jpg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;800;900&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <title>İnanç Coaching - Balıkesir Personal Trainer </title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+
+    <!-- ================== SEO EKLEMELERİ (mevcut yapıyı BOZMADAN) ================== -->
+    <title>Balıkesir Personal Trainer | İnanç Coaching</title>
+    <meta
+      name="description"
+      content="Balıkesir’de birebir personal training ve beslenme danışmanlığı. İnanç Coaching ile hedefe yönelik antrenman planı ve sürdürülebilir sonuçlar."
+    />
+    <link rel="canonical" href="https://balikesirpt.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Balıkesir Personal Trainer | İnanç Coaching" />
+    <meta
+      property="og:description"
+      content="Balıkesir’de birebir antrenman ve beslenme danışmanlığı."
+    />
+    <meta property="og:url" content="https://balikesirpt.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://balikesirpt.com/ardalogo.svg" />
+    <meta property="og:locale" content="tr_TR" />
+
+    <!-- (İstersen GSC URL-prefix doğrulaması için META buraya) -->
+    <!-- <meta name="google-site-verification" content="KODUN-BURAYA" /> -->
+
+    <!-- LocalBusiness JSON-LD (yerel SEO) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "İnanç Coaching",
+        "image": "https://balikesirpt.com/logoh.jpg",
+        "url": "https://balikesirpt.com/",
+        "telephone": "+90 533 440 9803",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Balıkesir",
+          "addressRegion": "TR",
+          "addressCountry": "TR"
+        },
+        "areaServed": "Balıkesir"
+      }
+    </script>
+
+    <!-- Favicons (varsa) -->
+    <link rel="icon" href="/ardalogo.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <!-- ============================================================================ -->
   </head>
+
   <body>
     <div id="root"></div>
+    <!-- Vite giriş noktası (mevcut yapıyı bozmadan) -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
