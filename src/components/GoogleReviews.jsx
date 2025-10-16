@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import MotionReveal from "./MotionReveal";
 
-/* Google G — Iconify */
+/* Google G — CTA kartında kullanıyoruz */
 function GoogleG({ className = "h-6 w-6", ariaHidden = true }) {
   return (
     <img
@@ -18,13 +18,18 @@ function GoogleG({ className = "h-6 w-6", ariaHidden = true }) {
   );
 }
 
-/* Yıldızlar */
+/* CTA’daki 5 yıldız için küçük yardımcı */
 function Stars({ rating }) {
   const full = Math.round(rating ?? 0);
   return (
     <div className="flex gap-1">
       {Array.from({ length: 5 }).map((_, i) => (
-        <span key={i} className={`text-[18px] ${i < full ? "text-amber-400" : "text-neutral-600"}`}>★</span>
+        <span
+          key={i}
+          className={`text-[18px] ${i < full ? "text-amber-400" : "text-neutral-600"}`}
+        >
+          ★
+        </span>
       ))}
     </div>
   );
@@ -32,7 +37,12 @@ function Stars({ rating }) {
 
 /* Baş harf avatarı */
 function InitialsAvatar({ name }) {
-  const initials = (name || "?").split(" ").map(s => s[0]).join("").slice(0,2).toUpperCase();
+  const initials = (name || "?")
+    .split(" ")
+    .map((s) => s[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
   return (
     <div className="h-8 w-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-semibold text-neutral-200">
       {initials}
@@ -50,55 +60,85 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
   const [isMobile, setIsMobile] = useState(false);
   const [autoData, setAutoData] = useState(null);
 
-  const shownRating = typeof averageRating === "number" ? averageRating : (typeof autoData?.rating === "number" ? autoData.rating : null);
-  const shownTotal  = typeof totalReviews  === "number" ? totalReviews  : (typeof autoData?.total  === "number" ? autoData.total  : null);
+  const shownRating =
+    typeof averageRating === "number"
+      ? averageRating
+      : typeof autoData?.rating === "number"
+      ? autoData.rating
+      : null;
+
+  const shownTotal =
+    typeof totalReviews === "number"
+      ? totalReviews
+      : typeof autoData?.total === "number"
+      ? autoData.total
+      : null;
 
   const resolvedPlaceUrl = placeId
     ? `https://www.google.com/maps/place/?q=place_id:${placeId}`
-    : (autoData?.url || undefined);
+    : autoData?.url || undefined;
 
   const resolvedWriteUrl = placeId
     ? `https://search.google.com/local/writereview?placeid=${placeId}`
-    : (autoData?.cid ? `https://search.google.com/local/writereview?cid=${autoData.cid}` : undefined);
+    : autoData?.cid
+    ? `https://search.google.com/local/writereview?cid=${autoData.cid}`
+    : undefined;
 
+  /* mobile tespiti */
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
     const h = () => setIsMobile(mq.matches);
-    h(); mq.addEventListener?.("change", h);
+    h();
+    mq.addEventListener?.("change", h);
     return () => mq.removeEventListener?.("change", h);
   }, []);
-  const autoSpeed   = isMobile ? 10  : 40;
+  const autoSpeed = isMobile ? 10 : 40;
   const manualSpeed = isMobile ? 120 : 180;
 
+  /* animasyon state */
   const offsetRef = useRef(0);
-  const velRef    = useRef(-autoSpeed);
-  const reqRef    = useRef(0);
+  const velRef = useRef(-autoSpeed);
+  const reqRef = useRef(0);
   const containerRef = useRef(null);
-  const viewportRef  = useRef(null);
-  const lastTsRef    = useRef(0);
-  const dprRef       = useRef(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1);
+  const lastTsRef = useRef(0);
+  const dprRef = useRef(
+    typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1
+  );
 
+  /* veriyi çek */
   useEffect(() => {
     fetch("/api/places-reviews")
-      .then(r => r.json())
-      .then(d => {
-        const normalized = (d?.reviews || []).map(x => ({
+      .then((r) => r.json())
+      .then((d) => {
+        const normalized = (d?.reviews || []).map((x) => ({
           profile_photo_url: x.profilePhotoUrl ?? x.profile_photo_url ?? "",
           author_name: x.authorName ?? x.author_name ?? "Google kullanıcısı",
-          relative_time_description: x.relativeTime ?? x.relative_time_description ?? "",
+          relative_time_description:
+            x.relativeTime ?? x.relative_time_description ?? "",
           rating: x.rating ?? 0,
-          text: x.text ?? ""
+          text: x.text ?? "",
         }));
         setReviews(normalized);
 
         let cid = null;
-        try { cid = new URL(d?.url || "").searchParams.get("cid"); } catch {}
-        setAutoData({ rating: d?.rating ?? null, total: d?.total ?? null, url: d?.url ?? null, cid });
+        try {
+          cid = new URL(d?.url || "").searchParams.get("cid");
+        } catch {}
+        setAutoData({
+          rating: d?.rating ?? null,
+          total: d?.total ?? null,
+          url: d?.url ?? null,
+          cid,
+        });
       })
       .catch(console.error);
   }, []);
 
-  const setWidth = useMemo(() => (reviews.length || 1) * (CARD_W + GAP), [reviews.length]);
+  /* animasyon */
+  const setWidth = useMemo(
+    () => (reviews.length || 1) * (CARD_W + GAP),
+    [reviews.length]
+  );
 
   useEffect(() => {
     const step = (ts) => {
@@ -109,14 +149,14 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
       offsetRef.current += velRef.current * dt;
 
       if (offsetRef.current <= -setWidth) offsetRef.current += setWidth;
-      else if (offsetRef.current >= 0)     offsetRef.current -= setWidth;
+      else if (offsetRef.current >= 0) offsetRef.current -= setWidth;
 
-      // DPR'a göre tam piksele snap (hairline fix)
+      // DPR'a snap (hairline çizgi çözümü)
       const dpr = dprRef.current;
       const snapped = Math.round(offsetRef.current * dpr) / dpr;
 
       if (containerRef.current) {
-        containerRef.current.style.transform = `translate3d(${snapped}px,0,0)`; // iOS compositing
+        containerRef.current.style.transform = `translate3d(${snapped}px,0,0)`;
       }
 
       reqRef.current = requestAnimationFrame(step);
@@ -125,19 +165,20 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
     return () => cancelAnimationFrame(reqRef.current);
   }, [setWidth, autoSpeed]);
 
+  /* manuel hız */
   const onPointerDown = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.touches?.[0]?.clientX ?? e.clientX) - rect.left;
     velRef.current = (x < rect.width / 2 ? +1 : -1) * manualSpeed;
   };
-  const onPointerUp = () => { velRef.current = -autoSpeed; };
+  const onPointerUp = () => {
+    velRef.current = -autoSpeed;
+  };
 
   const ctaStars = Math.round(Number(shownRating) || 0);
 
-  // Fade genişliği (mask için) — sadece kenarlarda
+  /* MASK ile kenarlarda fade — dikişsiz */
   const fade = isMobile ? 56 : 96;
-
-  // Viewport’a mask ver: merkez opak, kenarlara doğru transparan
   const maskStyle = {
     WebkitMaskImage: `linear-gradient(to right,
       rgba(0,0,0,0) 0px,
@@ -149,7 +190,6 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
       rgba(0,0,0,1) ${fade}px,
       rgba(0,0,0,1) calc(100% - ${fade}px),
       rgba(0,0,0,0) 100%)`,
-    // dikişi tamamen yok etmek için 1px taşırma:
     WebkitMaskPosition: "-1px 0",
     maskPosition: "-1px 0",
   };
@@ -168,16 +208,17 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                 <div className="flex flex-col items-start">
                   <div className="flex items-center gap-3">
                     <span className="text-white font-semibold text-lg sm:text-xl">
-                      {typeof shownRating === "number" ? shownRating.toFixed(1) : "—"}
+                      {typeof shownRating === "number"
+                        ? shownRating.toFixed(1)
+                        : "—"}
                     </span>
-                    <div className="flex gap-1">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <span key={i} className={`text-[18px] ${i < ctaStars ? "text-amber-400" : "text-neutral-600"}`}>★</span>
-                      ))}
-                    </div>
+                    {/* CTA kısmındaki 5 yıldız kalıyor */}
+                    <Stars rating={ctaStars} />
                   </div>
                   <div className="text-xs sm:text-sm text-neutral-400 mt-1">
-                    {typeof shownTotal === "number" ? `${shownTotal} yorum` : "Google üzerinde"}
+                    {typeof shownTotal === "number"
+                      ? `${shownTotal} yorum`
+                      : "Google üzerinde"}
                   </div>
                 </div>
               </div>
@@ -188,7 +229,11 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                   target="_blank"
                   rel="noreferrer"
                   className={`inline-flex items-center justify-center h-11 px-5 rounded-xl text-sm font-semibold transition whitespace-nowrap
-                    ${resolvedPlaceUrl ? "bg-blue-600 hover:bg-blue-500 text-white" : "bg-neutral-800 text-neutral-500 cursor-not-allowed"}
+                    ${
+                      resolvedPlaceUrl
+                        ? "bg-blue-600 hover:bg-blue-500 text-white"
+                        : "bg-neutral-800 text-neutral-500 cursor-not-allowed"
+                    }
                     w-full sm:w-auto`}
                   aria-disabled={!resolvedPlaceUrl}
                 >
@@ -199,7 +244,11 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                   target="_blank"
                   rel="noreferrer"
                   className={`inline-flex items-center justify-center h-11 px-5 rounded-xl text-sm font-semibold transition whitespace-nowrap
-                    ${resolvedWriteUrl ? "bg-emerald-600 hover:bg-emerald-500 text-white" : "bg-neutral-800 text-neutral-500 cursor-not-allowed"}
+                    ${
+                      resolvedWriteUrl
+                        ? "bg-emerald-600 hover:bg-emerald-500 text-white"
+                        : "bg-neutral-800 text-neutral-500 cursor-not-allowed"
+                    }
                     w-full sm:w-auto`}
                   aria-disabled={!resolvedWriteUrl}
                 >
@@ -212,9 +261,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
 
         {/* Kayar kartlar */}
         <MotionReveal delay={120}>
-          {/* viewport: sadece içerikleri maskeler, arkaplanı değil */}
           <div
-            ref={viewportRef}
             className="relative overflow-hidden bg-neutral-950"
             onMouseDown={onPointerDown}
             onMouseUp={onPointerUp}
@@ -232,6 +279,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
               {[...reviews, ...reviews].map((r, i) => (
                 <article
                   key={`${r.author_name}-${i}`}
+                  /* BG’yi Hizmetler/Fiyatlar ile aynı: bg-neutral-900 + border-neutral-800 */
                   className="flex-shrink-0 rounded-2xl shadow-lg p-4 flex flex-col bg-neutral-900 border border-neutral-800"
                   style={{ width: CARD_W, height: CARD_H }}
                 >
@@ -248,18 +296,30 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                         <InitialsAvatar name={r.author_name} />
                       )}
                       <div className="leading-tight">
-                        <div className="font-semibold text-neutral-100 text-sm">{r.author_name}</div>
-                        <div className="text-xs text-neutral-400">{r.relative_time_description}</div>
+                        {/* +%5 font artışı */}
+                        <div className="font-semibold text-neutral-100 text-[0.92rem]">
+                          {r.author_name}
+                        </div>
+                        <div className="text-[0.79rem] text-neutral-400">
+                          {r.relative_time_description}
+                        </div>
                       </div>
                     </div>
-                    <GoogleG className="h-6 w-6" />
+
+                    {/* Google ikonunu KALDIRDIK. Yerine "5 ★" biçimi (aynı boy) */}
+                    <div className="flex items-center gap-1 text-neutral-300 font-semibold text-[0.92rem]">
+                      <span>{Number(r.rating || 0).toFixed(1)}</span>
+                      <span aria-hidden className="leading-none">★</span>
+                    </div>
                   </div>
 
-                  <div className="mt-2"><Stars rating={r.rating} /></div>
+                  {/* Eski 5 yıldız SATIRINI kaldırdık */}
 
+                  {/* İçerik: +%5 font artışı */}
                   <p
-                    className="mt-2 text-[12px] leading-snug text-neutral-300 flex-1 overflow-hidden"
+                    className="mt-3 text-neutral-300 flex-1 overflow-hidden leading-snug"
                     style={{
+                      fontSize: "12.6px", /* 12px * 1.05 */
                       display: "-webkit-box",
                       WebkitBoxOrient: "vertical",
                       WebkitLineClamp: 5,
