@@ -132,7 +132,6 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
     () => (reviews.length || 1) * (CARD_W + GAP),
     [reviews.length]
   );
-
   useEffect(() => {
     const step = (ts) => {
       if (!lastTsRef.current) lastTsRef.current = ts;
@@ -164,6 +163,9 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
 
   const ctaStars = Math.round(Number(shownRating) || 0);
 
+  // Kenar fade mesafesi (mask) — daha geniş yapıp çizgiyi yok ediyor
+  const fadePx = isMobile ? 80 : 140;
+
   return (
     <section className="w-full pt-5 pb-20 px-4 sm:px-8 lg:px-20 select-none bg-neutral-950">
       <div className="max-w-6xl mx-auto">
@@ -174,7 +176,6 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
               {/* Sol: Logo + Puan */}
               <div className="flex items-center gap-4">
                 <div className="h-10 w-10 sm:h-12 sm:w-12 flex items-center justify-center rounded-xl bg-neutral-800">
-                  {/* Boyutları piksel-grid’e oturttum (24px / 32px) */}
                   <GoogleG className="h-6 w-6 sm:h-8 sm:w-8" />
                 </div>
 
@@ -207,7 +208,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                 </div>
               </div>
 
-              {/* Sağ: Butonlar — mobilde 2 kolon grid, sm+ flex-nowrap */}
+              {/* Sağ: Butonlar */}
               <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-row sm:flex-nowrap sm:gap-4 w-full md:w-auto">
                 <a
                   href={resolvedPlaceUrl || "#"}
@@ -253,25 +254,24 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
             onMouseLeave={onPointerUp}
             onTouchStart={onPointerDown}
             onTouchEnd={onPointerUp}
+            /* Kenara tam dayalı ve çizgisiz fade için MASK kullanıyoruz */
+            style={{
+              WebkitMaskImage: `linear-gradient(to right,
+                rgba(0,0,0,1) 0px,
+                rgba(0,0,0,1) ${Math.max(fadePx - 40, 40)}px,
+                rgba(0,0,0,0) ${fadePx}px,
+                rgba(0,0,0,0) calc(100% - ${fadePx}px),
+                rgba(0,0,0,1) calc(100% - ${Math.max(fadePx - 40, 40)}px),
+                rgba(0,0,0,1) 100%)`,
+              maskImage: `linear-gradient(to right,
+                rgba(0,0,0,1) 0px,
+                rgba(0,0,0,1) ${Math.max(fadePx - 40, 40)}px,
+                rgba(0,0,0,0) ${fadePx}px,
+                rgba(0,0,0,0) calc(100% - ${fadePx}px),
+                rgba(0,0,0,1) calc(100% - ${Math.max(fadePx - 40, 40)}px),
+                rgba(0,0,0,1) 100%)`,
+            }}
           >
-            {/* Kenarlara fade efektleri — kenara TAM dayalı, çizgi bırakmaz */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-y-0 left-[-1px] w-12 sm:w-20 z-20"
-              style={{
-                background:
-                  "linear-gradient(to right, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
-              }}
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-y-0 right-[-1px] w-12 sm:w-20 z-20"
-              style={{
-                background:
-                  "linear-gradient(to left, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
-              }}
-            />
-
             {/* Track */}
             <div
               ref={containerRef}
@@ -305,7 +305,6 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                         </div>
                       </div>
                     </div>
-                    {/* Küçük logo — 24px net */}
                     <GoogleG className="h-6 w-6" />
                   </div>
 
