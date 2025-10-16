@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import MotionReveal from "./MotionReveal";
 
-/* Google G — CTA kartında kullanıyoruz */
+/* Google G — CTA ve kartlarda aynı ikon */
 function GoogleG({ className = "h-6 w-6", ariaHidden = true }) {
   return (
     <img
@@ -261,21 +261,25 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                           <div className="font-semibold text-neutral-100 text-[0.88rem]">
                             {r.author_name}
                           </div>
-                          {/* ZAMAN: %5 KÜÇÜK (zaten küçüktü; 0.75rem uygundur) */}
+                          {/* ZAMAN: %5 KÜÇÜK */}
                           <div className="text-[0.75rem] text-neutral-400">
                             {r.relative_time_description}
                           </div>
                         </div>
                       </div>
 
-                      {/* PUAN + YILDIZ: %5 BÜYÜK & yıldız amber */}
-                      <div className="flex items-center gap-1 font-semibold text-[0.97rem]">
-                        <span className="text-neutral-100">{numeric}</span>
-                        <span aria-hidden className="leading-none text-amber-400">★</span>
+                      {/* Solunda Google ikonu, 5 ve ★ bitişik; 5/★ %5 daha büyük, ikon onlardan %10 daha uzak */}
+                      <div className="flex items-center">
+                        <GoogleG className="h-6 w-6 opacity-90" />
+                        {/* %10 daha uzak: grup ile ikon arası margin-left: 10% */}
+                        <div className="ml-[10%] flex items-center gap-1 font-semibold text-[1.02rem]">
+                          <span className="text-neutral-100">{numeric}</span>
+                          <span aria-hidden className="leading-none text-amber-400">★</span>
+                        </div>
                       </div>
                     </div>
 
-                    {/* YORUM METNİ (eski boyut, küçültülmüş) */}
+                    {/* YORUM METNİ (eski boyut, 12px) */}
                     <p
                       className="mt-3 text-neutral-300 flex-1 overflow-hidden leading-snug"
                       style={{
