@@ -24,7 +24,12 @@ function Stars({ rating }) {
   return (
     <div className="flex gap-1">
       {Array.from({ length: 5 }).map((_, i) => (
-        <span key={i} className={`text-[18px] ${i < full ? "text-amber-400" : "text-neutral-600"}`}>★</span>
+        <span
+          key={i}
+          className={`text-[18px] ${i < full ? "text-amber-400" : "text-neutral-600"}`}
+        >
+          ★
+        </span>
       ))}
     </div>
   );
@@ -32,7 +37,12 @@ function Stars({ rating }) {
 
 /* Baş harf avatarı */
 function InitialsAvatar({ name }) {
-  const initials = (name || "?").split(" ").map(s => s[0]).join("").slice(0,2).toUpperCase();
+  const initials = (name || "?")
+    .split(" ")
+    .map((s) => s[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
   return (
     <div className="h-8 w-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-semibold text-neutral-200">
       {initials}
@@ -45,35 +55,40 @@ const CARD_W = 300;
 const CARD_H = 196; // 170 * 1.15
 const GAP = 16;
 
-export default function GoogleReviews({
-  placeId,
-  averageRating,
-  totalReviews,
-}) {
+export default function GoogleReviews({ placeId, averageRating, totalReviews }) {
   const [reviews, setReviews] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   const [autoData, setAutoData] = useState(null); // { rating,total,url,cid }
 
-  const shownRating = typeof averageRating === "number"
-    ? averageRating
-    : (typeof autoData?.rating === "number" ? autoData.rating : null);
+  const shownRating =
+    typeof averageRating === "number"
+      ? averageRating
+      : typeof autoData?.rating === "number"
+      ? autoData.rating
+      : null;
 
-  const shownTotal = typeof totalReviews === "number"
-    ? totalReviews
-    : (typeof autoData?.total === "number" ? autoData.total : null);
+  const shownTotal =
+    typeof totalReviews === "number"
+      ? totalReviews
+      : typeof autoData?.total === "number"
+      ? autoData.total
+      : null;
 
   const resolvedPlaceUrl = placeId
     ? `https://www.google.com/maps/place/?q=place_id:${placeId}`
-    : (autoData?.url || undefined);
+    : autoData?.url || undefined;
 
   const resolvedWriteUrl = placeId
     ? `https://search.google.com/local/writereview?placeid=${placeId}`
-    : (autoData?.cid ? `https://search.google.com/local/writereview?cid=${autoData.cid}` : undefined);
+    : autoData?.cid
+    ? `https://search.google.com/local/writereview?cid=${autoData.cid}`
+    : undefined;
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
     const h = () => setIsMobile(mq.matches);
-    h(); mq.addEventListener?.("change", h);
+    h();
+    mq.addEventListener?.("change", h);
     return () => mq.removeEventListener?.("change", h);
   }, []);
   const autoSpeed = isMobile ? 10 : 40;
@@ -87,30 +102,36 @@ export default function GoogleReviews({
 
   useEffect(() => {
     fetch("/api/places-reviews")
-      .then(r => r.json())
-      .then(d => {
-        const normalized = (d?.reviews || []).map(x => ({
+      .then((r) => r.json())
+      .then((d) => {
+        const normalized = (d?.reviews || []).map((x) => ({
           profile_photo_url: x.profilePhotoUrl ?? x.profile_photo_url ?? "",
           author_name: x.authorName ?? x.author_name ?? "Google kullanıcısı",
-          relative_time_description: x.relativeTime ?? x.relative_time_description ?? "",
+          relative_time_description:
+            x.relativeTime ?? x.relative_time_description ?? "",
           rating: x.rating ?? 0,
-          text: x.text ?? ""
+          text: x.text ?? "",
         }));
         setReviews(normalized);
 
         let cid = null;
-        try { cid = new URL(d?.url || "").searchParams.get("cid"); } catch {}
+        try {
+          cid = new URL(d?.url || "").searchParams.get("cid");
+        } catch {}
         setAutoData({
           rating: d?.rating ?? null,
           total: d?.total ?? null,
           url: d?.url ?? null,
-          cid
+          cid,
         });
       })
       .catch(console.error);
   }, []);
 
-  const setWidth = useMemo(() => (reviews.length || 1) * (CARD_W + GAP), [reviews.length]);
+  const setWidth = useMemo(
+    () => (reviews.length || 1) * (CARD_W + GAP),
+    [reviews.length]
+  );
   useEffect(() => {
     const step = (ts) => {
       if (!lastTsRef.current) lastTsRef.current = ts;
@@ -120,7 +141,7 @@ export default function GoogleReviews({
       offsetRef.current += velRef.current * dt;
 
       if (offsetRef.current <= -setWidth) offsetRef.current += setWidth;
-      else if (offsetRef.current >= 0)     offsetRef.current -= setWidth;
+      else if (offsetRef.current >= 0) offsetRef.current -= setWidth;
 
       if (containerRef.current)
         containerRef.current.style.transform = `translateX(${offsetRef.current}px)`;
@@ -136,7 +157,9 @@ export default function GoogleReviews({
     const x = (e.touches?.[0]?.clientX ?? e.clientX) - rect.left;
     velRef.current = (x < rect.width / 2 ? +1 : -1) * manualSpeed;
   };
-  const onPointerUp = () => { velRef.current = -autoSpeed; };
+  const onPointerUp = () => {
+    velRef.current = -autoSpeed;
+  };
 
   const ctaStars = Math.round(Number(shownRating) || 0);
 
@@ -158,16 +181,27 @@ export default function GoogleReviews({
                 <div className="flex flex-col items-start">
                   <div className="flex items-center gap-3">
                     <span className="text-white font-semibold text-lg sm:text-xl">
-                      {typeof shownRating === "number" ? shownRating.toFixed(1) : "—"}
+                      {typeof shownRating === "number"
+                        ? shownRating.toFixed(1)
+                        : "—"}
                     </span>
                     <div className="flex gap-1">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <span key={i} className={`text-[18px] ${i < ctaStars ? "text-amber-400" : "text-neutral-600"}`}>★</span>
+                        <span
+                          key={i}
+                          className={`text-[18px] ${
+                            i < ctaStars ? "text-amber-400" : "text-neutral-600"
+                          }`}
+                        >
+                          ★
+                        </span>
                       ))}
                     </div>
                   </div>
                   <div className="text-xs sm:text-sm text-neutral-400 mt-1">
-                    {typeof shownTotal === "number" ? `${shownTotal} yorum` : "Google üzerinde"}
+                    {typeof shownTotal === "number"
+                      ? `${shownTotal} yorum`
+                      : "Google üzerinde"}
                   </div>
                 </div>
               </div>
@@ -179,7 +213,11 @@ export default function GoogleReviews({
                   target="_blank"
                   rel="noreferrer"
                   className={`inline-flex items-center justify-center h-11 px-5 rounded-xl text-sm font-semibold transition whitespace-nowrap
-                    ${resolvedPlaceUrl ? "bg-blue-600 hover:bg-blue-500 text-white" : "bg-neutral-800 text-neutral-500 cursor-not-allowed"}
+                    ${
+                      resolvedPlaceUrl
+                        ? "bg-blue-600 hover:bg-blue-500 text-white"
+                        : "bg-neutral-800 text-neutral-500 cursor-not-allowed"
+                    }
                     w-full sm:w-auto`}
                   aria-disabled={!resolvedPlaceUrl}
                 >
@@ -190,7 +228,11 @@ export default function GoogleReviews({
                   target="_blank"
                   rel="noreferrer"
                   className={`inline-flex items-center justify-center h-11 px-5 rounded-xl text-sm font-semibold transition whitespace-nowrap
-                    ${resolvedWriteUrl ? "bg-emerald-600 hover:bg-emerald-500 text-white" : "bg-neutral-800 text-neutral-500 cursor-not-allowed"}
+                    ${
+                      resolvedWriteUrl
+                        ? "bg-emerald-600 hover:bg-emerald-500 text-white"
+                        : "bg-neutral-800 text-neutral-500 cursor-not-allowed"
+                    }
                     w-full sm:w-auto`}
                   aria-disabled={!resolvedWriteUrl}
                 >
@@ -211,6 +253,25 @@ export default function GoogleReviews({
             onTouchStart={onPointerDown}
             onTouchEnd={onPointerUp}
           >
+            {/* Kenarlara fade efektleri */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-y-0 left-0 w-10 sm:w-16 z-10"
+              style={{
+                background:
+                  "linear-gradient(to right, rgba(10,10,10,1), rgba(10,10,10,0))",
+              }}
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-y-0 right-0 w-10 sm:w-16 z-10"
+              style={{
+                background:
+                  "linear-gradient(to left, rgba(10,10,10,1), rgba(10,10,10,0))",
+              }}
+            />
+
+            {/* Track */}
             <div
               ref={containerRef}
               className="flex"
@@ -219,7 +280,7 @@ export default function GoogleReviews({
               {[...reviews, ...reviews].map((r, i) => (
                 <article
                   key={`${r.author_name}-${i}`}
-                  className="flex-shrink-0 rounded-2xl shadow-lg p-4 flex flex-col bg-neutral-900"
+                  className="flex-shrink-0 rounded-2xl shadow-lg p-4 flex flex-col bg-neutral-900 border border-neutral-800"
                   style={{ width: CARD_W, height: CARD_H }}
                 >
                   <div className="flex items-center justify-between">
@@ -235,15 +296,21 @@ export default function GoogleReviews({
                         <InitialsAvatar name={r.author_name} />
                       )}
                       <div className="leading-tight">
-                        <div className="font-semibold text-neutral-100 text-sm">{r.author_name}</div>
-                        <div className="text-xs text-neutral-400">{r.relative_time_description}</div>
+                        <div className="font-semibold text-neutral-100 text-sm">
+                          {r.author_name}
+                        </div>
+                        <div className="text-xs text-neutral-400">
+                          {r.relative_time_description}
+                        </div>
                       </div>
                     </div>
                     {/* Küçük logo — 24px net */}
                     <GoogleG className="h-6 w-6" />
                   </div>
 
-                  <div className="mt-2"><Stars rating={r.rating} /></div>
+                  <div className="mt-2">
+                    <Stars rating={r.rating} />
+                  </div>
 
                   <p
                     className="mt-2 text-[12px] leading-snug text-neutral-300 flex-1 overflow-hidden"
