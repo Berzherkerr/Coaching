@@ -1,0 +1,1 @@
+"https://balikesirpt.com/" | Set-Content .\public\sitemap.txt -Encoding UTF8
