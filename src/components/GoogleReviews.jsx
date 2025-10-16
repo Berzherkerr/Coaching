@@ -74,7 +74,9 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
   const velRef    = useRef(-autoSpeed);
   const reqRef    = useRef(0);
   const containerRef = useRef(null);
+  const viewportRef  = useRef(null);
   const lastTsRef    = useRef(0);
+  const dprRef       = useRef(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1);
 
   useEffect(() => {
     fetch("/api/places-reviews")
@@ -109,8 +111,13 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
       if (offsetRef.current <= -setWidth) offsetRef.current += setWidth;
       else if (offsetRef.current >= 0)     offsetRef.current -= setWidth;
 
-      if (containerRef.current)
-        containerRef.current.style.transform = `translateX(${offsetRef.current}px)`;
+      // DPR'a göre tam piksele snap (hairline fix)
+      const dpr = dprRef.current;
+      const snapped = Math.round(offsetRef.current * dpr) / dpr;
+
+      if (containerRef.current) {
+        containerRef.current.style.transform = `translate3d(${snapped}px,0,0)`; // iOS compositing
+      }
 
       reqRef.current = requestAnimationFrame(step);
     };
@@ -126,6 +133,26 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
   const onPointerUp = () => { velRef.current = -autoSpeed; };
 
   const ctaStars = Math.round(Number(shownRating) || 0);
+
+  // Fade genişliği (mask için) — sadece kenarlarda
+  const fade = isMobile ? 56 : 96;
+
+  // Viewport’a mask ver: merkez opak, kenarlara doğru transparan
+  const maskStyle = {
+    WebkitMaskImage: `linear-gradient(to right,
+      rgba(0,0,0,0) 0px,
+      rgba(0,0,0,1) ${fade}px,
+      rgba(0,0,0,1) calc(100% - ${fade}px),
+      rgba(0,0,0,0) 100%)`,
+    maskImage: `linear-gradient(to right,
+      rgba(0,0,0,0) 0px,
+      rgba(0,0,0,1) ${fade}px,
+      rgba(0,0,0,1) calc(100% - ${fade}px),
+      rgba(0,0,0,0) 100%)`,
+    // dikişi tamamen yok etmek için 1px taşırma:
+    WebkitMaskPosition: "-1px 0",
+    maskPosition: "-1px 0",
+  };
 
   return (
     <section className="w-full pt-5 pb-20 px-4 sm:px-8 lg:px-20 select-none bg-neutral-950">
@@ -185,82 +212,22 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
 
         {/* Kayar kartlar */}
         <MotionReveal delay={120}>
-          {/* relative + isolate: overlay'ler üstte dursun, dikiş kalmasın */}
+          {/* viewport: sadece içerikleri maskeler, arkaplanı değil */}
           <div
+            ref={viewportRef}
             className="relative overflow-hidden bg-neutral-950"
             onMouseDown={onPointerDown}
             onMouseUp={onPointerUp}
             onMouseLeave={onPointerUp}
             onTouchStart={onPointerDown}
             onTouchEnd={onPointerUp}
-            style={{ isolation: "isolate" }}
+            style={{ isolation: "isolate", ...maskStyle }}
           >
-            {/* SOL FADE – container padding’ini de aşacak şekilde 3 breakpoint */}
-            {/* mobile (px-4) */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute top-0 bottom-0 left-0 z-30 block sm:hidden"
-              style={{
-                left: "-16px",           // -(px-4)
-                width: "112px",          // geniş fade
-                background: "linear-gradient(to right, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
-              }}
-            />
-            {/* sm (px-8) */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute top-0 bottom-0 left-0 z-30 hidden sm:block lg:hidden"
-              style={{
-                left: "-32px",           // -(sm:px-8)
-                width: "160px",
-                background: "linear-gradient(to right, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
-              }}
-            />
-            {/* lg (px-20) */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute top-0 bottom-0 left-0 z-30 hidden lg:block"
-              style={{
-                left: "-80px",           // -(lg:px-20)
-                width: "220px",
-                background: "linear-gradient(to right, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
-              }}
-            />
-
-            {/* SAĞ FADE – simetri */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute top-0 bottom-0 right-0 z-30 block sm:hidden"
-              style={{
-                right: "-16px",
-                width: "112px",
-                background: "linear-gradient(to left, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
-              }}
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute top-0 bottom-0 right-0 z-30 hidden sm:block lg:hidden"
-              style={{
-                right: "-32px",
-                width: "160px",
-                background: "linear-gradient(to left, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
-              }}
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute top-0 bottom-0 right-0 z-30 hidden lg:block"
-              style={{
-                right: "-80px",
-                width: "220px",
-                background: "linear-gradient(to left, rgba(10,10,10,1) 0%, rgba(10,10,10,0) 100%)",
-              }}
-            />
-
             {/* Track */}
             <div
               ref={containerRef}
               className="flex"
-              style={{ gap: `${GAP}px`, willChange: "transform" }}
+              style={{ gap: `${GAP}px`, willChange: "transform", backfaceVisibility: "hidden" }}
             >
               {[...reviews, ...reviews].map((r, i) => (
                 <article
