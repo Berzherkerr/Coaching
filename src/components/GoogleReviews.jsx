@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import MotionReveal from "./MotionReveal";
 
-/* Google G — CTA ve kartlarda aynı ikon */
+/* Google G — yalnızca CTA kartında kullanılıyor */
 function GoogleG({ className = "h-6 w-6", ariaHidden = true }) {
   return (
     <img
@@ -244,7 +244,8 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                     className="flex-shrink-0 rounded-2xl shadow-lg p-4 flex flex-col bg-neutral-900 border border-neutral-800"
                     style={{ width: CARD_W, height: CARD_H }}
                   >
-                    <div className="flex items-center justify-between">
+                    {/* Üst satır: sola kullanıcı bilgisi, sağ üstte puan+★ */}
+                    <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         {r.profile_photo_url ? (
                           <img
@@ -257,7 +258,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                           <InitialsAvatar name={r.author_name} />
                         )}
                         <div className="leading-tight">
-                          {/* İSİM: %5 KÜÇÜK */}
+                          {/* İSİM: %5 KÜÇÜK (önceki isteğe göre) */}
                           <div className="font-semibold text-neutral-100 text-[0.88rem]">
                             {r.author_name}
                           </div>
@@ -268,18 +269,15 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                         </div>
                       </div>
 
-                      {/* Solunda Google ikonu, 5 ve ★ bitişik; 5/★ %5 daha büyük, ikon onlardan %10 daha uzak */}
-                      <div className="flex items-center">
-                        <GoogleG className="h-6 w-6 opacity-90" />
-                        {/* %10 daha uzak: grup ile ikon arası margin-left: 10% */}
-                        <div className="ml-[10%] flex items-center gap-1 font-semibold text-[1.02rem]">
-                          <span className="text-neutral-100">{numeric}</span>
-                          <span aria-hidden className="leading-none text-amber-400">★</span>
-                        </div>
+                      {/* PUAN + YILDIZ: %10 daha BÜYÜK, sağ üste düzgün oturur */}
+                      <div className="inline-flex items-center gap-1 font-semibold text-[1.188rem] leading-none self-start pr-[2px]">
+                        {/* 1.08rem (önceki) * 1.10 ≈ 1.188rem */}
+                        <span className="text-neutral-100">{numeric}</span>
+                        <span aria-hidden className="text-amber-400">★</span>
                       </div>
                     </div>
 
-                    {/* YORUM METNİ (eski boyut, 12px) */}
+                    {/* YORUM METNİ (12px) */}
                     <p
                       className="mt-3 text-neutral-300 flex-1 overflow-hidden leading-snug"
                       style={{
