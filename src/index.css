@@ -42,6 +42,35 @@ body, html, #root {
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* ==========================================================================
+   EK: Koyu tema scrollbar stilleri (TÜM SAYFA) — mevcut yapıyı BOZMADAN
+   ========================================================================== */
 
+/* Firefox */
+* {
+  scrollbar-width: thin;                 /* normal | thin */
+  scrollbar-color: #525252 #0a0a0a;      /* thumb | track */
+}
 
+/* WebKit (Chrome / Edge / Safari) */
+::-webkit-scrollbar {
+  width: 10px;                           /* dikey */
+  height: 10px;                          /* yatay */
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;                   /* track: neutral-950 */
+}
+::-webkit-scrollbar-thumb {
+  background: #404040;                   /* thumb: neutral-700 */
+  border-radius: 8px;
+  border: 2px solid #0a0a0a;             /* track rengiyle çerçeve */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #525252;                   /* hover: neutral-600 */
+}
 
+/* İsteğe bağlı: belirli bir container’da kullanmak için
+.scroll-dark::-webkit-scrollbar       { width: 10px; }
+.scroll-dark::-webkit-scrollbar-track { background: #0a0a0a; }
+.scroll-dark::-webkit-scrollbar-thumb { background: #404040; border: 2px solid #0a0a0a; }
+*/
