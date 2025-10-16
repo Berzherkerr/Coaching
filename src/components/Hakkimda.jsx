@@ -98,7 +98,7 @@ export default function Hakkimda() {
           {/* Vurgu satırı */}
           <p className="mt-3 text-base sm:text-lg text-neutral-300 leading-relaxed text-center">
             Merhaba, ben <strong className="text-neutral-100">Arda İnanç Kurt</strong>. Marmara Üniversitesi
-            Antrenörlük Bölümü mezunuyum. Son 3 Senedir Balıkesirde, kişisel antrenörlük yapıyorum.
+            Antrenörlük Bölümü mezunuyum. Balıkesir'de Personal Trainer olarak hizmet veriyorum.
           </p>
 
           {/* Metin blokları */}
