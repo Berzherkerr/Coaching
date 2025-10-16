@@ -18,7 +18,7 @@ function GoogleG({ className = "h-6 w-6", ariaHidden = true }) {
   );
 }
 
-/* CTA’daki 5 yıldız (değişmedi) */
+/* CTA’daki 5 yıldız */
 function Stars({ rating }) {
   const full = Math.round(rating ?? 0);
   return (
@@ -58,26 +58,20 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
   const shownRating =
     typeof averageRating === "number"
       ? averageRating
-      : typeof autoData?.rating === "number"
-      ? autoData.rating
-      : null;
+      : (typeof autoData?.rating === "number" ? autoData.rating : null);
 
   const shownTotal =
     typeof totalReviews === "number"
       ? totalReviews
-      : typeof autoData?.total === "number"
-      ? autoData.total
-      : null;
+      : (typeof autoData?.total === "number" ? autoData.total : null);
 
   const resolvedPlaceUrl = placeId
     ? `https://www.google.com/maps/place/?q=place_id:${placeId}`
-    : autoData?.url || undefined;
+    : (autoData?.url || undefined);
 
   const resolvedWriteUrl = placeId
     ? `https://search.google.com/local/writereview?placeid=${placeId}`
-    : autoData?.cid
-    ? `https://search.google.com/local/writereview?cid=${autoData.cid}`
-    : undefined;
+    : (autoData?.cid ? `https://search.google.com/local/writereview?cid=${autoData.cid}` : undefined);
 
   /* mobile tespiti */
   useEffect(() => {
@@ -243,7 +237,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
               style={{ gap: `${GAP}px`, willChange: "transform", backfaceVisibility: "hidden" }}
             >
               {[...reviews, ...reviews].map((r, i) => {
-                const numeric = Math.round(Number(r.rating || 0)); // 5.0 değil, 5
+                const numeric = Math.round(Number(r.rating || 0)); // 5.0 değil 5
                 return (
                   <article
                     key={`${r.author_name}-${i}`}
@@ -263,25 +257,25 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                           <InitialsAvatar name={r.author_name} />
                         )}
                         <div className="leading-tight">
-                          {/* Kullanıcı adı: ÖNCEKİ boyutta kalsın */}
-                          <div className="font-semibold text-neutral-100 text-[0.92rem]">
+                          {/* İSİM: %5 KÜÇÜK */}
+                          <div className="font-semibold text-neutral-100 text-[0.88rem]">
                             {r.author_name}
                           </div>
-                          {/* Zaman: %5 KÜÇÜK */}
+                          {/* ZAMAN: %5 KÜÇÜK (zaten küçüktü; 0.75rem uygundur) */}
                           <div className="text-[0.75rem] text-neutral-400">
                             {r.relative_time_description}
                           </div>
                         </div>
                       </div>
 
-                      {/* Google ikonu yerine: 5 ★  (sayı ve yıldız aynı büyüklükte) */}
-                      <div className="flex items-center gap-1 font-semibold text-[0.92rem]">
+                      {/* PUAN + YILDIZ: %5 BÜYÜK & yıldız amber */}
+                      <div className="flex items-center gap-1 font-semibold text-[0.97rem]">
                         <span className="text-neutral-100">{numeric}</span>
                         <span aria-hidden className="leading-none text-amber-400">★</span>
                       </div>
                     </div>
 
-                    {/* Yorum metni: %5 KÜÇÜLT (eski hâline dön: ~12px) */}
+                    {/* YORUM METNİ (eski boyut, küçültülmüş) */}
                     <p
                       className="mt-3 text-neutral-300 flex-1 overflow-hidden leading-snug"
                       style={{
