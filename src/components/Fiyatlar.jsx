@@ -42,7 +42,7 @@ const paketler = [
       "Spor salonunda beraber antreman",
       "Vücut ölçüm ve analiz seansları",
     ],
-    fiyat: "6000",
+    fiyat: "7000",
     etiket: "EN İYİ SONUÇ",
     // Koyu tema: turuncu/amber
     renk:
