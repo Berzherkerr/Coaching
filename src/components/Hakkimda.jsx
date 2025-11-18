@@ -76,7 +76,7 @@ export default function Hakkimda() {
             ))}
           </div>
 
-          {/* Üstte yumuşak gradient overlay (okunabilirlik için) */}
+          
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-neutral-950/20 via-transparent to-transparent" />
 
           {/* Noktalar */}
@@ -93,7 +93,7 @@ export default function Hakkimda() {
           </div>
         </div>
 
-        {/* METİN — ortalanmış */}
+        {/* METİN  */}
         <div className="relative text-center">
           {/* Vurgu satırı */}
           <p className="mt-3 text-base sm:text-lg text-neutral-300 leading-relaxed text-center">
@@ -114,8 +114,7 @@ export default function Hakkimda() {
             </p>
           </div>
 
-          {/* Turuncu dekoratif ışık kaldırıldı */}
-          {/* <div className="pointer-events-none absolute -left-4 -top-4 h-16 w-16 rounded-2xl blur-xl bg-orange-600/20" /> */}
+         
         </div>
       </div>
     </section>

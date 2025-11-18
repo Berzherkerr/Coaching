@@ -107,7 +107,7 @@ function Header() {
             />
           </a>
 
-          {/* Menü (ortada mutlak merkezli) */}
+          {/* Menü  */}
           <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6 whitespace-nowrap">
             {menuItems.map((item, idx) => (
               <a
@@ -121,7 +121,7 @@ function Header() {
             ))}
           </nav>
 
-          {/* Sağda sadece yazı linki */}
+          
           <a
             href="tel:+905334409803"
             className="ml-auto flex items-center gap-2 text-orange-500 hover:text-orange-400 transition text-sm font-semibold"
@@ -131,9 +131,9 @@ function Header() {
           </a>
         </div>
 
-        {/* Mobil: logo - menü (ortada) - telefon aynı satırda */}
+        {/* Mobil: logo  */}
         <div className="md:hidden relative flex items-center h-14">
-          {/* Logo (sol) — MENÜYLE AYNI KAYDIRMA */}
+          {/* Logo (sol) —  */}
           <a
             href="#hero"
             onClick={handleNav("#hero")}
@@ -148,7 +148,7 @@ function Header() {
             />
           </a>
 
-          {/* Menü merkezde */}
+          {/* Menü  */}
           <nav
             className="absolute left-1/2 -translate-x-1/2 flex items-center gap-4
                        text-[13px] font-medium text-neutral-200 whitespace-nowrap"
@@ -165,7 +165,7 @@ function Header() {
             ))}
           </nav>
 
-          {/* Telefon (sağ) — sadece ikon */}
+          {/* Telefon (sağ) —  */}
           <a
             href="tel:+905334409803"
             className="ml-auto flex items-center text-orange-500 hover:text-orange-400 transition"

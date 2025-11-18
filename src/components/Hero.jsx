@@ -17,7 +17,7 @@ export default function Hero() {
         muted
         playsInline
       />
-      {/* koyulaştırma */}
+   
       <div className="absolute inset-0 bg-black/60" />
 
       {/* ALT FADE */}

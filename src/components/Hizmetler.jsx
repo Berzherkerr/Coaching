@@ -41,7 +41,7 @@ export default function Hizmetler() {
                                shadow-md ring-1 ring-transparent
                                hover:border-orange-600/40 hover:ring-orange-600/20 transition"
                   >
-                    {/* İkon sütunu 56px → 50px (daha dar), ikon 32px → ~29px */}
+                    {/* İkon sütunu  */}
                     <div className="grid grid-cols-[50px_1fr] gap-3 items-center">
                       <div className="col-start-1 row-span-2 flex items-center justify-center">
                         <span className="text-[29px] leading-none" aria-hidden>
@@ -49,12 +49,12 @@ export default function Hizmetler() {
                         </span>
                       </div>
 
-                      {/* Title %10 büyük (14px → ~15px), BOLD */}
+                      {/* Title  */}
                       <h3 className="col-start-2 text-[15px] font-bold text-neutral-100 leading-tight">
                         {item.title}
                       </h3>
 
-                      {/* Açıklama: mevcut ölçek (text-sm) */}
+                      {/* Açıklama */}
                       <p className="col-start-2 text-sm leading-snug text-neutral-300">
                         {item.description}
                       </p>

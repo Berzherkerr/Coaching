@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import MotionReveal from "./MotionReveal";
 
-/* Google G — yalnızca CTA kartında kullanılıyor */
+
 function GoogleG({ className = "h-6 w-6", ariaHidden = true }) {
   return (
     <img
@@ -18,7 +18,7 @@ function GoogleG({ className = "h-6 w-6", ariaHidden = true }) {
   );
 }
 
-/* CTA’daki 5 yıldız */
+
 function Stars({ rating }) {
   const full = Math.round(rating ?? 0);
   return (
@@ -126,7 +126,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
       if (offsetRef.current <= -setWidth) offsetRef.current += setWidth;
       else if (offsetRef.current >= 0)     offsetRef.current -= setWidth;
 
-      // DPR'a snap (hairline çizgi çözümü)
+      
       const dpr = dprRef.current;
       const snapped = Math.round(offsetRef.current * dpr) / dpr;
 
@@ -150,7 +150,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
 
   const ctaStars = Math.round(Number(shownRating) || 0);
 
-  /* MASK ile kenarlarda fade — dikişsiz */
+  
   const fade = isMobile ? 56 : 96;
   const maskStyle = {
     WebkitMaskImage: `linear-gradient(to right,
@@ -237,14 +237,14 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
               style={{ gap: `${GAP}px`, willChange: "transform", backfaceVisibility: "hidden" }}
             >
               {[...reviews, ...reviews].map((r, i) => {
-                const numeric = Math.round(Number(r.rating || 0)); // 5.0 değil 5
+                const numeric = Math.round(Number(r.rating || 0)); 
                 return (
                   <article
                     key={`${r.author_name}-${i}`}
                     className="flex-shrink-0 rounded-2xl shadow-lg p-4 flex flex-col bg-neutral-900 border border-neutral-800"
                     style={{ width: CARD_W, height: CARD_H }}
                   >
-                    {/* Üst satır: sola kullanıcı bilgisi, sağ üstte puan+★ */}
+                    
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         {r.profile_photo_url ? (
@@ -258,11 +258,11 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                           <InitialsAvatar name={r.author_name} />
                         )}
                         <div className="leading-tight">
-                          {/* İSİM: %5 KÜÇÜK (önceki isteğe göre) */}
+                          
                           <div className="font-semibold text-neutral-100 text-[0.88rem]">
                             {r.author_name}
                           </div>
-                          {/* ZAMAN: %5 KÜÇÜK */}
+                          
                           <div className="text-[0.75rem] text-neutral-400">
                             {r.relative_time_description}
                           </div>

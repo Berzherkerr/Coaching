@@ -1,7 +1,7 @@
 // src/components/Iletisim.jsx
 import { Mail, MapPin, Phone, Instagram } from "lucide-react";
 
-// Tek parça WhatsApp ikonu (currentColor)
+// Tek parça WhatsApp
 function WhatsAppIcon({ className = "h-6 w-6" }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden fill="currentColor">
@@ -17,9 +17,9 @@ function Iletisim() {
 
   return (
     <section id="contact" className="bg-neutral-950 py-20 px-4 sm:px-6 lg:px-8">
-      {/* md+: 3 kolon; aynı yükseklik */}
+     
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 items-stretch">
-        {/* SOL: İletişim Bilgileri — yazılar büyütüldü ve aralıklar oranlandı */}
+        {/* SOL: İletişim Bilgileri */}
         <div className="h-full md:h-[240px] flex flex-col justify-center text-center">
           <h2 className="text-2xl font-bold text-white mb-5">İletişim Bilgilerim</h2>
           <p className="text-base md:text-lg text-neutral-300 leading-relaxed mb-5">
@@ -45,9 +45,9 @@ function Iletisim() {
           </ul>
         </div>
 
-        {/* ORTA: İkon Kartları — Masaüstünde %50 küçültülmüş kare kutular; mobil aynı çizgide ama daha geniş boşluklu */}
+        {/* ORTA: İkon Kartları —  */}
         <div className="h-full md:h-[240px]">
-          {/* Mobil — kenarlara yaslı, aralık artırıldı */}
+         
           <div className="md:hidden grid grid-cols-4 gap-6 mx-[1rem]">
             {[
               { href: `https://wa.me/${phoneE164}`, icon: <WhatsAppIcon className="h-7 w-7 text-green-400" />, label: "WhatsApp" },
@@ -70,7 +70,7 @@ function Iletisim() {
             ))}
           </div>
 
-          {/* Masaüstü — kare ve küçük (öncekine göre en az %50 küçültüldü) */}
+          {/* Masaüstü */}
           <div className="hidden md:grid grid-cols-4 gap-2 h-full place-items-center">
             {[
               { href: `https://wa.me/${phoneE164}`, icon: <WhatsAppIcon className="h-8 w-8 text-green-400" />, label: "WhatsApp" },
@@ -95,7 +95,7 @@ function Iletisim() {
           </div>
         </div>
 
-        {/* SAĞ: Harita — masaüstünde %25 küçültüldü (320→240), dark themed */}
+        {/* SAĞ: Harita */}
         <div className="h-[256px] md:h-[240px] rounded-md overflow-hidden shadow-md bg-neutral-900 border border-neutral-800">
           <iframe
             title="Konum"

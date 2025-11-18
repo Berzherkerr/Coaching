@@ -8,7 +8,6 @@ import {
 function Footer() {
   return (
     <footer className="bg-[#111] text-white pt-12 pb-8 px-6">
-      {/* Hizalama düzeltildi */}
       <div className="max-w-6xl mx-auto w-full flex flex-col items-center md:items-start gap-6 px-4 sm:px-6 lg:px-0">
         
         {/* LOGO */}
