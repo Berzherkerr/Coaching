@@ -18,7 +18,7 @@ const paketler = [
     ],
     fiyat: "3000",
     etiket: null,
-    // Koyu tema: mavi
+    
     renk:
       "bg-neutral-900 border border-blue-500/30 ring-1 ring-blue-500/10 hover:border-blue-500/60 hover:ring-blue-500/30",
     etiketRenk: "bg-blue-600",
@@ -31,7 +31,7 @@ const paketler = [
     ],
     fiyat: "5000",
     etiket: "EN ÇOK TERCİH EDİLEN",
-    // Koyu tema: mor
+    
     renk:
       "bg-neutral-900 border border-purple-500/30 ring-1 ring-purple-500/10 hover:border-purple-500/60 hover:ring-purple-500/30",
     etiketRenk: "bg-purple-600",
@@ -44,7 +44,7 @@ const paketler = [
     ],
     fiyat: "7000",
     etiket: "EN İYİ SONUÇ",
-    // Koyu tema: turuncu/amber
+    
     renk:
       "bg-neutral-900 border border-amber-500/30 ring-1 ring-amber-500/10 hover:border-amber-500/60 hover:ring-amber-500/30",
     etiketRenk: "bg-amber-600",
