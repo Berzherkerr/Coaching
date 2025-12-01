@@ -20,7 +20,7 @@ const hizmetler = [
 
 export default function Hizmetler() {
   return (
-    <section id="hizmetler" className="bg-neutral-950 pt-22 pb-15 px-4 sm:px-8 lg:px-20">
+    <section id="hizmetler" className="bg-neutral-950 pt-20 pb-15 px-4 sm:px-8 lg:px-20">
       <div className="max-w-6xl mx-auto">
         {/* Başlık */}
         <header className="text-center mb-14">

@@ -41,7 +41,7 @@ const paketler = [
 
 export default function Fiyatlar() {
   return (
-    <section id="fiyatlar" className="bg-neutral-950 pt-22 pb-15 px-4 sm:px-8 lg:px-20">
+    <section id="fiyatlar" className="bg-neutral-950 pt-20 pb-15 px-4 sm:px-8 lg:px-20">
       <MotionReveal>
         <div className="max-w-6xl mx-auto text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-white">
