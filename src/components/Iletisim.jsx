@@ -17,97 +17,131 @@ function Iletisim() {
 
   return (
     <section id="contact" className="bg-neutral-950 py-20 px-4 sm:px-6 lg:px-8">
-     
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 items-stretch">
-        {/* SOL: İletişim Bilgileri */}
-        <div className="h-full md:h-[240px] flex flex-col justify-center text-center">
-          <h2 className="text-2xl font-bold text-white mb-5">İletişim Bilgilerim</h2>
-          <p className="text-base md:text-lg text-neutral-300 leading-relaxed mb-5">
-            7/24 iletişime geçmekten çekinmeyin. Sorularınıza yardımcı olmaktan memnuniyet duyarım.
-          </p>
-          <ul className="space-y-4 text-neutral-200 text-base">
-            <li className="flex items-start justify-center">
-              <MapPin className="w-5 h-5 mt-0.5 text-neutral-300 mr-3" />
-              <span>Altıeylül, BALIKESİR</span>
-            </li>
-            <li className="flex items-start justify-center">
-              <Phone className="w-5 h-5 mt-0.5 text-neutral-300 mr-3" />
-              <a href={`tel:${phoneE164}`} className="hover:text-orange-400 transition">
-                +90 533 440 98 03
-              </a>
-            </li>
-            <li className="flex items-start justify-center">
-              <Mail className="w-5 h-5 mt-0.5 text-neutral-300 mr-3" />
-              <a href={`mailto:${emailTo}`} className="hover:text-orange-400 transition">
-                inanccoaching@gmail.com
-              </a>
-            </li>
-          </ul>
-        </div>
+      <div className="max-w-6xl mx-auto">
 
-        {/* ORTA: İkon Kartları —  */}
-        <div className="h-full md:h-[240px]">
-         
-          <div className="md:hidden grid grid-cols-4 gap-6 mx-[1rem]">
-            {[
-              { href: `https://wa.me/${phoneE164}`, icon: <WhatsAppIcon className="h-7 w-7 text-green-400" />, label: "WhatsApp" },
-              { href: instagramUrl, icon: <Instagram className="h-7 w-7 text-orange-400" />, label: "Instagram" },
-              { href: `mailto:${emailTo}`, icon: <Mail className="h-7 w-7 text-blue-400" />, label: "Mail" },
-              { href: `tel:${phoneE164}`, icon: <Phone className="h-7 w-7 text-yellow-300" />, label: "Telefon" },
-            ].map((it, i) => (
-              <a
-                key={i}
-                href={it.href}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center justify-center h-14 rounded-xl border border-neutral-800 bg-neutral-900 p-3
-                           hover:border-orange-600/60 hover:shadow-lg transition"
-                aria-label={it.label}
-                title={it.label}
-              >
-                {it.icon}
-              </a>
-            ))}
+        {/* 2 Sütun: Tablet ve Desktop */}
+        <div className="hidden md:flex md:flex-row md:justify-between md:items-start md:gap-8">
+          {/* Sol: İletişim + ikonlar */}
+          <div className="flex flex-col items-center md:items-center text-center md:w-[45%] space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-2xl font-bold text-white">İletişim Bilgilerim</h3>
+              <ul className="space-y-2 text-neutral-200 text-base">
+                <li className="flex items-center justify-center gap-2">
+                  <MapPin className="w-5 h-5 text-neutral-300" /> Altıeylül, BALIKESİR
+                </li>
+                <li className="flex items-center justify-center gap-2">
+                  <Phone className="w-5 h-5 text-neutral-300" />
+                  <a href={`tel:${phoneE164}`} className="hover:text-orange-400 transition">
+                    +90 533 440 98 03
+                  </a>
+                </li>
+                <li className="flex items-center justify-center gap-2">
+                  <Mail className="w-5 h-5 text-neutral-300" />
+                  <a href={`mailto:${emailTo}`} className="hover:text-orange-400 transition">
+                    inanccoaching@gmail.com
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* İkonlar */}
+            <div className="grid grid-cols-4 gap-4 justify-center">
+              {[
+                { href: `https://wa.me/${phoneE164}`, icon: <WhatsAppIcon className="h-7 w-7 text-green-400" />, label: "WhatsApp" },
+                { href: instagramUrl, icon: <Instagram className="h-7 w-7 text-orange-400" />, label: "Instagram" },
+                { href: `mailto:${emailTo}`, icon: <Mail className="h-7 w-7 text-blue-400" />, label: "Mail" },
+                { href: `tel:${phoneE164}`, icon: <Phone className="h-7 w-7 text-yellow-300" />, label: "Telefon" },
+              ].map((it, i) => (
+                <a
+                  key={i}
+                  href={it.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-center w-17 h-17 rounded-xl border border-neutral-800 bg-neutral-900
+                             hover:border-orange-600/60 hover:shadow-lg transition"
+                  aria-label={it.label}
+                  title={it.label}
+                >
+                  {it.icon}
+                </a>
+              ))}
+            </div>
           </div>
 
-          {/* Masaüstü */}
-          <div className="hidden md:grid grid-cols-4 gap-2 h-full place-items-center">
-            {[
-              { href: `https://wa.me/${phoneE164}`, icon: <WhatsAppIcon className="h-8 w-8 text-green-400" />, label: "WhatsApp" },
-              { href: instagramUrl, icon: <Instagram className="h-8 w-8 text-orange-400" />, label: "Instagram" },
-              { href: `mailto:${emailTo}`, icon: <Mail className="h-8 w-8 text-blue-400" />, label: "Mail" },
-              { href: `tel:${phoneE164}`, icon: <Phone className="h-8 w-8 text-yellow-300" />, label: "Telefon" },
-            ].map((it, i) => (
-              <a
-                key={i}
-                href={it.href}
-                target="_blank"
-                rel="noreferrer"
-                className="group rounded-xl border border-neutral-800 bg-neutral-900
-                           hover:border-orange-600/60 hover:ring-1 hover:ring-orange-600/30 hover:shadow-lg transition
-                           w-20 h-20 aspect-square flex items-center justify-center p-3"
-                aria-label={it.label}
-                title={it.label}
-              >
-                {it.icon}
-              </a>
-            ))}
+          {/* Sağ: Harita */}
+          <div className="md:w-[45%] h-[240px] rounded-md overflow-hidden shadow-md bg-neutral-900 border border-neutral-800">
+            <iframe
+              title="Konum"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d543.1339278799962!2d27.882835267360313!3d39.64004822604878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b701fa525cd461%3A0xa8bfb319985f0dfe!2zxLBuYW7DpyBDb2FjaGluZw!5e0!3m2!1sen!2sde!4v1754712858841!5m2!1sen!2sde"
+              width="100%"
+              height="100%"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="border-0 w-full h-full filter invert-[.92] hue-rotate-180 saturate-[.8] contrast-[1.05] brightness-95"
+            />
           </div>
         </div>
 
-        {/* SAĞ: Harita */}
-        <div className="h-[256px] md:h-[240px] rounded-md overflow-hidden shadow-md bg-neutral-900 border border-neutral-800">
-          <iframe
-            title="Konum"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d543.1339278799962!2d27.882835267360313!3d39.64004822604878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b701fa525cd461%3A0xa8bfb319985f0dfe!2zxLBuYW7DpyBDb2FjaGluZw!5e0!3m2!1sen!2sde!4v1754712858841!5m2!1sen!2sde"
-            width="100%"
-            height="100%"
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="border-0 w-full h-full
-                       filter invert-[.92] hue-rotate-180 saturate-[.8] contrast-[1.05] brightness-95"
-          />
+        {/* Mobil: Eski hali dokunulmadı */}
+        <div className="md:hidden grid grid-cols-1 gap-12">
+          {/* İletişim ve ikonlar */}
+          <div className="flex flex-col items-center text-center space-y-4">
+            <h3 className="text-2xl font-bold text-white">İletişim Bilgilerim</h3>
+            <ul className="space-y-2 text-neutral-200 text-base">
+              <li className="flex items-center justify-center gap-2">
+                <MapPin className="w-5 h-5 text-neutral-300" /> Altıeylül, BALIKESİR
+              </li>
+              <li className="flex items-center justify-center gap-2">
+                <Phone className="w-5 h-5 text-neutral-300" />
+                <a href={`tel:${phoneE164}`} className="hover:text-orange-400 transition">
+                  +90 533 440 98 03
+                </a>
+              </li>
+              <li className="flex items-center justify-center gap-2">
+                <Mail className="w-5 h-5 text-neutral-300" />
+                <a href={`mailto:${emailTo}`} className="hover:text-orange-400 transition">
+                  inanccoaching@gmail.com
+                </a>
+              </li>
+            </ul>
+
+            <div className="grid grid-cols-4 gap-6 mx-[1rem]">
+              {[
+                { href: `https://wa.me/${phoneE164}`, icon: <WhatsAppIcon className="h-7 w-7 text-green-400" />, label: "WhatsApp" },
+                { href: instagramUrl, icon: <Instagram className="h-7 w-7 text-orange-400" />, label: "Instagram" },
+                { href: `mailto:${emailTo}`, icon: <Mail className="h-7 w-7 text-blue-400" />, label: "Mail" },
+                { href: `tel:${phoneE164}`, icon: <Phone className="h-7 w-7 text-yellow-300" />, label: "Telefon" },
+              ].map((it, i) => (
+                <a
+                  key={i}
+                  href={it.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-center h-14 rounded-xl border border-neutral-800 bg-neutral-900 p-3
+                             hover:border-orange-600/60 hover:shadow-lg transition"
+                  aria-label={it.label}
+                  title={it.label}
+                >
+                  {it.icon}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Harita */}
+          <div className="h-[256px] rounded-md overflow-hidden shadow-md bg-neutral-900 border border-neutral-800">
+            <iframe
+              title="Konum"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d543.1339278799962!2d27.882835267360313!3d39.64004822604878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b701fa525cd461%3A0xa8bfb319985f0dfe!2zxLBuYW7DpyBDb2FjaGluZw!5e0!3m2!1sen!2sde!4v1754712858841!5m2!1sen!2sde"
+              width="100%"
+              height="100%"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="border-0 w-full h-full filter invert-[.92] hue-rotate-180 saturate-[.8] contrast-[1.05] brightness-95"
+            />
+          </div>
         </div>
       </div>
     </section>

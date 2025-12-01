@@ -5,55 +5,43 @@ const ortakOzellikler = [
   "Kişiye Özgü Vücut Analizi",
   "Kişinin Hedefinin Belirlenmesi",
   "Hedefe Uygun Beslenme Programı",
-  "Hedefe Uygun Antreman Programı",
+  "Hedefe Uygun Antrenman Programı",
   "Öğün ve Antreman Takibi",
 ];
 
 const paketler = [
   {
     title: "Uzaktan Eğitim",
-    ozel: [
-      "Online başlangıç danışmanlığı",
-      "Haftalık kontrol ve değerlendirme",
-    ],
+    ozel: ["Online başlangıç danışmanlığı", "Haftalık kontrol ve değerlendirme"],
     fiyat: "3000",
     etiket: null,
-    
     renk:
       "bg-neutral-900 border border-blue-500/30 ring-1 ring-blue-500/10 hover:border-blue-500/60 hover:ring-blue-500/30",
     etiketRenk: "bg-blue-600",
   },
   {
     title: "Online Özel Ders",
-    ozel: [
-      "Görüntülü görüşme ile birebir seanslar",
-      "Haftalık kontrol ve değerlendirme",
-    ],
+    ozel: ["Görüntülü görüşme ile birebir seanslar", "Haftalık kontrol ve değerlendirme"],
     fiyat: "5000",
     etiket: "EN ÇOK TERCİH EDİLEN",
-    
     renk:
       "bg-neutral-900 border border-purple-500/30 ring-1 ring-purple-500/10 hover:border-purple-500/60 hover:ring-purple-500/30",
     etiketRenk: "bg-purple-600",
   },
   {
     title: "Birebir Özel Ders",
-    ozel: [
-      "Spor salonunda beraber antreman",
-      "Vücut ölçüm ve analiz seansları",
-    ],
+    ozel: ["Spor salonunda beraber antreman", "Vücut ölçüm ve analiz seansları"],
     fiyat: "7000",
     etiket: "EN İYİ SONUÇ",
-    
     renk:
       "bg-neutral-900 border border-amber-500/30 ring-1 ring-amber-500/10 hover:border-amber-500/60 hover:ring-amber-500/30",
     etiketRenk: "bg-amber-600",
   },
 ];
 
-function Fiyatlar() {
+export default function Fiyatlar() {
   return (
-    <section id="fiyatlar" className="bg-neutral-950 pt-3 pb-20 px-4 sm:px-8 lg:px-20">
+    <section id="fiyatlar" className="bg-neutral-950 pt-22 pb-15 px-4 sm:px-8 lg:px-20">
       <MotionReveal>
         <div className="max-w-6xl mx-auto text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-white">
@@ -65,56 +53,64 @@ function Fiyatlar() {
         </div>
       </MotionReveal>
 
-      {/* Mobil: 1 kolon | Tablet ve üstü: 3 kolon */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
-        {paketler.map((paket, index) => (
-          <MotionReveal key={paket.title} delay={index * 80}>
-            <div
-              className={`${paket.renk} relative rounded-xl p-6 shadow-lg transition-transform duration-300 hover:scale-105 flex flex-col justify-between`}
-            >
-              {/* Etiket */}
-              {paket.etiket && (
-                <div
-                  className={`absolute -top-3 right-3 ${paket.etiketRenk} text-white text-xs font-bold px-2 py-1 rounded shadow-md tracking-wider`}
-                >
-                  {paket.etiket}
+      {/* Grid: Mobil 1 kolon | Tablet 2 kolon | Masaüstü 3 kolon */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 max-w-6xl mx-auto">
+        {paketler.map((paket, index, arr) => {
+          // Tablet tek kutu satırda ise ortala
+          const isTabletSingleInRow =
+            arr.length % 2 !== 0 && index === arr.length - 1; // son kutu tek ise
+
+          return (
+            <MotionReveal key={paket.title} delay={index * 80}>
+              <div
+                className={`${paket.renk} relative rounded-xl p-6 shadow-lg transition-transform duration-300 hover:scale-105 flex flex-col justify-between`}
+                style={{
+                  marginLeft: isTabletSingleInRow ? "auto" : undefined,
+                  marginRight: isTabletSingleInRow ? "auto" : undefined,
+                }}
+              >
+                {/* Etiket */}
+                {paket.etiket && (
+                  <div
+                    className={`absolute -top-3 right-3 ${paket.etiketRenk} text-white text-xs font-bold px-2 py-1 rounded shadow-md tracking-wider`}
+                  >
+                    {paket.etiket}
+                  </div>
+                )}
+
+                <div>
+                  {/* Başlık */}
+                  <h3 className="text-xl font-semibold text-neutral-100 text-center mb-4">
+                    {paket.title}
+                  </h3>
+
+                  {/* Derse özel içerik */}
+                  <ul className="text-neutral-200 text-sm space-y-2 mb-6 list-disc list-inside">
+                    {paket.ozel.map((ozellik, idx) => (
+                      <li key={idx}>{ozellik}</li>
+                    ))}
+                  </ul>
                 </div>
-              )}
 
-              <div>
-                {/* Başlık */}
-                <h3 className="text-xl font-semibold text-neutral-100 text-center mb-4">
-                  {paket.title}
-                </h3>
+                {/* Ortak Özellikler */}
+                <div className="border-t border-neutral-800 pt-4 mt-auto">
+                  <ul className="text-neutral-300 text-sm space-y-1 list-disc list-inside">
+                    {ortakOzellikler.map((ozellik, idx) => (
+                      <li key={idx}>{ozellik}</li>
+                    ))}
+                  </ul>
+                </div>
 
-                {/* Derse özel içerik */}
-                <ul className="text-neutral-200 text-sm space-y-2 mb-6 list-disc list-inside">
-                  {paket.ozel.map((ozellik, idx) => (
-                    <li key={idx}>{ozellik}</li>
-                  ))}
-                </ul>
+                {/* Fiyat */}
+                <div className="mt-6 text-center flex justify-center items-baseline gap-2">
+                  <p className="text-3xl font-extrabold text-white">₺{paket.fiyat}</p>
+                  <p className="text-base text-neutral-300 font-medium tracking-wide">/ Aylık</p>
+                </div>
               </div>
-
-              {/* Ortak Özellikler */}
-              <div className="border-t border-neutral-800 pt-4 mt-auto">
-                <ul className="text-neutral-300 text-sm space-y-1 list-disc list-inside">
-                  {ortakOzellikler.map((ozellik, idx) => (
-                    <li key={idx}>{ozellik}</li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Fiyat */}
-              <div className="mt-6 text-center flex justify-center items-baseline gap-2">
-                <p className="text-3xl font-extrabold text-white">₺{paket.fiyat}</p>
-                <p className="text-base text-neutral-300 font-medium tracking-wide">/ Aylık</p>
-              </div>
-            </div>
-          </MotionReveal>
-        ))}
+            </MotionReveal>
+          );
+        })}
       </div>
     </section>
   );
 }
-
-export default Fiyatlar;

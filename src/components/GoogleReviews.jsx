@@ -2,7 +2,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import MotionReveal from "./MotionReveal";
 
-
 function GoogleG({ className = "h-6 w-6", ariaHidden = true }) {
   return (
     <img
@@ -17,7 +16,6 @@ function GoogleG({ className = "h-6 w-6", ariaHidden = true }) {
     />
   );
 }
-
 
 function Stars({ rating }) {
   const full = Math.round(rating ?? 0);
@@ -35,7 +33,6 @@ function Stars({ rating }) {
   );
 }
 
-/* Baş harf avatarı */
 function InitialsAvatar({ name }) {
   const initials = (name || "?").split(" ").map(s => s[0]).join("").slice(0,2).toUpperCase();
   return (
@@ -45,9 +42,8 @@ function InitialsAvatar({ name }) {
   );
 }
 
-/* Kart ölçüleri */
 const CARD_W = 300;
-const CARD_H = 196; // 170 * 1.15
+const CARD_H = 196;
 const GAP = 16;
 
 export default function GoogleReviews({ placeId, averageRating, totalReviews }) {
@@ -73,25 +69,23 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
     ? `https://search.google.com/local/writereview?placeid=${placeId}`
     : (autoData?.cid ? `https://search.google.com/local/writereview?cid=${autoData.cid}` : undefined);
 
-  /* mobile tespiti */
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
     const h = () => setIsMobile(mq.matches);
     h(); mq.addEventListener?.("change", h);
     return () => mq.removeEventListener?.("change", h);
   }, []);
-  const autoSpeed   = isMobile ? 10  : 40;
-  const manualSpeed = isMobile ? 120 : 180;
 
-  /* animasyon state */
+  const autoSpeed = isMobile ? 10 : 40;
+  const manualSpeed = isMobile ? 60 : 120;
+
   const offsetRef = useRef(0);
-  const velRef    = useRef(-autoSpeed);
-  const reqRef    = useRef(0);
+  const velRef = useRef(-autoSpeed);
+  const reqRef = useRef(0);
   const containerRef = useRef(null);
-  const lastTsRef    = useRef(0);
-  const dprRef       = useRef(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1);
+  const lastTsRef = useRef(0);
 
-  /* veriyi çek */
+  // Fetch reviews
   useEffect(() => {
     fetch("/api/places-reviews")
       .then(r => r.json())
@@ -112,10 +106,12 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
       .catch(console.error);
   }, []);
 
-  /* animasyon */
   const setWidth = useMemo(() => (reviews.length || 1) * (CARD_W + GAP), [reviews.length]);
 
+  // Smooth endless scroll without momentum or pulse
   useEffect(() => {
+    if (!reviews.length || !setWidth) return;
+
     const step = (ts) => {
       if (!lastTsRef.current) lastTsRef.current = ts;
       const dt = (ts - lastTsRef.current) / 1000;
@@ -124,53 +120,36 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
       offsetRef.current += velRef.current * dt;
 
       if (offsetRef.current <= -setWidth) offsetRef.current += setWidth;
-      else if (offsetRef.current >= 0)     offsetRef.current -= setWidth;
-
-      
-      const dpr = dprRef.current;
-      const snapped = Math.round(offsetRef.current * dpr) / dpr;
+      else if (offsetRef.current >= 0) offsetRef.current -= setWidth;
 
       if (containerRef.current) {
-        containerRef.current.style.transform = `translate3d(${snapped}px,0,0)`;
+        containerRef.current.style.transform = `translate3d(${offsetRef.current}px,0,0)`;
       }
 
       reqRef.current = requestAnimationFrame(step);
     };
+
     reqRef.current = requestAnimationFrame(step);
     return () => cancelAnimationFrame(reqRef.current);
-  }, [setWidth, autoSpeed]);
+  }, [reviews, setWidth]);
 
-  /* manuel hız */
+  // Pointer controls (sola basınca sola, sağa basınca sağa, ortaya dur)
   const onPointerDown = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.touches?.[0]?.clientX ?? e.clientX) - rect.left;
-    velRef.current = (x < rect.width / 2 ? +1 : -1) * manualSpeed;
+
+    if (x < rect.width / 3) velRef.current = -manualSpeed;
+    else if (x > (rect.width / 3) * 2) velRef.current = manualSpeed;
+    else velRef.current = 0;
   };
+
   const onPointerUp = () => { velRef.current = -autoSpeed; };
 
   const ctaStars = Math.round(Number(shownRating) || 0);
 
-  
-  const fade = isMobile ? 56 : 96;
-  const maskStyle = {
-    WebkitMaskImage: `linear-gradient(to right,
-      rgba(0,0,0,0) 0px,
-      rgba(0,0,0,1) ${fade}px,
-      rgba(0,0,0,1) calc(100% - ${fade}px),
-      rgba(0,0,0,0) 100%)`,
-    maskImage: `linear-gradient(to right,
-      rgba(0,0,0,0) 0px,
-      rgba(0,0,0,1) ${fade}px,
-      rgba(0,0,0,1) calc(100% - ${fade}px),
-      rgba(0,0,0,0) 100%)`,
-    WebkitMaskPosition: "-1px 0",
-    maskPosition: "-1px 0",
-  };
-
   return (
-    <section className="w-full pt-5 pb-20 px-4 sm:px-8 lg:px-20 select-none bg-neutral-950">
+    <section className="w-full pt-5 pb-10 px-4 sm:px-8 lg:px-20 select-none bg-neutral-950">
       <div className="max-w-6xl mx-auto">
-        {/* CTA */}
         <MotionReveal>
           <div className="rounded-2xl bg-neutral-900 border border-neutral-800 shadow-lg p-5 sm:p-8 mb-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 sm:gap-6">
@@ -219,18 +198,16 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
           </div>
         </MotionReveal>
 
-        {/* Kayar kartlar */}
         <MotionReveal delay={120}>
           <div
-            className="relative overflow-hidden bg-neutral-950"
+            className="relative overflow-hidden bg-neutral-950 cursor-pointer"
             onMouseDown={onPointerDown}
             onMouseUp={onPointerUp}
             onMouseLeave={onPointerUp}
             onTouchStart={onPointerDown}
             onTouchEnd={onPointerUp}
-            style={{ isolation: "isolate", ...maskStyle }}
+            style={{ isolation: "isolate", touchAction: "none" }} // native momentum kapalı
           >
-            {/* Track */}
             <div
               ref={containerRef}
               className="flex"
@@ -244,7 +221,6 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                     className="flex-shrink-0 rounded-2xl shadow-lg p-4 flex flex-col bg-neutral-900 border border-neutral-800"
                     style={{ width: CARD_W, height: CARD_H }}
                   >
-                    
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         {r.profile_photo_url ? (
@@ -258,26 +234,21 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                           <InitialsAvatar name={r.author_name} />
                         )}
                         <div className="leading-tight">
-                          
                           <div className="font-semibold text-neutral-100 text-[0.88rem]">
                             {r.author_name}
                           </div>
-                          
                           <div className="text-[0.75rem] text-neutral-400">
                             {r.relative_time_description}
                           </div>
                         </div>
                       </div>
 
-                      {/* PUAN + YILDIZ: %10 daha BÜYÜK, sağ üste düzgün oturur */}
                       <div className="inline-flex items-center gap-1 font-semibold text-[1.188rem] leading-none self-start pr-[2px]">
-                        {/* 1.08rem (önceki) * 1.10 ≈ 1.188rem */}
                         <span className="text-neutral-100">{numeric}</span>
                         <span aria-hidden className="text-amber-400">★</span>
                       </div>
                     </div>
 
-                    {/* YORUM METNİ (12px) */}
                     <p
                       className="mt-3 text-neutral-300 flex-1 overflow-hidden leading-snug"
                       style={{

@@ -20,13 +20,13 @@ const hizmetler = [
 
 export default function Hizmetler() {
   return (
-    <section id="hizmetler" className="bg-neutral-950 pt-10 pb-35 px-4 sm:px-8 lg:px-20">
+    <section id="hizmetler" className="bg-neutral-950 pt-22 pb-15 px-4 sm:px-8 lg:px-20">
       <div className="max-w-6xl mx-auto">
         {/* Başlık */}
         <header className="text-center mb-14">
           <h2 className="text-3xl sm:text-4xl font-bold text-white">Hizmetler</h2>
           <p className="mt-4 text-lg text-neutral-300 max-w-2xl mx-auto">
-            Hedefine uygun çözümü seç ve hemen başlayalım.
+            Senin ihtiyaçlarını anlayan bir rehber eşliğinde, sürdürülebilir adımlarla ilerle.
           </p>
         </header>
 
