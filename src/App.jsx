@@ -12,7 +12,7 @@ import GoogleReviews from './components/GoogleReviews'
 
 function App() {
   return (
-    <div className="h-screen snap-y snap-mandatory overflow-y-scroll scroll-smooth">
+    <div className="h-screen snap-y snap-mandatory overflow-y-scroll overflow-x-scroll scroll-smooth">
       <Header className="snap-start" />
       <Hero className="snap-start" />
       <Hakkimda className="snap-start"  />
