@@ -189,7 +189,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
               mode="word"
               className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] tracking-[-0.02em]"
             >
-              İnanç Coaching | Personal Trainer
+              İnanç Coaching | Balıkesir
             </RevealHeading>
 
             <div className="mt-3 flex flex-wrap items-center justify-center gap-3">

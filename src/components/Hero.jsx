@@ -27,7 +27,7 @@ export default function Hero() {
 
       {/* ALT FADE – daha uzun, daha küçük adımlı, daha yumuşak */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-1000   z-20 sm:h-1000"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-1000   z-15 sm:h-1000"
         style={{
           background: `
             linear-gradient(
