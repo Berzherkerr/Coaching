@@ -1,6 +1,7 @@
 // src/components/GoogleReviews.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import MotionReveal from "./MotionReveal";
+import { RevealHeading } from "./TextReveal";
 
 function GoogleG({ className = "h-6 w-6", ariaHidden = true }) {
   return (
@@ -24,7 +25,9 @@ function Stars({ rating }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <span
           key={i}
-          className={`text-[18px] ${i < full ? "text-amber-400" : "text-neutral-600"}`}
+          className={`text-lg ${
+            i < full ? "text-amber-400" : "text-neutral-600"
+          }`}
         >
           ★
         </span>
@@ -34,7 +37,13 @@ function Stars({ rating }) {
 }
 
 function InitialsAvatar({ name }) {
-  const initials = (name || "?").split(" ").map(s => s[0]).join("").slice(0,2).toUpperCase();
+  const initials = (name || "?")
+    .split(" ")
+    .map((s) => s[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
     <div className="h-8 w-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-semibold text-neutral-200">
       {initials}
@@ -54,25 +63,33 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
   const shownRating =
     typeof averageRating === "number"
       ? averageRating
-      : (typeof autoData?.rating === "number" ? autoData.rating : null);
+      : typeof autoData?.rating === "number"
+      ? autoData.rating
+      : null;
 
   const shownTotal =
     typeof totalReviews === "number"
       ? totalReviews
-      : (typeof autoData?.total === "number" ? autoData.total : null);
+      : typeof autoData?.total === "number"
+      ? autoData.total
+      : null;
 
   const resolvedPlaceUrl = placeId
     ? `https://www.google.com/maps/place/?q=place_id:${placeId}`
-    : (autoData?.url || undefined);
+    : autoData?.url || undefined;
 
   const resolvedWriteUrl = placeId
     ? `https://search.google.com/local/writereview?placeid=${placeId}`
-    : (autoData?.cid ? `https://search.google.com/local/writereview?cid=${autoData.cid}` : undefined);
+    : autoData?.cid
+    ? `https://search.google.com/local/writereview?cid=${autoData.cid}`
+    : undefined;
 
+  // Mobil / desktop
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
     const h = () => setIsMobile(mq.matches);
-    h(); mq.addEventListener?.("change", h);
+    h();
+    mq.addEventListener?.("change", h);
     return () => mq.removeEventListener?.("change", h);
   }, []);
 
@@ -85,30 +102,41 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
   const containerRef = useRef(null);
   const lastTsRef = useRef(0);
 
-  // Fetch reviews
+  // Google Reviews fetch
   useEffect(() => {
     fetch("/api/places-reviews")
-      .then(r => r.json())
-      .then(d => {
-        const normalized = (d?.reviews || []).map(x => ({
+      .then((r) => r.json())
+      .then((d) => {
+        const normalized = (d?.reviews || []).map((x) => ({
           profile_photo_url: x.profilePhotoUrl ?? x.profile_photo_url ?? "",
           author_name: x.authorName ?? x.author_name ?? "Google kullanıcısı",
-          relative_time_description: x.relativeTime ?? x.relative_time_description ?? "",
+          relative_time_description:
+            x.relativeTime ?? x.relative_time_description ?? "",
           rating: x.rating ?? 0,
-          text: x.text ?? ""
+          text: x.text ?? "",
         }));
         setReviews(normalized);
 
         let cid = null;
-        try { cid = new URL(d?.url || "").searchParams.get("cid"); } catch {}
-        setAutoData({ rating: d?.rating ?? null, total: d?.total ?? null, url: d?.url ?? null, cid });
+        try {
+          cid = new URL(d?.url || "").searchParams.get("cid");
+        } catch {}
+        setAutoData({
+          rating: d?.rating ?? null,
+          total: d?.total ?? null,
+          url: d?.url ?? null,
+          cid,
+        });
       })
       .catch(console.error);
   }, []);
 
-  const setWidth = useMemo(() => (reviews.length || 1) * (CARD_W + GAP), [reviews.length]);
+  const setWidth = useMemo(
+    () => (reviews.length || 1) * (CARD_W + GAP),
+    [reviews.length]
+  );
 
-  // Smooth endless scroll without momentum or pulse
+  // Sonsuz kayma animasyonu
   useEffect(() => {
     if (!reviews.length || !setWidth) return;
 
@@ -131,141 +159,167 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
 
     reqRef.current = requestAnimationFrame(step);
     return () => cancelAnimationFrame(reqRef.current);
-  }, [reviews, setWidth]);
+  }, [reviews, setWidth, autoSpeed]);
 
-  // Pointer controls (sola basınca sola, sağa basınca sağa, ortaya dur)
+  // Pointer kontrolü
   const onPointerDown = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.touches?.[0]?.clientX ?? e.clientX) - rect.left;
+    const clientX = e.touches?.[0]?.clientX ?? e.clientX;
+    const x = clientX - rect.left;
 
     if (x < rect.width / 3) velRef.current = -manualSpeed;
     else if (x > (rect.width / 3) * 2) velRef.current = manualSpeed;
     else velRef.current = 0;
   };
 
-  const onPointerUp = () => { velRef.current = -autoSpeed; };
+  const onPointerUp = () => {
+    velRef.current = -autoSpeed;
+  };
 
   const ctaStars = Math.round(Number(shownRating) || 0);
 
   return (
-    <section className="w-full pt-5 pb-10 px-4 sm:px-8 lg:px-20 select-none bg-neutral-950">
+    <section className="w-full pt-0 pb-16 px-4 sm:px-8 lg:px-20 select-none bg-neutral-950">
       <div className="max-w-6xl mx-auto">
+        {/* Üst başlık + rating */}
         <MotionReveal>
-          <div className="rounded-2xl bg-neutral-900 border border-neutral-800 shadow-lg p-5 sm:p-8 mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 sm:gap-6">
-              <div className="flex items-center gap-4">
-                <div className="h-10 w-10 sm:h-12 sm:w-12 flex items-center justify-center rounded-xl bg-neutral-800">
-                  <GoogleG className="h-6 w-6 sm:h-8 sm:w-8" />
-                </div>
-                <div className="flex flex-col items-start">
-                  <div className="flex items-center gap-3">
-                    <span className="text-white font-semibold text-lg sm:text-xl">
-                      {typeof shownRating === "number" ? shownRating.toFixed(1) : "—"}
-                    </span>
-                    <Stars rating={ctaStars} />
-                  </div>
-                  <div className="text-xs sm:text-sm text-neutral-400 mt-1">
-                    {typeof shownTotal === "number" ? `${shownTotal} yorum` : "Google üzerinde"}
-                  </div>
-                </div>
-              </div>
+          <header className="mb-8 text-center">
+            <RevealHeading
+              as="h2"
+              mode="word"
+              className="text-3xl sm:text-4xl font-extrabold text-white leading-[1.1] tracking-[-0.02em]"
+            >
+              İnanç Coaching | Personal Trainer
+            </RevealHeading>
 
-              <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-row sm:flex-nowrap sm:gap-4 w-full md:w-auto">
-                <a
-                  href={resolvedPlaceUrl || "#"}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`inline-flex items-center justify-center h-11 px-5 rounded-xl text-sm font-semibold transition whitespace-nowrap
-                    ${resolvedPlaceUrl ? "bg-blue-600 hover:bg-blue-500 text-white" : "bg-neutral-800 text-neutral-500 cursor-not-allowed"}
-                    w-full sm:w-auto`}
-                  aria-disabled={!resolvedPlaceUrl}
-                >
-                  Yorumlar
-                </a>
-                <a
-                  href={resolvedWriteUrl || "#"}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`inline-flex items-center justify-center h-11 px-5 rounded-xl text-sm font-semibold transition whitespace-nowrap
-                    ${resolvedWriteUrl ? "bg-emerald-600 hover:bg-emerald-500 text-white" : "bg-neutral-800 text-neutral-500 cursor-not-allowed"}
-                    w-full sm:w-auto`}
-                  aria-disabled={!resolvedWriteUrl}
-                >
-                  Yorum yaz
-                </a>
-              </div>
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
+              <Stars rating={ctaStars || 5} />
+              <span className="text-sm sm:text-base text-neutral-300">
+                {typeof shownRating === "number"
+                  ? `${shownRating.toFixed(1)} `
+                  : "Google üzerinden değerlendirmeler"}
+                {typeof shownTotal === "number" ? ` • ${shownTotal} yorum` : ""}
+              </span>
             </div>
-          </div>
+          </header>
         </MotionReveal>
 
+        {/* Kayan slider + CTA */}
         <MotionReveal delay={120}>
-          <div
-            className="relative overflow-hidden bg-neutral-950 cursor-pointer"
-            onMouseDown={onPointerDown}
-            onMouseUp={onPointerUp}
-            onMouseLeave={onPointerUp}
-            onTouchStart={onPointerDown}
-            onTouchEnd={onPointerUp}
-            style={{ isolation: "isolate", touchAction: "none" }} // native momentum kapalı
-          >
+          <>
             <div
-              ref={containerRef}
-              className="flex"
-              style={{ gap: `${GAP}px`, willChange: "transform", backfaceVisibility: "hidden" }}
+              className="relative overflow-hidden bg-transparent cursor-pointer"
+              onMouseDown={onPointerDown}
+              onMouseUp={onPointerUp}
+              onMouseLeave={onPointerUp}
+              onTouchStart={onPointerDown}
+              onTouchEnd={onPointerUp}
+              style={{ isolation: "isolate", touchAction: "none" }}
             >
-              {[...reviews, ...reviews].map((r, i) => {
-                const numeric = Math.round(Number(r.rating || 0)); 
-                return (
-                  <article
-                    key={`${r.author_name}-${i}`}
-                    className="flex-shrink-0 rounded-2xl shadow-lg p-4 flex flex-col bg-neutral-900 border border-neutral-800"
-                    style={{ width: CARD_W, height: CARD_H }}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        {r.profile_photo_url ? (
-                          <img
-                            src={r.profile_photo_url}
-                            alt={r.author_name}
-                            className="h-8 w-8 rounded-full object-cover"
-                            referrerPolicy="no-referrer"
-                          />
-                        ) : (
-                          <InitialsAvatar name={r.author_name} />
-                        )}
-                        <div className="leading-tight">
-                          <div className="font-semibold text-neutral-100 text-[0.88rem]">
-                            {r.author_name}
+              <div className="overflow-hidden">
+                <div
+                  ref={containerRef}
+                  className="flex"
+                  style={{
+                    gap: `${GAP}px`,
+                    willChange: "transform",
+                    backfaceVisibility: "hidden",
+                  }}
+                >
+                  {[...reviews, ...reviews].map((r, i) => {
+                    const numeric = Math.round(Number(r.rating || 0));
+                    const rawText = (r.text || "").trim();
+                    const shortText =
+                      rawText.length > 220
+                        ? rawText.slice(0, 220).trimEnd() + "..."
+                        : rawText;
+
+                    return (
+                      <article
+                        key={`${r.author_name}-${i}`}
+                        className="flex-shrink-0 rounded-sm shadow-lg p-4 flex flex-col bg-neutral-900/95 border border-neutral-800"
+                        style={{ width: CARD_W, height: CARD_H }}
+                      >
+                        {/* Üst satır: avatar + isim + tarih + Google ikonu */}
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-center gap-3">
+                            {r.profile_photo_url ? (
+                              <img
+                                src={r.profile_photo_url}
+                                alt={r.author_name}
+                                className="h-8 w-8 rounded-full object-cover"
+                                referrerPolicy="no-referrer"
+                              />
+                            ) : (
+                              <InitialsAvatar name={r.author_name} />
+                            )}
+                            <div className="leading-tight">
+                              <div className="font-semibold text-neutral-100 text-sm sm:text-base">
+                                {r.author_name}
+                              </div>
+                              <div className="text-xs text-neutral-400">
+                                {r.relative_time_description}
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-[0.75rem] text-neutral-400">
-                            {r.relative_time_description}
-                          </div>
+
+                          <GoogleG className="h-5 w-5" ariaHidden={false} />
                         </div>
-                      </div>
 
-                      <div className="inline-flex items-center gap-1 font-semibold text-[1.188rem] leading-none self-start pr-[2px]">
-                        <span className="text-neutral-100">{numeric}</span>
-                        <span aria-hidden className="text-amber-400">★</span>
-                      </div>
-                    </div>
+                        {/* Yıldızlar */}
+                        <div className="mt-2">
+                          <Stars rating={numeric} />
+                        </div>
 
-                    <p
-                      className="mt-3 text-neutral-300 flex-1 overflow-hidden leading-snug"
-                      style={{
-                        fontSize: "12px",
-                        display: "-webkit-box",
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 5,
-                      }}
-                      title={r.text}
-                    >
-                      {r.text}
-                    </p>
-                  </article>
-                );
-              })}
+                        {/* Yorum metni  */}
+                        <p
+                          className="mt-3 text-xs sm:text-sm text-neutral-300 flex-1 overflow-hidden leading-snug"
+                          style={{
+                            display: "-webkit-box",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 4,
+                          }}
+                          title={rawText}
+                        >
+                          {shortText}
+                        </p>
+                      </article>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-          </div>
+
+            {/* CTA butonları –  */}
+            <div className="mt-12 flex flex-row gap-3 items-center justify-center">
+              <a
+                href={resolvedPlaceUrl || "#"}
+                target="_blank"
+                rel="noreferrer"
+                className={`inline-flex items-center justify-center h-11 px-4 sm:px-5 rounded-xl text-sm md:text-base font-semibold tracking-tight border transition-colors ${
+                  resolvedPlaceUrl
+                    ? "border-neutral-700 bg-neutral-900/80 text-neutral-100 hover:border-orange-500 hover:text-white-200"
+                    : "border-neutral-800 bg-neutral-900/60 text-neutral-500 cursor-not-allowed"
+                }`}
+                aria-disabled={!resolvedPlaceUrl}
+              >
+                Google İşletme
+              </a>
+              <a
+                href={resolvedWriteUrl || "#"}
+                target="_blank"
+                rel="noreferrer"
+                className={`inline-flex items-center justify-center h-11 px-4 sm:px-5 rounded-xl text-sm md:text-base font-semibold tracking-tight transition-colors ${
+                  resolvedWriteUrl
+                    ? "bg-orange-600 hover:bg-orange-500 text-white shadow-sm hover:shadow-md"
+                    : "bg-neutral-800 text-neutral-500 cursor-not-allowed"
+                }`}
+                aria-disabled={!resolvedWriteUrl}
+              >
+                Yorum yaz
+              </a>
+            </div>
+          </>
         </MotionReveal>
       </div>
     </section>

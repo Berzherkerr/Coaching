@@ -1,61 +1,109 @@
 // src/components/Hizmetler.jsx
-// Güncelleme (yalnızca istenenler):
-// - MOBİL: İkon %10 KÜÇÜK (32px → ~29px) ve ikon sütunu dar (56px → 50px) → metin alanı genişledi.
-// - MOBİL: Title boyutu %10 BÜYÜK (14px → ~15px), BOLD.
-// - DESKTOP: Önceki hâliyle aynı (eşit yükseklik + %15 artırılmış dikey aralık).
-
 import React from "react";
 import MotionReveal from "./MotionReveal";
+import { RevealHeading } from "./TextReveal";
 
 const hizmetler = [
-  { icon: "💪", title: "Birebir Fitness Koçluğu", description: "Hedefine uygun, tamamen sana özel antrenmanlarla gelişimini adım adım takip ediyoruz." },
-  { icon: "💻", title: "Canlı Online Antrenman Seansları", description: "İnternetin olduğu her yerde, canlı bağlantıyla birlikte çalışıp motivasyonunu yüksek tutuyoruz." },
-  { icon: "🗂️", title: "Kişiye Özel Programlar", description: "Zamanına ve imkanlarına göre hazırlanmış planla, nereye gidersen git düzenini koruyabilirsin." },
-  { icon: "🥗", title: "Kişiselleştirilmiş Beslenme Danışmanlığı", description: "Yaşam tarzına uygun, sürdürülebilir beslenme planı ile daha sağlıklı sonuçlar elde edebilirsin." },
-  { icon: "⚖️", title: "Kilo Kontrolü Uzmanlığı", description: "Kilo verme ya da alma hedefinde, seni doğru adımlarla ilerleten bir yol haritası oluşturuyoruz." },
-  { icon: "🚫", title: "Gıda Hassasiyetlerine Uygun Planlama", description: "İhtiyaçlarına ve hassasiyetlerine göre güvenli bir beslenme planıyla yoluna devam edebilirsin." },
-  { icon: "📊", title: "Antrenman Planlamasında Uzmanlık", description: "Performansına uygun, düzenli ve verimli antrenman planıyla gereksiz yorulmadan ilerleyebilirsin." },
-  { icon: "🏠", title: "Ekipmansız Ev Egzersizi Rehberliği", description: "Sadece kendi beden ağırlığınla evinde bile etkili sonuçlar alabileceğin programlar sunuyorum." },
+  {
+    icon: "🏋️‍♂️",
+    title: "Birebir Koçluk",
+    description:
+      "Balıkesir'de salonda bire bir çalışarak, sana özel programla formunu ve gücünü adım adım birlikte geliştiriyoruz.",
+  },
+  {
+    icon: "💻",
+    title: "Online Koçluk",
+    description:
+      "Nerede olursan ol; online program, video analiz ve düzenli takip ile seni hedeflerine güvenle ilerletiyorum.",
+  },
+  {
+    icon: "🥗",
+    title: "Beslenme Danışmanlığı",
+    description:
+      "Günlük hayatına uyan, yasaklara değil dengeye dayalı bir beslenme planı ile sürecini destekliyorum.",
+  },
+  {
+    icon: "⚖️",
+    title: "Kilo Yönetimi",
+    description:
+      "Kilo verme ya da alma hedefini; tartı stresini büyütmeden, kontrollü ve sürdürülebilir şekilde yönetiyoruz.",
+  },
+  {
+    icon: "🏠",
+    title: "Ev Antrenmanı",
+    description:
+      "Salona gelemiyorsan, evde basit ekipmanlarla uygulayabileceğin net ve takip edilebilir bir plan kuruyoruz.",
+  },
+  {
+    icon: "🧍‍♂️",
+    title: "Form & Postür",
+    description:
+      "Duruşunu ve hareket kaliteni analiz ederek daha dik, dengeli ve ağrısız bir vücut mekaniği hedefliyoruz.",
+  },
+  {
+    icon: "🤸‍♂️",
+    title: "Mobilite & Esneklik",
+    description:
+      "Uzun süre oturmaya bağlı duruş bozuklukları ve hareket kısıtlılıkları için, özel programlar hazırlıyorum.",
+  },
+  {
+    icon: "💪",
+    title: "Kas Gelişimi",
+    description:
+      "Bilinçli yüklenme prensipleriyle kas kütleni artıran, güç odaklı ve ölçülebilir programlar tasarlıyorum.",
+  },
+  {
+    icon: "📈",
+    title: "Boy Gelişimi",
+    description:
+      "Büyüme döneminde omurga sağlığını koruyan, güvenli ve destekleyici egzersizlerle potansiyelini destekliyorum.",
+  },
 ];
 
 export default function Hizmetler() {
   return (
-    <section id="hizmetler" className="bg-neutral-950 pt-20 pb-15 px-4 sm:px-8 lg:px-20">
+    <section
+      id="hizmetler"
+      className="relative z-10 bg-neutral-950 pt-20 pb-15 px-4 sm:px-8 lg:px-20"
+    >
       <div className="max-w-6xl mx-auto">
         {/* Başlık */}
-        <header className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white">Hizmetler</h2>
-          <p className="mt-4 text-lg text-neutral-300 max-w-2xl mx-auto">
-            Senin ihtiyaçlarını anlayan bir rehber eşliğinde, sürdürülebilir adımlarla ilerle.
+        <div className="text-center mb-14">
+          <RevealHeading
+            as="h2"
+            mode="word"
+            className="text-3xl sm:text-4xl font-extrabold text-white leading-[1.1] tracking-[-0.02em]"
+          >
+            Hizmetler
+          </RevealHeading>
+          <p className="mt-4 text-base md:text-lg font-medium text-neutral-300 max-w-4xl mx-auto leading-relaxed">
+            Sürdürülebilir bir sistem ile hem Balıkesir’de hem de online olarak
+            seninle birlikte gelişiyoruz.
           </p>
-        </header>
+        </div>
 
-        {/* MOBİL */}
+        {/* Mobil görünüm */}
         <div className="sm:hidden">
           <ul className="space-y-3">
-            {hizmetler.map((item, i) => (
-              <li key={i}>
-                <MotionReveal delay={i * 80}>
+            {hizmetler.map((item, index) => (
+              <li key={index}>
+                <MotionReveal>
                   <div
-                    className="rounded-lg bg-neutral-900 border border-neutral-800 p-4
-                               shadow-md ring-1 ring-transparent
-                               hover:border-orange-600/40 hover:ring-orange-600/20 transition"
+                    className="group rounded-sm bg-neutral-900/90 border border-neutral-800 p-3 shadow-lg ring-1 ring-transparent hover:-translate-y-[3px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] transition-all duration-300 ease-out"
+                    style={{ transformOrigin: "center" }}
                   >
-                    {/* İkon sütunu  */}
                     <div className="grid grid-cols-[50px_1fr] gap-3 items-center">
                       <div className="col-start-1 row-span-2 flex items-center justify-center">
-                        <span className="text-[29px] leading-none" aria-hidden>
+                        <div className="text-3xl leading-none group-hover-emoji-pulse-soft">
                           {item.icon}
-                        </span>
+                        </div>
                       </div>
 
-                      {/* Title  */}
-                      <h3 className="col-start-2 text-[15px] font-bold text-neutral-100 leading-tight">
+                      <h3 className="col-start-2 text-md font-semibold text-white leading-snug">
                         {item.title}
                       </h3>
 
-                      {/* Açıklama */}
-                      <p className="col-start-2 text-sm leading-snug text-neutral-300">
+                      <p className="col-start-2 text-sm leading-relaxed text-neutral-300/90 font-normal">
                         {item.description}
                       </p>
                     </div>
@@ -66,23 +114,21 @@ export default function Hizmetler() {
           </ul>
         </div>
 
-        {/* DESKTOP */}
-        <div className="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-8 auto-rows-[1fr] items-stretch">
-          {hizmetler.map((item, i) => (
-            <MotionReveal key={i} delay={i * 80}>
+        {/* Desktop / Tablet görünüm – 3x3 grid */}
+        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[1fr] items-stretch">
+          {hizmetler.map((item, index) => (
+            <MotionReveal key={index} delay={index * 60}>
               <div
-                className="bg-neutral-900 p-5 pt-8 pb-6
-                           rounded-xl border border-neutral-800
-                           shadow-lg ring-1 ring-transparent
-                           hover:border-orange-600/60 hover:ring-orange-600/30
-                           transition-all duration-300
-                           h-full flex flex-col items-center text-center gap-3.5"
+                className="group bg-neutral-900/90 p-4 pt-6 pb-5 rounded-sm border border-neutral-800 shadow-lg ring-1 ring-transparent hover:-translate-y-[4px] hover:shadow-[0_22px_55px_rgba(0,0,0,0.50)] hover:border-neutral-700 transition-all duration-300 ease-out h-full flex flex-col items-center text-center gap-3"
+                style={{ transformOrigin: "center" }}
               >
-                <div className="text-3xl" aria-hidden>{item.icon}</div>
-                <h3 className="text-lg font-semibold text-neutral-100 leading-tight">
+                <div className="text-4xl mb-1 group-hover-emoji-pulse-soft">
+                  {item.icon}
+                </div>
+                <h3 className="text-lg md:text-xl font-semibold text-white leading-snug">
                   {item.title}
                 </h3>
-                <p className="text-neutral-300 text-sm leading-snug">
+                <p className="text-neutral-300/90 text-sm leading-relaxed font-normal max-w-[280px]">
                   {item.description}
                 </p>
               </div>

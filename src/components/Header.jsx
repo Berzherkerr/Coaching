@@ -82,7 +82,7 @@ function Header() {
   return (
     <header
       className={`
-        fixed top-0 left-0 w-full z-50
+        fixed top-0 left-0 w-full z-50 
         transition-all duration-400 ease-[cubic-bezier(.22,1,.36,1)]
         ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-0 pointer-events-none"}
         bg-neutral-950/70 backdrop-blur-sm

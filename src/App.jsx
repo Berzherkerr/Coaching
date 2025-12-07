@@ -9,6 +9,7 @@ import GoogleReviews from './components/GoogleReviews'
 
 
 
+
 function App() {
   return (
     <div className="h-screen snap-y snap-mandatory overflow-y-scroll">

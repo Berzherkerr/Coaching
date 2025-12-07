@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* Genel layout */
 body, html, #root {
   margin: 0;
   padding: 0;
@@ -7,7 +8,16 @@ body, html, #root {
   height: 100%;
 }
 
+:root {
+  /* Sadece BURADAN fade genişliğini kontrol edeceksin */
+  --fade-amount: 10%;
+}
+
+/* ===========================
+   UTILITIES LAYER
+   =========================== */
 @layer utilities {
+  /* Hizmetler / MotionReveal için slide-fade animasyonu */
   @keyframes slide-fade {
     0% {
       opacity: 0;
@@ -24,7 +34,7 @@ body, html, #root {
   }
 }
 
-/* Sonsuz yatay akış; içerik iki kez kopyalandığı için -50% 
+/* Sonsuz yatay akış; içerik iki kez kopyalandığı için -50%
 @keyframes reviews-marquee-x {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -32,19 +42,26 @@ body, html, #root {
 .reviews-track {
   animation: reviews-marquee-x 15s linear infinite;
 }
-
 */
 
+/* Headline için condensed font kullanmak istersen diye değişken */
 :root {
-  --hero-condensed: "Oswald", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --hero-condensed: "Oswald", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
 
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+/* Scrollbar gizleme helper'ı */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
-/* ==========================================================================
-   EK: Koyu tema scrollbar stilleri (TÜM SAYFA) — mevcut yapıyı BOZMADAN
-   ========================================================================== */
+/* =====================================================================
+   Koyu tema scrollbar stilleri (TÜM SAYFA)
+   ===================================================================== */
 
 /* Firefox */
 * {
@@ -74,3 +91,26 @@ body, html, #root {
 .scroll-dark::-webkit-scrollbar-track { background: #0a0a0a; }
 .scroll-dark::-webkit-scrollbar-thumb { background: #404040; border: 2px solid #0a0a0a; }
 */
+
+/* =====================================================================
+   Emoji için yumuşak pulse animasyonu (Hizmetler kartları)
+   ===================================================================== */
+
+@keyframes emoji-pulse-soft {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.05);
+  }
+  65% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.group:hover .group-hover-emoji-pulse-soft {
+  animation: emoji-pulse-soft 2s cubic-bezier(0.33, 0.0, 0.2, 1) infinite;
+}
