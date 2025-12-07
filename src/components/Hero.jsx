@@ -27,7 +27,7 @@ export default function Hero() {
 
       {/* ALT FADE – daha uzun, daha küçük adımlı, daha yumuşak */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-72 sm:h-1000"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-1000 pb-5  z-20 sm:h-1000"
         style={{
           background: `
             linear-gradient(
@@ -46,7 +46,7 @@ export default function Hero() {
       />
 
       {/* içerik */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 pb-16 mb-90 md:pb-24 text-center text-white">
+      <div className="relative z-20 w-full max-w-5xl mx-auto px-4 pb-16 mb-90 md:pb-24 text-center text-white">
         <h1 className="font-extrabold uppercase tracking-tight leading-[0.95] text-2xl sm:text-4xl md:text-6xl lg:text-5xl drop-shadow-lg font-[var(--hero-condensed,theme(fontFamily.sans))]">
           Kendİne yaptığın en İyİ yatırım, bedenİnle başlar.
         </h1>

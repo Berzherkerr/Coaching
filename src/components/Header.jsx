@@ -16,7 +16,6 @@ function PhoneIcon({ className = "h-4 w-4" }) {
       shapeRendering="geometricPrecision"
       focusable="false"
     >
-      {/* Kaynak: lucide phone çizgisel ikonun grid’e oturtulmuş versiyonu */}
       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.64-3.07 19.5 19.5 0 0 1-6-6 19.86 19.86 0 0 1-3.08-8.64A2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.81.31 1.6.57 2.35a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 7 7l.73-.73a2 2 0 0 1 2.11-.45c.75.26 1.54.45 2.35.57A2 2 0 0 1 22 16.92z" />
     </svg>
   );
@@ -27,18 +26,18 @@ function Header() {
 
   const lastYRef = useRef(0);
   const rafRef = useRef(null);
+  const hideTimeoutRef = useRef(null);
 
   const SHOW_UP_THRESHOLD = 6;
   const HIDE_DOWN_THRESHOLD = 6;
+  const HIDE_DELAY_MS = 7000; // 7 saniye sonra gizle
 
-  // Menü
   const menuItems = [
     { label: "Hakkımda", href: "#hakkimda" },
     { label: "Hizmetler", href: "#hizmetler" },
     { label: "Paketler", href: "#fiyatlar" },
   ];
 
-  // Menüdekiyle aynı davranış + fallback: hedef yoksa en üste kaydır
   const handleNav = (href) => (e) => {
     e.preventDefault();
     const el =
@@ -55,16 +54,43 @@ function Header() {
   useEffect(() => {
     lastYRef.current = window.scrollY;
 
+    const clearHideTimeout = () => {
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+        hideTimeoutRef.current = null;
+      }
+    };
+
     const onScroll = () => {
       if (rafRef.current) return;
+
       rafRef.current = requestAnimationFrame(() => {
         const y = window.scrollY;
         const dy = y - lastYRef.current;
 
-        if (y <= 12) setIsVisible(true);
-        else {
-          if (dy < -SHOW_UP_THRESHOLD) setIsVisible(true);
-          if (dy > HIDE_DOWN_THRESHOLD) setIsVisible(false);
+        // En üstlere yakınken her zaman göster + timer sıfırla
+        if (y <= 12) {
+          clearHideTimeout();
+          if (!isVisible) setIsVisible(true);
+        } else {
+          // Yukarı kaydırma → hemen göster + timer sıfırla
+          if (dy < -SHOW_UP_THRESHOLD) {
+            clearHideTimeout();
+            if (!isVisible) setIsVisible(true);
+          }
+
+          // Aşağı kaydırma → 7 saniye sonra gizle (hala aşağıda ise)
+          if (dy > HIDE_DOWN_THRESHOLD) {
+            if (!hideTimeoutRef.current) {
+              hideTimeoutRef.current = setTimeout(() => {
+                // hala en üstte değilse gizle
+                if (window.scrollY > 12) {
+                  setIsVisible(false);
+                }
+                hideTimeoutRef.current = null;
+              }, HIDE_DELAY_MS);
+            }
+          }
         }
 
         lastYRef.current = y;
@@ -76,15 +102,19 @@ function Header() {
     return () => {
       window.removeEventListener("scroll", onScroll);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
     };
-  }, []);
+  }, [isVisible]);
 
   return (
     <header
-      className={`
-        fixed top-0 left-0 w-full z-50 
+      className={`fixed top-0 left-0 w-full z-50 
         transition-all duration-400 ease-[cubic-bezier(.22,1,.36,1)]
-        ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-0 pointer-events-none"}
+        ${
+          isVisible
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-0 pointer-events-none"
+        }
         bg-neutral-950/70 backdrop-blur-sm
         shadow-[0_8px_24px_rgba(0,0,0,0)]
       `}
@@ -92,7 +122,7 @@ function Header() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-0">
         {/* Masaüstü */}
         <div className="hidden md:flex items-center py-[0.64rem] relative">
-          {/* Logo (sol) — MENÜYLE AYNI KAYDIRMA: #hero varsa ona, yoksa en üste */}
+          {/* Logo */}
           <a
             href="#hero"
             onClick={handleNav("#hero")}
@@ -107,8 +137,8 @@ function Header() {
             />
           </a>
 
-          {/* Menü  */}
-          <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6 whitespace-nowrap">
+          {/* Menü */}
+          <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-8 whitespace-nowrap">
             {menuItems.map((item, idx) => (
               <a
                 key={idx}
@@ -121,7 +151,7 @@ function Header() {
             ))}
           </nav>
 
-          
+          {/* Telefon butonu */}
           <a
             href="tel:+905334409803"
             className="ml-auto flex items-center gap-2 text-orange-500 hover:text-orange-400 transition text-sm font-semibold"
@@ -131,9 +161,9 @@ function Header() {
           </a>
         </div>
 
-        {/* Mobil: logo  */}
-        <div className="md:hidden relative flex items-center h-14">
-          {/* Logo (sol) —  */}
+        {/* Mobil */}
+        <div className="md:hidden relative flex items-center  h-14">
+          {/* Logo */}
           <a
             href="#hero"
             onClick={handleNav("#hero")}
@@ -148,10 +178,10 @@ function Header() {
             />
           </a>
 
-          {/* Menü  */}
+          {/* Menü */}
           <nav
-            className="absolute left-1/2 -translate-x-1/2 flex items-center gap-4
-                       text-[13px] font-medium text-neutral-200 whitespace-nowrap"
+            className="absolute left-1/2 -translate-x-1/2 flex items-center gap-5
+                       text-[13px] font-bold text-neutral-200 whitespace-nowrap"
           >
             {menuItems.map((item, index) => (
               <a
@@ -165,7 +195,7 @@ function Header() {
             ))}
           </nav>
 
-          {/* Telefon (sağ) —  */}
+          {/* Telefon ikonu */}
           <a
             href="tel:+905334409803"
             className="ml-auto flex items-center text-orange-500 hover:text-orange-400 transition"

@@ -72,7 +72,7 @@ export default function Hizmetler() {
           <RevealHeading
             as="h2"
             mode="word"
-            className="text-3xl sm:text-4xl font-extrabold text-white leading-[1.1] tracking-[-0.02em]"
+            className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] tracking-[-0.02em]"
           >
             Hizmetler
           </RevealHeading>

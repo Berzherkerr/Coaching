@@ -56,7 +56,7 @@ export default function Hakkimda() {
 
       <div className="max-w-6xl mx-auto">
         {/* İçerik grid: slider + metin */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-15 lg:gap-14 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-10 lg:gap-14 items-center">
           {/* SLAYT */}
           <MotionReveal>
             <div

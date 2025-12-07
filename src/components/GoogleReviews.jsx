@@ -187,7 +187,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
             <RevealHeading
               as="h2"
               mode="word"
-              className="text-3xl sm:text-4xl font-extrabold text-white leading-[1.1] tracking-[-0.02em]"
+              className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] tracking-[-0.02em]"
             >
               İnanç Coaching | Personal Trainer
             </RevealHeading>
