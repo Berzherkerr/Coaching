@@ -169,7 +169,7 @@ export default function Fiyatlar() {
                   </div>
 
                   {paket.tagline && (
-                    <p className="mt-2 text-xs sm:text-sm font-bold text-neutral-400 leading-relaxed">
+                    <p className="mt-2 text-sm sm:text-sm font-md text-neutral-400 leading-relaxed">
                       {paket.tagline}
                     </p>
                   )}
