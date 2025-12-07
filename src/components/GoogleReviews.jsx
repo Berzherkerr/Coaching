@@ -214,7 +214,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
               onMouseLeave={onPointerUp}
               onTouchStart={onPointerDown}
               onTouchEnd={onPointerUp}
-              style={{ isolation: "isolate", touchAction: "none" }}
+              style={{ isolation: "isolate", touchAction: "pan-y" }}
             >
               <div className="overflow-hidden">
                 <div
