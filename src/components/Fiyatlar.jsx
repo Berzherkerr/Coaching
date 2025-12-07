@@ -16,7 +16,7 @@ const ortakOzellikler = [
 const paketler = [
   {
     title: "Uzaktan Eğitim",
-    tagline: "Spora yeni başlayanlara uygun çözüm.",
+    tagline: "Spora yeni başlayanlara uygun çözüm",
     ozel: [
       "Özel antrenman ve beslenme programı",
       "Haftalık online değerlendirme ve takip",
@@ -30,7 +30,7 @@ const paketler = [
   },
   {
     title: "Online Koçluk",
-    tagline: "Canlı birebir seans ve geri bildirim.",
+    tagline: "Canlı birebir seans ve geri bildirim",
     ozel: [
       "Online birebir antrenman seansları",
       "Seans sonrası değerlendirme ve düzenleme",
@@ -169,7 +169,7 @@ export default function Fiyatlar() {
                   </div>
 
                   {paket.tagline && (
-                    <p className="mt-3 text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                    <p className="mt-2 text-xs sm:text-sm font-bold text-neutral-400 leading-relaxed">
                       {paket.tagline}
                     </p>
                   )}
