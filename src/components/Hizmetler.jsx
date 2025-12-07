@@ -3,6 +3,8 @@ import React from "react";
 import MotionReveal from "./MotionReveal";
 import { RevealHeading } from "./TextReveal";
 
+const WHATSAPP_NUMBER = "905334409803";
+
 const hizmetler = [
   {
     icon: "🏋️‍♂️",
@@ -60,6 +62,13 @@ const hizmetler = [
   },
 ];
 
+function handleWhatsappClick(title) {
+  const message = `İnanç Coaching web sitenizdeki "${title}" hizmetiniz hakkında bilgi almak istiyorum.`;
+  const encoded = encodeURIComponent(message.trim());
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
 export default function Hizmetler() {
   return (
     <section
@@ -88,8 +97,10 @@ export default function Hizmetler() {
             {hizmetler.map((item, index) => (
               <li key={index}>
                 <MotionReveal>
-                  <div
-                    className="group rounded-sm bg-neutral-900/90 border border-neutral-800 p-3 shadow-lg ring-1 ring-transparent hover:-translate-y-[3px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] transition-all duration-300 ease-out"
+                  <button
+                    type="button"
+                    onClick={() => handleWhatsappClick(item.title)}
+                    className="w-full text-left group rounded-sm bg-neutral-900/90 border border-neutral-800 p-3 shadow-lg ring-1 ring-transparent hover:-translate-y-[3px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] transition-all duration-300 ease-out"
                     style={{ transformOrigin: "center" }}
                   >
                     <div className="grid grid-cols-[50px_1fr] gap-3 items-center">
@@ -107,7 +118,7 @@ export default function Hizmetler() {
                         {item.description}
                       </p>
                     </div>
-                  </div>
+                  </button>
                 </MotionReveal>
               </li>
             ))}
@@ -118,8 +129,10 @@ export default function Hizmetler() {
         <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[1fr] items-stretch">
           {hizmetler.map((item, index) => (
             <MotionReveal key={index} delay={index * 60}>
-              <div
-                className="group bg-neutral-900/90 p-4 pt-6 pb-5 rounded-sm border border-neutral-800 shadow-lg ring-1 ring-transparent hover:-translate-y-[4px] hover:shadow-[0_22px_55px_rgba(0,0,0,0.50)] hover:border-neutral-700 transition-all duration-300 ease-out h-full flex flex-col items-center text-center gap-3"
+              <button
+                type="button"
+                onClick={() => handleWhatsappClick(item.title)}
+                className="group bg-neutral-900/90 p-4 pt-6 pb-5 rounded-sm border border-neutral-800 shadow-lg ring-1 ring-transparent hover:-translate-y-[4px] hover:shadow-[0_22px_55px_rgba(0,0,0,0.50)] hover:border-neutral-700 transition-all duration-300 ease-out h-full flex flex-col items-center text-center gap-3 w-full"
                 style={{ transformOrigin: "center" }}
               >
                 <div className="text-4xl mb-1 group-hover-emoji-pulse-soft">
@@ -131,7 +144,7 @@ export default function Hizmetler() {
                 <p className="text-neutral-300/90 text-sm leading-relaxed font-normal max-w-[280px]">
                   {item.description}
                 </p>
-              </div>
+              </button>
             </MotionReveal>
           ))}
         </div>

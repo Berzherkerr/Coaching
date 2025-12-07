@@ -149,7 +149,7 @@ export default function Fiyatlar() {
                 {/* Üst sağ küçük etiket */}
                 {paket.etiket && (
                   <div
-                    className={`${paket.etiketRenk} absolute -top-3 right-3 text-white text-[10px] sm:text-xs font-semibold px-2 py-1 rounded-full shadow-md tracking-[0.12em] uppercase`}
+                    className={`${paket.etiketRenk} absolute -top-3 right-3 text-white text-[10px] text-lg font-semibold px-2 py-1 rounded-full shadow-md tracking-[0.12em] uppercase`}
                   >
                     {paket.etiket}
                   </div>
