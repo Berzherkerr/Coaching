@@ -10,7 +10,7 @@ const hizmetler = [
     icon: "🏋️‍♂️",
     title: "Birebir Koçluk",
     description:
-      "Balıkesir'de salonda bire bir çalışarak, sana özel programla formunu ve gücünü adım adım birlikte geliştiriyoruz.",
+      "Balıkesir'de salonda birebir çalışarak, sana özel programla formunu ve gücünü adım adım birlikte geliştiriyoruz.",
   },
   {
     icon: "💻",
