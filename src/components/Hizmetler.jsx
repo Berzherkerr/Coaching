@@ -10,7 +10,7 @@ const hizmetler = [
     icon: "🏋️‍♂️",
     title: "Birebir Koçluk",
     description:
-      "Balıkesir'de salonda birebir çalışarak, sana özel programla formunu ve gücünü adım adım birlikte geliştiriyoruz.",
+      "Balıkesir'de spor salonunda birebir çalışarak, sana özel programla formunu ve gücünü adım adım birlikte geliştiriyoruz.",
   },
   {
     icon: "💻",
@@ -132,7 +132,7 @@ export default function Hizmetler() {
               <button
                 type="button"
                 onClick={() => handleWhatsappClick(item.title)}
-                className="group bg-neutral-900/90 p-4 pt-6 pb-5 rounded-sm border border-neutral-800 shadow-lg ring-1 ring-transparent hover:-translate-y-[4px] hover:shadow-[0_22px_55px_rgba(0,0,0,0.50)] hover:border-neutral-700 transition-all duration-300 ease-out h-full flex flex-col items-center text-center gap-3 w-full"
+                className="group bg-neutral-900/90 p-4 pt-6 pb-5 rounded-sm border border-neutral-800 shadow-lg ring-1 ring-transparent hover:-translate-y-[4px] hover:shadow-[0_22px_55px_rgba(0,0,0,0.50)] hover:border-orange-500 transition-all duration-300 ease-out h-full flex flex-col items-center text-center gap-3 w-full"
                 style={{ transformOrigin: "center" }}
               >
                 <div className="text-4xl mb-1 group-hover-emoji-pulse-soft">

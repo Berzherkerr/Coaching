@@ -207,7 +207,7 @@ export default function Fiyatlar() {
                 <button
                   type="button"
                   onClick={() => handleWhatsappClick(paket.title)}
-                  className={`mt-6 w-full py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold tracking-tight border border-neutral-700 bg-neutral-900/90 text-neutral-200 transition-colors duration-200 ${paket.buttonHover}`}
+                  className={`mt-6 w-full py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-semibold tracking-tight border border-neutral-700 bg-neutral-900/90 text-neutral-200 transition-colors duration-200 ${paket.buttonHover}`}
                 >
                   Paketi Seç
                 </button>
