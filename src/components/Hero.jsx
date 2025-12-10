@@ -46,8 +46,8 @@ export default function Hero() {
       />
 
       {/* içerik */}
-      <div className="relative z-20 w-full max-w-5xl mx-auto px-4 pb-16 mb-50 md:pb-24 text-center text-white">
-        <h1 className="font-extrabold uppercase tracking-tight leading-[0.95] text-2xl sm:text-4xl md:text-6xl lg:text-5xl drop-shadow-lg font-[var(--hero-condensed,theme(fontFamily.sans))]">
+      <div className="relative z-20 w-full max-w-5xl mx-auto px-4 pb-16 mb-90 md:pb-24 text-center text-white">
+        <h1 className="font-extrabold uppercase tracking-tight leading-[0.95] text-2xl sm:text-4xl md:text-6xl lg:text-6xl drop-shadow-lg font-[var(--hero-condensed,theme(fontFamily.sans))]">
           Kendİne yaptığın en İyİ yatırım, bedenİnle başlar.
         </h1>
         <p className="mt-4 md:mt-6 text-base sm:text-lg md:text-2xl font-medium drop-shadow-md max-w-2xl mx-auto">
