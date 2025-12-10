@@ -179,7 +179,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
   const ctaStars = Math.round(Number(shownRating) || 0);
 
   return (
-    <section className="w-full pt-20 pb-16 px-4 sm:px-8 lg:px-20 select-none bg-neutral-950">
+    <section className="w-full pt-5 pb-16 px-4 sm:px-8 lg:px-20 select-none bg-neutral-950">
       <div className="max-w-6xl mx-auto">
         {/* Üst başlık + rating */}
         <MotionReveal>
