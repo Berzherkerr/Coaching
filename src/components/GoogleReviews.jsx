@@ -237,7 +237,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                     return (
                       <article
                         key={`${r.author_name}-${i}`}
-                        className="flex-shrink-0 rounded-sm shadow-lg p-4 flex flex-col bg-neutral-950 border border-neutral-800"
+                        className="flex-shrink-0 rounded-sm shadow-lg p-4 flex flex-col bg-neutral-900/90 border border-neutral-800"
                         style={{ width: CARD_W, height: CARD_H }}
                       >
                         {/* Üst satır: avatar + isim + tarih + Google ikonu */}
