@@ -1,5 +1,4 @@
 // FIYATLAR BÖLÜMÜ - Paket fiyatlandırması
-import React from "react";
 import MotionReveal from "./MotionReveal";
 import { RevealHeading } from "./TextReveal";
 
@@ -21,11 +20,9 @@ const paketler = [
       "Özel antrenman ve beslenme programı",
       "Haftalık online değerlendirme ve takip",
     ],
-    fiyat: "3000",
     etiket: "YENİ BAŞLAYANLARA",
     renk: "hover:border-blue-500/60 hover:ring-blue-500/30",
     etiketRenk: "bg-blue-600",
-    // Hover'da mavi tema
     buttonHover: "hover:bg-blue-600 hover:text-white hover:border-blue-500",
   },
   {
@@ -35,11 +32,9 @@ const paketler = [
       "Online birebir antrenman seansları",
       "Seans sonrası değerlendirme ve düzenleme",
     ],
-    fiyat: "7000",
     etiket: "EN ÇOK TERCİH EDİLEN",
     renk: "hover:border-purple-500/60 hover:ring-purple-500/30",
     etiketRenk: "bg-purple-600",
-    // Hover'da mor tema
     buttonHover: "hover:bg-purple-600 hover:text-white hover:border-purple-500",
   },
   {
@@ -49,58 +44,14 @@ const paketler = [
       "Balıkesir’de salonda birebir antrenman",
       "Anlık takip, analiz ve düzenli ölçüm",
     ],
-    fiyat: "10000",
     etiket: "EN İYİ SONUÇ",
     renk: "hover:border-amber-500/60 hover:ring-amber-500/30",
     etiketRenk: "bg-amber-600",
-    // Hover'da amber tema
     buttonHover:
       "hover:bg-amber-500 hover:text-neutral-950 hover:border-amber-400",
   },
 ];
 
-// 0'dan hedef fiyata doğru sayım (requestAnimationFrame + ease-out)
-function useCountUp(target, duration = 900) {
-  const [value, setValue] = React.useState(0);
-
-  React.useEffect(() => {
-    const finalValue = Number(target) || 0;
-    let frameId;
-    const startTime = performance.now();
-
-    const step = (now) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      // easeOutCubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = Math.floor(finalValue * eased);
-
-      setValue(current);
-
-      if (progress < 1) {
-        frameId = requestAnimationFrame(step);
-      }
-    };
-
-    frameId = requestAnimationFrame(step);
-
-    return () => {
-      if (frameId) cancelAnimationFrame(frameId);
-    };
-  }, [target, duration]);
-
-  return value;
-}
-
-function AnimatedPrice({ amount }) {
-  const value = useCountUp(amount, 900);
-
-  return (
-    <span className="text-[34px] sm:text-[34px] font-semibold tracking-tight text-white tabular-nums">
-      ₺{value.toLocaleString("tr-TR")}
-    </span>
-  );
-}
 
 function handleWhatsappClick(title) {
   const message = `Sitenizden "${title}" paketiniz için iletişime geçiyorum. Bilgi alabilir miyim lütfen?`;
@@ -155,21 +106,14 @@ export default function Fiyatlar() {
                   </div>
                 )}
 
-                {/* Üst blok: başlık badge + fiyat + tagline */}
+                {/* Üst blok: başlık badge + tagline */}
                 <div>
                   <div className="inline-flex items-center rounded-full border border-neutral-700/80 bg-neutral-900/90 px-3 py-1 text-[13px] sm:text-xs font-medium uppercase tracking-[0.16em] text-neutral-100">
                     {paket.title}
                   </div>
 
-                  <div className="mt-4 flex items-baseline gap-2">
-                    <AnimatedPrice amount={paket.fiyat} />
-                    <span className="text-xs sm:text-md text-neutral-400 font-medium tracking-wide">
-                      / Aylık
-                    </span>
-                  </div>
-
                   {paket.tagline && (
-                    <p className="mt-2 text-sm sm:text-sm font-md text-neutral-400 leading-relaxed">
+                    <p className="mt-4 text-sm sm:text-sm font-md text-neutral-400 leading-relaxed">
                       {paket.tagline}
                     </p>
                   )}
