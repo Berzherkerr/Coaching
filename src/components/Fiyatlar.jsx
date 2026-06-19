@@ -108,7 +108,7 @@ export default function Fiyatlar() {
 
                 {/* Üst blok: başlık badge + tagline */}
                 <div>
-                  <div className="inline-flex items-center rounded-full border border-neutral-700/80 bg-neutral-900/90 px-3 py-1 text-[13px] sm:text-xs font-medium uppercase tracking-[0.16em] text-neutral-100">
+                  <div className="inline-flex items-center rounded-full border border-neutral-700/80 bg-neutral-900/90 px-4 py-1.5 text-sm sm:text-base lg:text-lg font-semibold uppercase tracking-[0.12em] text-neutral-100">
                     {paket.title}
                   </div>
 
