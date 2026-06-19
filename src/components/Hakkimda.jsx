@@ -112,24 +112,28 @@ export default function Hakkimda() {
               <p className="text-base sm:text-lg font-medium text-neutral-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
                 Merhaba, ben{" "}
                 <strong className="text-neutral-100">Arda İnanç Kurt</strong>.
-                Marmara Üniversitesi Antrenörlük Bölümü mezunuyum ve
-                Balıkesir&apos;de kişiye özel programlarla çalışan bir spor
-                hocasıyım.
+                Balıkesir Merkez&apos;de kişiye özel programlarla öğrencilerimin
+                hayatlarına dokunduğum bir yaşantı sürmekteyim.
               </p>
 
               <div className="mt-4 space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
                 <p>
-                  Yaklaşık 9 senedir birebir koçluk, online takip ve beslenme
-                  planlamasıyla danışanlarımın yağ kaybı, kas gelişimi ve duruş
-                  iyileştirmesi gibi hedeflerine ulaşmalarına yardımcı
-                  oluyorum. Her danışan için, günlük hayat temposuna uyumlu ve
-                  sürdürülebilir bir sistem kurmaya odaklanıyorum.
+                  Yaklaşık 10 senedir birebir ve online koçluk ile antrenmanla
+                  birlikte beslenme planlaması oluşturarak danışanlarımın yağ
+                  kaybı, kas gelişimi ve postür - duruş iyileştirmesi gibi
+                  hedeflerine ulaşmalarına yardımcı oluyorum.
+                </p>
+                <p>
+                  Her danışan için, onların günlük hayat temposuna uyumlu ve
+                  sürdürülebilir bir sistem kurmaya odaklanıyorum. Dersler benim
+                  müsait olduğum zamanlara değil öğrencinin müsait olduğu
+                  zamanlara planlanmakta.
                 </p>
                 <p>
                   Benim için antrenörlük; sadece antrenman yazmak değil,
-                  disiplin, kararlılık ve özgüven kazandırma süreci. Hedefine,
-                  yaşantına ve fiziksel seviyene göre, net bir plan ve
-                  ölçülebilir adımlarla ilerliyoruz.
+                  öğrencime disiplin, kararlılık ve özgüven kazandırma süreci.
+                  Hedefinize, yaşantınıza ve fiziksel seviyenize göre, net bir
+                  plan ve ölçülebilir adımlarla ilerliyoruz.
                 </p>
               </div>
             </div>
