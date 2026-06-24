@@ -219,7 +219,7 @@ function Header() {
 
           {/* Alt satır: 4 öğe varsa menü buraya */}
           {menuItems.length >= 4 && (
-            <nav className="flex items-center justify-center gap-5 pb-2.5 text-[13px] font-bold text-neutral-200 whitespace-nowrap">
+            <nav className="flex items-center justify-between pb-2.5 px-2 text-[13px] font-bold text-neutral-200">
               {menuItems.map((item, index) => (
                 <a key={index} href={item.href} onClick={handleNav(item.href)} className="hover:text-orange-400 transition">
                   {item.label}
