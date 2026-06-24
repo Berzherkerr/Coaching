@@ -324,28 +324,41 @@ function ReviewsSettings({ token }) {
 
 // ─── Blog editörü ─────────────────────────────────────────────────────────────
 function BlogEditor({ token }) {
-  const [posts, setPosts]   = useState([]);
-  const [editing, setEditing] = useState(null); // null = liste, {} = yeni, {id,...} = düzenleme
-  const [title, setTitle]   = useState("");
-  const [content, setContent] = useState("");
-  const [saving, setSaving] = useState(false);
+  const [posts, setPosts]         = useState([]);
+  const [editing, setEditing]     = useState(null);
+  const [title, setTitle]         = useState("");
+  const [content, setContent]     = useState("");
+  const [coverImage, setCoverImage]   = useState("");
+  const [contentImages, setContentImages] = useState([""]);
+  const [saving, setSaving]       = useState(false);
 
   const load = () =>
     apiFetch("/api/admin/blog", token).then((r) => r.json()).then((d) => setPosts(d.posts || [])).catch(() => {});
 
   useEffect(() => { load(); }, [token]);
 
-  const startNew = () => { setEditing({}); setTitle(""); setContent(""); };
-  const startEdit = (p) => { setEditing(p); setTitle(p.title); setContent(p.content); };
-  const cancel = () => { setEditing(null); setTitle(""); setContent(""); };
+  const startNew = () => { setEditing({}); setTitle(""); setContent(""); setCoverImage(""); setContentImages([""]); };
+  const startEdit = (p) => {
+    setEditing(p);
+    setTitle(p.title);
+    setContent(p.content);
+    setCoverImage(p.coverImage || "");
+    setContentImages(p.contentImages?.length ? p.contentImages : [""]);
+  };
+  const cancel = () => { setEditing(null); setTitle(""); setContent(""); setCoverImage(""); setContentImages([""]); };
+
+  const addImageRow    = () => setContentImages((prev) => [...prev, ""]);
+  const removeImageRow = (i) => setContentImages((prev) => prev.filter((_, idx) => idx !== i));
+  const updateImage    = (i, val) => setContentImages((prev) => { const n = [...prev]; n[i] = val; return n; });
 
   const savePost = async (draft) => {
     setSaving(true);
     const isNew = !editing?.id;
+    const images = contentImages.map((u) => u.trim()).filter(Boolean);
     const r = await apiFetch(
       isNew ? "/api/admin/blog" : `/api/admin/blog?id=${editing.id}`,
       token,
-      { method: isNew ? "POST" : "PUT", body: JSON.stringify({ title, content, draft }) }
+      { method: isNew ? "POST" : "PUT", body: JSON.stringify({ title, content, coverImage: coverImage.trim(), contentImages: images, draft }) }
     );
     setSaving(false);
     if (r.ok) { cancel(); load(); }
@@ -370,17 +383,48 @@ function BlogEditor({ token }) {
           <h2 className="text-white font-semibold">{editing.id ? "Yazıyı Düzenle" : "Yeni Yazı"}</h2>
         </div>
         <div className="space-y-4">
+          {/* Başlık */}
           <div>
             <label className="text-neutral-500 text-xs mb-1.5 block">Başlık</label>
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Yazı başlığı..."
               className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors" />
           </div>
+
+          {/* Kapak resmi */}
+          <div>
+            <label className="text-neutral-500 text-xs mb-1.5 block">Kapak Resmi URL</label>
+            <input type="url" value={coverImage} onChange={(e) => setCoverImage(e.target.value)} placeholder="https://..."
+              className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors text-sm" />
+            {coverImage.trim() && (
+              <img src={coverImage.trim()} alt="kapak önizleme" className="mt-2 w-full h-36 object-cover rounded-lg opacity-80" onError={(e) => e.target.style.display="none"} />
+            )}
+          </div>
+
+          {/* İçerik */}
           <div>
             <label className="text-neutral-500 text-xs mb-1.5 block">İçerik</label>
             <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="Yazı içeriği... (boş satır = yeni paragraf)"
-              rows={12}
+              rows={10}
               className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors resize-y text-sm leading-relaxed" />
           </div>
+
+          {/* İçerik resimleri */}
+          <div>
+            <label className="text-neutral-500 text-xs mb-1.5 block">İçerik Resimleri (yazının altında görünür)</label>
+            <div className="space-y-2">
+              {contentImages.map((url, i) => (
+                <div key={i} className="flex gap-2">
+                  <input type="url" value={url} onChange={(e) => updateImage(i, e.target.value)} placeholder="https://..."
+                    className="flex-1 bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2.5 focus:outline-none focus:border-orange-500 transition-colors text-sm" />
+                  {contentImages.length > 1 && (
+                    <button onClick={() => removeImageRow(i)} className="px-3 text-red-400 hover:text-red-300 text-lg leading-none">✕</button>
+                  )}
+                </div>
+              ))}
+            </div>
+            <button onClick={addImageRow} className="mt-2 text-xs text-orange-500 hover:text-orange-400 transition-colors">+ Resim ekle</button>
+          </div>
+
           <div className="flex gap-3">
             <button onClick={() => savePost(true)} disabled={saving || !title.trim()}
               className="flex-1 py-3 rounded-xl border border-neutral-700 text-neutral-300 hover:bg-neutral-800 disabled:opacity-40 transition-colors font-medium text-sm">

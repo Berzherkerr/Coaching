@@ -37,6 +37,8 @@ export async function onRequest({ env, request }) {
       title: body.title || "Başlıksız",
       content: body.content || "",
       excerpt: (body.content || "").slice(0, 160).trim(),
+      coverImage: body.coverImage || "",
+      contentImages: Array.isArray(body.contentImages) ? body.contentImages : [],
       publishedAt: Date.now(),
       draft: body.draft ?? true,
     };
@@ -55,6 +57,8 @@ export async function onRequest({ env, request }) {
       title: body.title ?? posts[idx].title,
       content: body.content ?? posts[idx].content,
       excerpt: (body.content || posts[idx].content).slice(0, 160).trim(),
+      coverImage: body.coverImage !== undefined ? body.coverImage : posts[idx].coverImage,
+      contentImages: Array.isArray(body.contentImages) ? body.contentImages : posts[idx].contentImages,
       draft: body.draft ?? posts[idx].draft,
     };
     await savePosts(env, posts);
