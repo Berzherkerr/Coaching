@@ -216,6 +216,12 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
               onTouchEnd={onPointerUp}
               style={{ isolation: "isolate", touchAction: "pan-y" }}
             >
+              {/* Sol fade */}
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-24 z-10"
+                style={{ background: "linear-gradient(to right, rgb(10,10,10) 0%, transparent 100%)" }} />
+              {/* Sağ fade */}
+              <div className="pointer-events-none absolute inset-y-0 right-0 w-24 z-10"
+                style={{ background: "linear-gradient(to left, rgb(10,10,10) 0%, transparent 100%)" }} />
               <div className="overflow-hidden">
                 <div
                   ref={containerRef}
