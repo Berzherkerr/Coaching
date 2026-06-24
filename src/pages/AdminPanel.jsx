@@ -62,10 +62,10 @@ function LoginScreen({ onLogin }) {
 
 // ─── Dashboard menü ───────────────────────────────────────────────────────────
 const MENU_ITEMS = [
-  { key: "prices",   icon: "💰", label: "Fiyatlar",      desc: "Paket fiyatlarını düzenle"          },
-  { key: "schedule", icon: "📅", label: "Haftalık Program", desc: "Müsait / dolu saatleri ayarla"   },
-  { key: "reviews",  icon: "⭐", label: "Yorum Akışı",   desc: "Google yorumlarını aç / kapat", soon: true },
-  { key: "blog",     icon: "✍️", label: "Blog",          desc: "Yazı yaz ve yayınla",          soon: true },
+  { key: "prices",   icon: "💰", label: "Fiyatlar",        desc: "Paket fiyatlarını düzenle"       },
+  { key: "schedule", icon: "📅", label: "Haftalık Program", desc: "Müsait / dolu saatleri ayarla"  },
+  { key: "reviews",  icon: "⭐", label: "Yorum Akışı",     desc: "Google yorumlarını aç / kapat"  },
+  { key: "blog",     icon: "✍️", label: "Blog",            desc: "Yazı yaz ve yayınla"            },
 ];
 
 function Dashboard({ onNavigate }) {
@@ -282,6 +282,166 @@ function ScheduleEditor({ token }) {
   );
 }
 
+// ─── Yorum akışı ayarları ────────────────────────────────────────────────────
+function ReviewsSettings({ token }) {
+  const [visible, setVisible] = useState(true);
+  const [status, setStatus] = useState("idle");
+
+  useEffect(() => {
+    apiFetch("/api/admin/settings", token)
+      .then((r) => r.json())
+      .then((d) => { if (typeof d.reviewsVisible === "boolean") setVisible(d.reviewsVisible); })
+      .catch(() => {});
+  }, [token]);
+
+  const save = async (val) => {
+    setVisible(val);
+    setStatus("saving");
+    const r = await apiFetch("/api/admin/settings", token, { method: "PUT", body: JSON.stringify({ reviewsVisible: val }) });
+    setStatus(r.ok ? "saved" : "error");
+    setTimeout(() => setStatus("idle"), 2000);
+  };
+
+  return (
+    <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
+      <p className="text-neutral-400 text-xs font-semibold uppercase tracking-widest mb-5">Google Yorumlar Bölümü</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-white font-medium text-sm">Yorum akışını göster</p>
+          <p className="text-neutral-500 text-xs mt-1">Kapatırsan sitede yorum bölümü gözükmez.</p>
+        </div>
+        <button onClick={() => save(!visible)}
+          className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${visible ? "bg-orange-500" : "bg-neutral-700"}`}>
+          <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${visible ? "translate-x-7" : "translate-x-1"}`} />
+        </button>
+      </div>
+      {status === "saved"  && <p className="text-green-400 text-xs mt-3">✓ Kaydedildi</p>}
+      {status === "error"  && <p className="text-red-400 text-xs mt-3">Hata oluştu</p>}
+      {status === "saving" && <p className="text-neutral-500 text-xs mt-3">Kaydediliyor...</p>}
+    </div>
+  );
+}
+
+// ─── Blog editörü ─────────────────────────────────────────────────────────────
+function BlogEditor({ token }) {
+  const [posts, setPosts]   = useState([]);
+  const [editing, setEditing] = useState(null); // null = liste, {} = yeni, {id,...} = düzenleme
+  const [title, setTitle]   = useState("");
+  const [content, setContent] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const load = () =>
+    apiFetch("/api/admin/blog", token).then((r) => r.json()).then((d) => setPosts(d.posts || [])).catch(() => {});
+
+  useEffect(() => { load(); }, [token]);
+
+  const startNew = () => { setEditing({}); setTitle(""); setContent(""); };
+  const startEdit = (p) => { setEditing(p); setTitle(p.title); setContent(p.content); };
+  const cancel = () => { setEditing(null); setTitle(""); setContent(""); };
+
+  const savePost = async (draft) => {
+    setSaving(true);
+    const isNew = !editing?.id;
+    const r = await apiFetch(
+      isNew ? "/api/admin/blog" : `/api/admin/blog?id=${editing.id}`,
+      token,
+      { method: isNew ? "POST" : "PUT", body: JSON.stringify({ title, content, draft }) }
+    );
+    setSaving(false);
+    if (r.ok) { cancel(); load(); }
+  };
+
+  const deletePost = async (id) => {
+    if (!confirm("Bu yazıyı silmek istiyor musun?")) return;
+    await apiFetch(`/api/admin/blog?id=${id}`, token, { method: "DELETE" });
+    load();
+  };
+
+  const toggleDraft = async (p) => {
+    await apiFetch(`/api/admin/blog?id=${p.id}`, token, { method: "PUT", body: JSON.stringify({ draft: !p.draft }) });
+    load();
+  };
+
+  if (editing !== null) {
+    return (
+      <div>
+        <div className="flex items-center gap-3 mb-6">
+          <button onClick={cancel} className="text-neutral-500 hover:text-white text-sm px-2 py-1 border border-neutral-800 hover:border-neutral-600 rounded-lg transition-colors">← Geri</button>
+          <h2 className="text-white font-semibold">{editing.id ? "Yazıyı Düzenle" : "Yeni Yazı"}</h2>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <label className="text-neutral-500 text-xs mb-1.5 block">Başlık</label>
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Yazı başlığı..."
+              className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors" />
+          </div>
+          <div>
+            <label className="text-neutral-500 text-xs mb-1.5 block">İçerik</label>
+            <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="Yazı içeriği... (boş satır = yeni paragraf)"
+              rows={12}
+              className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors resize-y text-sm leading-relaxed" />
+          </div>
+          <div className="flex gap-3">
+            <button onClick={() => savePost(true)} disabled={saving || !title.trim()}
+              className="flex-1 py-3 rounded-xl border border-neutral-700 text-neutral-300 hover:bg-neutral-800 disabled:opacity-40 transition-colors font-medium text-sm">
+              {saving ? "..." : "Taslak Kaydet"}
+            </button>
+            <button onClick={() => savePost(false)} disabled={saving || !title.trim()}
+              className="flex-1 py-3 rounded-xl bg-orange-500 hover:bg-orange-400 disabled:opacity-40 text-black font-bold transition-colors text-sm">
+              {saving ? "..." : "Yayınla"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-5">
+        <p className="text-neutral-400 text-sm">{posts.length} yazı</p>
+        <button onClick={startNew}
+          className="bg-orange-500 hover:bg-orange-400 text-black font-bold text-sm px-4 py-2 rounded-xl transition-colors">
+          + Yeni Yazı
+        </button>
+      </div>
+      {posts.length === 0 && (
+        <p className="text-neutral-600 text-center py-12">Henüz yazı yok.</p>
+      )}
+      <div className="space-y-3">
+        {posts.map((p) => (
+          <div key={p.id} className="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 flex items-start gap-4">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${p.draft ? "bg-neutral-700 text-neutral-400" : "bg-emerald-500/20 text-emerald-400"}`}>
+                  {p.draft ? "Taslak" : "Yayında"}
+                </span>
+                <span className="text-neutral-600 text-xs">{new Date(p.publishedAt).toLocaleDateString("tr-TR")}</span>
+              </div>
+              <p className="text-white font-medium text-sm truncate">{p.title}</p>
+              <p className="text-neutral-500 text-xs mt-1 line-clamp-1">{p.excerpt}</p>
+            </div>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <button onClick={() => toggleDraft(p)}
+                className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${p.draft ? "border-emerald-700 text-emerald-400 hover:bg-emerald-500/10" : "border-neutral-700 text-neutral-400 hover:bg-neutral-800"}`}>
+                {p.draft ? "Yayınla" : "Taslağa al"}
+              </button>
+              <button onClick={() => startEdit(p)}
+                className="text-xs px-3 py-1.5 rounded-lg border border-neutral-700 text-neutral-400 hover:bg-neutral-800 transition-colors">
+                Düzenle
+              </button>
+              <button onClick={() => deletePost(p.id)}
+                className="text-xs px-3 py-1.5 rounded-lg border border-red-800/60 text-red-400 hover:bg-red-500/10 transition-colors">
+                Sil
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Ana admin paneli ─────────────────────────────────────────────────────────
 export default function AdminPanel() {
   const [token, setToken] = useState(() => localStorage.getItem("admin_token") || "");
@@ -300,7 +460,7 @@ export default function AdminPanel() {
 
   if (!token) return <LoginScreen onLogin={handleLogin} />;
 
-  const PAGE_LABELS = { dashboard: "Panel", prices: "Fiyatlar", schedule: "Haftalık Program" };
+  const PAGE_LABELS = { dashboard: "Panel", prices: "Fiyatlar", schedule: "Haftalık Program", reviews: "Yorum Akışı", blog: "Blog" };
 
   return (
     <div className="min-h-screen bg-neutral-950 px-4 py-10">
@@ -329,6 +489,8 @@ export default function AdminPanel() {
         {page === "dashboard" && <Dashboard onNavigate={setPage} />}
         {page === "prices"    && <PricesEditor token={token} />}
         {page === "schedule"  && <ScheduleEditor token={token} />}
+        {page === "reviews"   && <ReviewsSettings token={token} />}
+        {page === "blog"      && <BlogEditor token={token} />}
       </div>
     </div>
   );

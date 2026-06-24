@@ -8,13 +8,19 @@ import Footer from './components/Footer'
 import Fiyatlar from './components/Fiyatlar'
 import GoogleReviews from './components/GoogleReviews'
 import Program from './components/Program'
+import Blog from './components/Blog'
 import AdminPanel from './pages/AdminPanel'
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false)
+  const [reviewsVisible, setReviewsVisible] = useState(true)
 
   useEffect(() => {
     setIsAdmin(window.location.pathname === '/admin')
+    fetch('/api/settings')
+      .then(r => r.json())
+      .then(d => { if (typeof d.reviewsVisible === 'boolean') setReviewsVisible(d.reviewsVisible) })
+      .catch(() => {})
   }, [])
 
   if (isAdmin) return <AdminPanel />
@@ -24,10 +30,11 @@ function App() {
       <Header className="snap-start" />
       <Hero className="snap-start" />
       <Hakkimda className="snap-start"  />
-      <GoogleReviews className="snap-start" placeId="ChIJYdRcUvoBtxQR_g1fmBmzv6g" averageRating={5.0} totalReviews={114} />
+      {reviewsVisible && <GoogleReviews className="snap-start" placeId="ChIJYdRcUvoBtxQR_g1fmBmzv6g" averageRating={5.0} totalReviews={114} />}
       <Hizmetler className="snap-start" />
       <Program className="snap-start" />
       <Fiyatlar className="snap-start" />
+      <Blog className="snap-start" />
       <Iletisim className="snap-start" />
       <Footer className="snap-start" />
     </div>
