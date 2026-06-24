@@ -1,4 +1,3 @@
-// src/components/Hakkimda.jsx
 import { useEffect, useRef, useState } from "react";
 import MotionReveal from "./MotionReveal";
 import { RevealHeading } from "./TextReveal";
@@ -55,9 +54,7 @@ export default function Hakkimda() {
     
 
       <div className="max-w-6xl mx-auto">
-        {/* İçerik grid: slider + metin */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-10 lg:gap-14 items-stretch">
-          {/* SLAYT */}
           <MotionReveal className="h-full">
             <div
               className="relative w-full h-full min-h-[290px] sm:min-h-[340px] rounded-sm overflow-hidden
@@ -69,7 +66,6 @@ export default function Hakkimda() {
               onTouchEnd={onTouchEnd}
               aria-label="Balıkesir spor hocası görsel slaytı"
             >
-              {/* Resimler */}
               <div
                 className="absolute inset-0 flex transition-transform duration-500 ease-out"
                 style={{ transform: `translateX(-${index * 100}%)` }}
@@ -85,10 +81,7 @@ export default function Hakkimda() {
                 ))}
               </div>
 
-              {/* Hafif üst gradient */}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-neutral-950/30 via-transparent to-transparent" />
-
-              {/* Noktalar */}
               <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
                 {images.map((_, i) => (
                   <button

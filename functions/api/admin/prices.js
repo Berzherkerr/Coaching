@@ -1,5 +1,3 @@
-// GET /api/admin/prices  — mevcut fiyatları döner (auth gerekli)
-// PUT /api/admin/prices  — fiyatları günceller (auth gerekli)
 import { verifyJWT } from "../../_jwt.js";
 
 const DEFAULT_PRICES = [

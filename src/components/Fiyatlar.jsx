@@ -180,7 +180,6 @@ export default function Fiyatlar() {
                   ))}
                 </ul>
 
-                {/* CTA – tam genişlik, nötr base, hover'da kart rengine göre accent */}
                 <button
                   type="button"
                   onClick={() => handleWhatsappClick(paket.title)}

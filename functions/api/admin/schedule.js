@@ -1,5 +1,3 @@
-// GET /api/admin/schedule — mevcut programı döner (auth gerekli)
-// PUT /api/admin/schedule — programı günceller (auth gerekli)
 import { verifyJWT } from "../../_jwt.js";
 
 async function authenticate({ env, request }) {

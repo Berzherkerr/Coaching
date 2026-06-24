@@ -1,4 +1,3 @@
-// src/components/Iletisim.jsx
 import { Mail, MapPin, Phone, Instagram } from "lucide-react";
 
 // WhatsApp – orijinal şekil, currentColor ile (yeşil yapacağız)

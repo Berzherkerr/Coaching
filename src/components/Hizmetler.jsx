@@ -1,4 +1,3 @@
-// src/components/Hizmetler.jsx
 import React from "react";
 import MotionReveal from "./MotionReveal";
 import { RevealHeading } from "./TextReveal";
@@ -76,7 +75,6 @@ export default function Hizmetler() {
       className="relative z-10 bg-neutral-950 pt-20 pb-16 px-4 sm:px-8 lg:px-20"
     >
       <div className="max-w-6xl mx-auto">
-        {/* Başlık */}
         <div className="text-center mb-14">
           <RevealHeading
             as="h2"

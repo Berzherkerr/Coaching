@@ -1,4 +1,3 @@
-// src/components/GoogleReviews.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import MotionReveal from "./MotionReveal";
 import { RevealHeading } from "./TextReveal";
@@ -104,14 +103,12 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
       .catch(console.error);
   }, []);
 
-  // Mobil: 7 saniyede bir sonraki karta geç
   useEffect(() => {
     if (!reviews.length) return;
     const t = setInterval(() => setMobileIndex((i) => (i + 1) % reviews.length), 7000);
     return () => clearInterval(t);
   }, [reviews.length]);
 
-  // Desktop: kayma animasyonu
   const setWidth = useMemo(() => (reviews.length || 1) * (CARD_W + GAP), [reviews.length]);
   const offsetRef   = useRef(0);
   const velRef      = useRef(-40);
@@ -149,7 +146,6 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
   return (
     <section className="w-full pt-5 pb-16 px-4 sm:px-8 lg:px-20 select-none bg-neutral-950">
       <div className="max-w-6xl mx-auto">
-        {/* Başlık */}
         <MotionReveal>
           <header className="mb-8 text-center">
             <RevealHeading as="h2" mode="word" className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] tracking-[-0.02em]">
@@ -167,7 +163,6 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
 
         <MotionReveal delay={120}>
           <>
-            {/* MOBİL: tek kart, 7 sn'de bir değişir */}
             {reviews.length > 0 && (
               <div className="sm:hidden">
                 <div className="relative overflow-hidden" style={{ height: CARD_H }}>
@@ -178,7 +173,6 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
                     </div>
                   ))}
                 </div>
-                {/* Nokta göstergesi */}
                 <div className="flex justify-center gap-1.5 mt-4">
                   {reviews.map((_, i) => (
                     <button key={i} onClick={() => setMobileIndex(i)}
@@ -188,7 +182,6 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
               </div>
             )}
 
-            {/* DESKTOP: kayan marquee */}
             <div
               className="hidden sm:block relative overflow-hidden bg-transparent cursor-pointer"
               onMouseDown={onPointerDown} onMouseUp={onPointerUp} onMouseLeave={onPointerUp}
@@ -210,7 +203,6 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
               </div>
             </div>
 
-            {/* CTA butonları */}
             <div className="mt-12 flex flex-row gap-3 items-center justify-center">
               <a href={resolvedPlaceUrl || "#"} target="_blank" rel="noreferrer"
                 className={`inline-flex items-center justify-center h-11 px-4 sm:px-5 rounded-xl text-sm md:text-base font-semibold tracking-tight border transition-colors ${

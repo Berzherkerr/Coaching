@@ -1,7 +1,3 @@
-// GET   /api/admin/blog          → tüm yazılar (taslaklar dahil)
-// POST  /api/admin/blog          → yeni yazı
-// PUT   /api/admin/blog?id=xxx   → yazıyı güncelle
-// DELETE /api/admin/blog?id=xxx  → yazıyı sil
 import { verifyJWT } from "../../_jwt.js";
 
 async function authenticate({ env, request }) {

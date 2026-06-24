@@ -1,4 +1,3 @@
-// POST /api/admin/login
 import { createJWT } from "../../_jwt.js";
 
 export async function onRequestPost({ env, request }) {

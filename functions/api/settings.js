@@ -1,4 +1,3 @@
-// GET /api/settings — public
 export async function onRequest({ env }) {
   try {
     const raw = env.INANC_KV ? await env.INANC_KV.get("settings") : null;

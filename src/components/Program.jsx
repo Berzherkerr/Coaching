@@ -63,7 +63,6 @@ export default function Program() {
         </MotionReveal>
 
         <MotionReveal delay={80}>
-          {/* Masaüstü: tablo */}
           <div className="hidden md:block overflow-x-auto rounded-sm border border-neutral-800">
             <table className="w-full border-collapse text-sm table-fixed">
               <thead>

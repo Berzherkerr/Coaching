@@ -1,4 +1,3 @@
-// GET /api/blog — public, yayınlanmış yazıları döner
 export async function onRequest({ env }) {
   try {
     const raw = env.INANC_KV ? await env.INANC_KV.get("blog_posts") : null;

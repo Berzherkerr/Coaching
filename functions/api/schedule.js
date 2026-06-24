@@ -1,5 +1,3 @@
-// GET /api/schedule — public, haftalık programı döner
-
 export async function onRequest({ env }) {
   try {
     const raw = env.INANC_KV ? await env.INANC_KV.get("schedule") : null;

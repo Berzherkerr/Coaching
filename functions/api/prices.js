@@ -1,5 +1,3 @@
-// GET /api/prices — public, KV'den fiyatları döner
-
 const DEFAULT_PRICES = [
   { id: "uzaktan", fiyat: "3.000",  sure: "ay" },
   { id: "online",  fiyat: "7.000",  sure: "ay" },

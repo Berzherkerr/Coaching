@@ -1,4 +1,3 @@
-// GET/PUT /api/admin/settings
 import { verifyJWT } from "../../_jwt.js";
 
 async function authenticate({ env, request }) {

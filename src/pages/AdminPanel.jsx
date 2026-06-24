@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-// ─── Sabitler ────────────────────────────────────────────────────────────────
 const GUNLER = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
 const SAATLER = [
   "07:00","08:00","09:00","10:00","11:00","12:00",
@@ -9,7 +8,7 @@ const SAATLER = [
 const PAKET_LABELS = { uzaktan: "Uzaktan Eğitim", online: "Online Koçluk", birebir: "Birebir Koçluk" };
 const SURE_SEC = [{ value: "ay", label: "/ ay" }, { value: "seans", label: "/ seans" }, { value: "program", label: "/ program" }];
 
-// Slot döngüsü: kapali → bos → dolu → kapali
+// kapali → bos → dolu → kapali
 const CYCLE = { kapali: "bos", bos: "dolu", dolu: "kapali" };
 const SLOT_STYLE = {
   bos:    { bg: "bg-emerald-500/20 hover:bg-emerald-500/40 border-emerald-500/40 text-emerald-400", label: "Müsait" },
@@ -17,7 +16,6 @@ const SLOT_STYLE = {
   kapali: { bg: "bg-neutral-800/60 hover:bg-neutral-700/60 border-neutral-700/40 text-neutral-600", label: ""     },
 };
 
-// ─── API yardımcıları ─────────────────────────────────────────────────────────
 async function apiFetch(path, token, opts = {}) {
   return fetch(path, {
     ...opts,
@@ -25,7 +23,6 @@ async function apiFetch(path, token, opts = {}) {
   });
 }
 
-// ─── Login ────────────────────────────────────────────────────────────────────
 function LoginScreen({ onLogin }) {
   const [pw, setPw] = useState("");
   const [err, setErr] = useState("");
@@ -60,7 +57,7 @@ function LoginScreen({ onLogin }) {
   );
 }
 
-// ─── Dashboard menü ───────────────────────────────────────────────────────────
+
 const MENU_ITEMS = [
   { key: "prices",   icon: "💰", label: "Fiyatlar",        desc: "Paket fiyatlarını düzenle"       },
   { key: "schedule", icon: "📅", label: "Haftalık Program", desc: "Müsait / dolu saatleri ayarla"  },
@@ -98,7 +95,7 @@ function Dashboard({ onNavigate }) {
   );
 }
 
-// ─── Fiyat editörü ────────────────────────────────────────────────────────────
+
 function PricesEditor({ token }) {
   const [prices, setPrices] = useState([]);
   const [status, setStatus] = useState("idle");
@@ -167,7 +164,7 @@ function PricesEditor({ token }) {
   );
 }
 
-// ─── Program editörü ──────────────────────────────────────────────────────────
+
 function ScheduleEditor({ token }) {
   const [slots, setSlots] = useState({});
   const [status, setStatus] = useState("idle");
@@ -282,7 +279,6 @@ function ScheduleEditor({ token }) {
   );
 }
 
-// ─── Yorum akışı ayarları ────────────────────────────────────────────────────
 function ReviewsSettings({ token }) {
   const [visible, setVisible] = useState(true);
   const [status, setStatus] = useState("idle");
@@ -322,7 +318,6 @@ function ReviewsSettings({ token }) {
   );
 }
 
-// ─── Blog editörü ─────────────────────────────────────────────────────────────
 function BlogEditor({ token }) {
   const [posts, setPosts]         = useState([]);
   const [editing, setEditing]     = useState(null);
@@ -383,14 +378,12 @@ function BlogEditor({ token }) {
           <h2 className="text-white font-semibold">{editing.id ? "Yazıyı Düzenle" : "Yeni Yazı"}</h2>
         </div>
         <div className="space-y-4">
-          {/* Başlık */}
           <div>
             <label className="text-neutral-500 text-xs mb-1.5 block">Başlık</label>
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Yazı başlığı..."
               className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors" />
           </div>
 
-          {/* Kapak resmi */}
           <div>
             <label className="text-neutral-500 text-xs mb-1.5 block">Kapak Resmi URL</label>
             <input type="url" value={coverImage} onChange={(e) => setCoverImage(e.target.value)} placeholder="https://..."
@@ -400,7 +393,6 @@ function BlogEditor({ token }) {
             )}
           </div>
 
-          {/* İçerik */}
           <div>
             <label className="text-neutral-500 text-xs mb-1.5 block">İçerik</label>
             <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="Yazı içeriği... (boş satır = yeni paragraf)"
@@ -408,7 +400,6 @@ function BlogEditor({ token }) {
               className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors resize-y text-sm leading-relaxed" />
           </div>
 
-          {/* İçerik resimleri */}
           <div>
             <label className="text-neutral-500 text-xs mb-1.5 block">İçerik Resimleri (yazının altında görünür)</label>
             <div className="space-y-2">
@@ -486,7 +477,7 @@ function BlogEditor({ token }) {
   );
 }
 
-// ─── Ana admin paneli ─────────────────────────────────────────────────────────
+
 export default function AdminPanel() {
   const [token, setToken] = useState(() => localStorage.getItem("admin_token") || "");
   const [page, setPage] = useState("dashboard");
@@ -529,7 +520,6 @@ export default function AdminPanel() {
           </button>
         </div>
 
-        {/* İçerik */}
         {page === "dashboard" && <Dashboard onNavigate={setPage} />}
         {page === "prices"    && <PricesEditor token={token} />}
         {page === "schedule"  && <ScheduleEditor token={token} />}

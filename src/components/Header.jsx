@@ -1,4 +1,3 @@
-// src/components/Header.jsx
 import { useEffect, useRef, useState } from "react";
 
 /** Pixel-perfect telefon ikonu (24px grid, net stroke) */
@@ -135,9 +134,7 @@ function Header() {
       `}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-0">
-        {/* Masaüstü */}
         <div className="hidden md:flex items-center py-[0.64rem] relative">
-          {/* Logo */}
           <a
             href="#hero"
             onClick={handleNav("#hero")}
