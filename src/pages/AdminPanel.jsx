@@ -305,14 +305,14 @@ function ReviewsSettings({ token }) {
   return (
     <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
       <p className="text-neutral-400 text-xs font-semibold uppercase tracking-widest mb-5">Google Yorumlar Bölümü</p>
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex items-center justify-between gap-4">
+        <div className="min-w-0">
           <p className="text-white font-medium text-sm">Yorum akışını göster</p>
           <p className="text-neutral-500 text-xs mt-1">Kapatırsan sitede yorum bölümü gözükmez.</p>
         </div>
-        <button onClick={() => save(!visible)}
-          className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${visible ? "bg-orange-500" : "bg-neutral-700"}`}>
-          <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${visible ? "translate-x-7" : "translate-x-1"}`} />
+        <button onClick={() => save(!visible)} aria-pressed={visible}
+          className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors duration-200 ${visible ? "bg-orange-500" : "bg-neutral-700"}`}>
+          <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-200 ${visible ? "translate-x-6" : "translate-x-1"}`} />
         </button>
       </div>
       {status === "saved"  && <p className="text-green-400 text-xs mt-3">✓ Kaydedildi</p>}
