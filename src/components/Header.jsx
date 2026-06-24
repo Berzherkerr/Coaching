@@ -177,48 +177,56 @@ function Header() {
         </div>
 
         {/* Mobil */}
-        <div className="md:hidden relative flex items-center  h-14">
-          {/* Logo */}
-          <a
-            href="#hero"
-            onClick={handleNav("#hero")}
-            className="flex items-center min-w-0 z-10"
-            aria-label="Hero bölümüne dön"
-            title="Hero"
-          >
-            <img
-              src="/ardalogo.svg"
-              alt="İnanç Hoca Logo"
-              className="h-15 -mb-2.5 -ml-1 w-auto filter invert brightness-0"
-            />
-          </a>
+        <div className="md:hidden flex flex-col">
+          {/* Üst satır: Logo + Telefon */}
+          <div className="relative flex items-center h-14">
+            {/* Logo */}
+            <a
+              href="#hero"
+              onClick={handleNav("#hero")}
+              className="flex items-center min-w-0 z-10"
+              aria-label="Hero bölümüne dön"
+              title="Hero"
+            >
+              <img
+                src="/ardalogo.svg"
+                alt="İnanç Hoca Logo"
+                className="h-15 -mb-2.5 -ml-1 w-auto filter invert brightness-0"
+              />
+            </a>
 
-          {/* Menü */}
-          <nav
-            className="absolute left-1/2 -translate-x-1/2 flex items-center gap-5
-                       text-[13px] font-bold text-neutral-200 whitespace-nowrap"
-          >
-            {menuItems.map((item, index) => (
-              <a
-                key={index}
-                href={item.href}
-                onClick={handleNav(item.href)}
-                className="hover:text-orange-400 transition"
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
+            {/* 3 öğe: menü ortada (absolute) */}
+            {menuItems.length < 4 && (
+              <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-5 text-[13px] font-bold text-neutral-200 whitespace-nowrap">
+                {menuItems.map((item, index) => (
+                  <a key={index} href={item.href} onClick={handleNav(item.href)} className="hover:text-orange-400 transition">
+                    {item.label}
+                  </a>
+                ))}
+              </nav>
+            )}
 
-          {/* Telefon ikonu */}
-          <a
-            href="tel:+905334409803"
-            className="ml-auto flex items-center text-orange-500 hover:text-orange-400 transition"
-            aria-label="Ara"
-            title="Ara"
-          >
-            <PhoneIcon className="h-5 w-5" />
-          </a>
+            {/* Telefon ikonu */}
+            <a
+              href="tel:+905334409803"
+              className="ml-auto flex items-center text-orange-500 hover:text-orange-400 transition"
+              aria-label="Ara"
+              title="Ara"
+            >
+              <PhoneIcon className="h-5 w-5" />
+            </a>
+          </div>
+
+          {/* Alt satır: 4 öğe varsa menü buraya */}
+          {menuItems.length >= 4 && (
+            <nav className="flex items-center justify-center gap-5 pb-2.5 text-[13px] font-bold text-neutral-200 whitespace-nowrap">
+              {menuItems.map((item, index) => (
+                <a key={index} href={item.href} onClick={handleNav(item.href)} className="hover:text-orange-400 transition">
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          )}
         </div>
       </div>
     </header>
