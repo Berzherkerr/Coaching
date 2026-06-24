@@ -10,7 +10,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative w-full h-screen flex items-end justify-center overflow-hidden bg-[rgb(10,10,10)]"
+      className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[rgb(10,10,10)]"
     >
       {/* Video */}
       <video
@@ -46,7 +46,7 @@ export default function Hero() {
       />
 
       {/* içerik */}
-      <div className="relative z-20 w-full max-w-5xl mx-auto px-4 pb-16 mb-90 md:pb-24 text-center text-white">
+      <div className="relative z-20 w-full max-w-5xl mx-auto px-4 text-center text-white">
         <h1 className="font-extrabold uppercase tracking-tight leading-[0.95] text-2xl sm:text-4xl md:text-6xl lg:text-6xl drop-shadow-lg font-[var(--hero-condensed,theme(fontFamily.sans))]">
           Kendİne yaptığın en İyİ yatırım, bedenİnle başlar.
         </h1>
