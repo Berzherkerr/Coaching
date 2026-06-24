@@ -24,7 +24,7 @@ function App() {
       <Header className="snap-start" />
       <Hero className="snap-start" />
       <Hakkimda className="snap-start"  />
-      <GoogleReviews className="snap-start" placeId="ChIJYdRcUvoBtxQR_g1fmBmzv6g" apiBase="http://localhost:5185"/>
+      <GoogleReviews className="snap-start" placeId="ChIJYdRcUvoBtxQR_g1fmBmzv6g" averageRating={5.0} totalReviews={114} />
       <Hizmetler className="snap-start" />
       <Program className="snap-start" />
       <Fiyatlar className="snap-start" />
