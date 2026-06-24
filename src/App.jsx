@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import Hakkimda from './components/Hakkimda'
@@ -6,11 +7,17 @@ import Iletisim from './components/Iletisim'
 import Footer from './components/Footer'
 import Fiyatlar from './components/Fiyatlar'
 import GoogleReviews from './components/GoogleReviews'
-
-
-
+import AdminPanel from './pages/AdminPanel'
 
 function App() {
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  useEffect(() => {
+    setIsAdmin(window.location.pathname === '/admin')
+  }, [])
+
+  if (isAdmin) return <AdminPanel />
+
   return (
     <div className="min-h-screen bg-neutral-950 overflow-x-hidden overflow-y-hidden scroll-extrasmooth">
       <Header className="snap-start" />

@@ -56,11 +56,11 @@ export default function Hakkimda() {
 
       <div className="max-w-6xl mx-auto">
         {/* İçerik grid: slider + metin */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-10 lg:gap-14 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-10 lg:gap-14 items-stretch">
           {/* SLAYT */}
-          <MotionReveal>
+          <MotionReveal className="h-full">
             <div
-              className="relative w-full h-[290px] sm:h-[340px] lg:h-[325px] rounded-sm overflow-hidden
+              className="relative w-full h-full min-h-[290px] sm:min-h-[340px] rounded-sm overflow-hidden
                          bg-neutral-900/90 border border-neutral-800 shadow-lg ring-1 ring-transparent
                          select-none"
               onMouseEnter={stopAuto}
@@ -107,8 +107,8 @@ export default function Hakkimda() {
           </MotionReveal>
 
           {/* METİN */}
-          <MotionReveal delay={80}>
-            <div className="relative text-center lg:text-center">
+          <MotionReveal delay={80} className="h-full">
+            <div className="relative text-center lg:text-center h-full flex flex-col justify-center">
               <p className="text-base sm:text-lg font-medium text-neutral-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
                 Merhaba, ben{" "}
                 <strong className="text-neutral-100">Arda İnanç Kurt</strong>.

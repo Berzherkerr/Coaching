@@ -1,4 +1,5 @@
 // FIYATLAR BÖLÜMÜ - Paket fiyatlandırması
+import { useEffect, useState } from "react";
 import MotionReveal from "./MotionReveal";
 import { RevealHeading } from "./TextReveal";
 
@@ -14,6 +15,9 @@ const ortakOzellikler = [
 
 const paketler = [
   {
+    id: "uzaktan",
+    fiyat: "3.000",
+    sure: "ay",
     title: "Uzaktan Eğitim",
     tagline: "Spora yeni başlayanlara uygun çözüm",
     ozel: [
@@ -26,6 +30,9 @@ const paketler = [
     buttonHover: "hover:bg-blue-600 hover:text-white hover:border-blue-500",
   },
   {
+    id: "online",
+    fiyat: "7.000",
+    sure: "ay",
     title: "Online Koçluk",
     tagline: "Canlı birebir seans ve geri bildirim",
     ozel: [
@@ -38,6 +45,9 @@ const paketler = [
     buttonHover: "hover:bg-purple-600 hover:text-white hover:border-purple-500",
   },
   {
+    id: "birebir",
+    fiyat: "10.000",
+    sure: "ay",
     title: "Birebir Koçluk",
     tagline: "Balıkesir’de anlaşmalı salonlarda birebir çalışma",
     ozel: [
@@ -61,6 +71,19 @@ function handleWhatsappClick(title) {
 }
 
 export default function Fiyatlar() {
+  const [priceMap, setPriceMap] = useState({});
+
+  useEffect(() => {
+    fetch("/api/prices")
+      .then((r) => r.json())
+      .then((d) => {
+        const map = {};
+        (d.paketler || []).forEach((p) => { map[p.id] = p; });
+        setPriceMap(map);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section
       id="fiyatlar"
@@ -87,6 +110,8 @@ export default function Fiyatlar() {
         {paketler.map((paket, index, arr) => {
           const isTabletSingleInRow =
             arr.length % 2 !== 0 && index === arr.length - 1;
+          const fiyat = priceMap[paket.id]?.fiyat ?? paket.fiyat;
+          const sure = priceMap[paket.id]?.sure ?? paket.sure;
 
           return (
             <MotionReveal key={paket.title} delay={index * 80}>
@@ -108,9 +133,9 @@ export default function Fiyatlar() {
 
                 {/* Üst blok: başlık badge + tagline */}
                 <div>
-                  <div className="inline-flex items-center rounded-full border border-neutral-700/80 bg-neutral-900/90 px-4 py-1.5 text-sm sm:text-base lg:text-lg font-semibold uppercase tracking-[0.12em] text-neutral-100">
+                  <h3 className="text-sm sm:text-base lg:text-lg font-semibold uppercase tracking-[0.12em] text-neutral-100">
                     {paket.title}
-                  </div>
+                  </h3>
 
                   {paket.tagline && (
                     <p className="mt-4 text-sm sm:text-sm font-md text-neutral-400 leading-relaxed">
@@ -119,6 +144,14 @@ export default function Fiyatlar() {
                   )}
 
                   <div className="mt-4 h-px bg-neutral-800" />
+                </div>
+
+                {/* Fiyat */}
+                <div className="mt-5 flex items-baseline gap-1.5">
+                  <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                    ₺{fiyat}
+                  </span>
+                  <span className="text-neutral-500 text-sm">/ {sure}</span>
                 </div>
 
                 {/* Özellik listesi (pakete özel + ortak) */}
