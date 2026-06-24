@@ -23,6 +23,20 @@ function PhoneIcon({ className = "h-4 w-4" }) {
 
 function Header() {
   const [isVisible, setIsVisible] = useState(true);
+  const [hasProgram, setHasProgram] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/schedule")
+      .then((r) => r.json())
+      .then((d) => {
+        const slots = d.slots || {};
+        const aktif = Object.values(slots).some((gun) =>
+          Object.values(gun).some((durum) => durum !== "kapali")
+        );
+        setHasProgram(aktif);
+      })
+      .catch(() => {});
+  }, []);
 
   const lastYRef = useRef(0);
   const rafRef = useRef(null);
@@ -35,7 +49,7 @@ function Header() {
   const menuItems = [
     { label: "Hakkımda", href: "#hakkimda" },
     { label: "Hizmetler", href: "#hizmetler" },
-    { label: "Program", href: "#program" },
+    ...(hasProgram ? [{ label: "Program", href: "#program" }] : []),
     { label: "Paketler", href: "#fiyatlar" },
   ];
 
