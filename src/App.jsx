@@ -7,6 +7,7 @@ import Iletisim from './components/Iletisim'
 import Footer from './components/Footer'
 import Fiyatlar from './components/Fiyatlar'
 import GoogleReviews from './components/GoogleReviews'
+import Program from './components/Program'
 import AdminPanel from './pages/AdminPanel'
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
       <Hakkimda className="snap-start"  />
       <GoogleReviews className="snap-start" placeId="ChIJYdRcUvoBtxQR_g1fmBmzv6g" apiBase="http://localhost:5185"/>
       <Hizmetler className="snap-start" />
+      <Program className="snap-start" />
       <Fiyatlar className="snap-start" />
       <Iletisim className="snap-start" />
       <Footer className="snap-start" />

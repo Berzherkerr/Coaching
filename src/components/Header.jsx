@@ -35,6 +35,7 @@ function Header() {
   const menuItems = [
     { label: "Hakkımda", href: "#hakkimda" },
     { label: "Hizmetler", href: "#hizmetler" },
+    { label: "Program", href: "#program" },
     { label: "Paketler", href: "#fiyatlar" },
   ];
 
