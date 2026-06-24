@@ -11,17 +11,28 @@ const SAATLER = [
 
 const WHATSAPP = "905334409803";
 
+function formatUpdatedAt(iso) {
+  if (!iso) return null;
+  const d = new Date(iso);
+  return d.toLocaleString("tr-TR", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" });
+}
+
 export default function Program() {
   const [slots, setSlots] = useState({});
+  const [updatedAt, setUpdatedAt] = useState(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     fetch("/api/schedule")
       .then((r) => r.json())
-      .then((d) => setSlots(d.slots || {}))
-      .catch(() => {});
+      .then((d) => { setSlots(d.slots || {}); setUpdatedAt(d.updatedAt || null); setLoaded(true); })
+      .catch(() => setLoaded(true));
   }, []);
 
   const getSlot = (gun, saat) => slots[gun]?.[saat] || "kapali";
+
+  const hicSlotVar = loaded && GUNLER.some((g) => SAATLER.some((s) => getSlot(g, s) !== "kapali"));
+  if (!loaded || !hicSlotVar) return null;
 
   const handleBook = (gun, saat) => {
     const msg = `Merhaba, ${gun} günü saat ${saat} için randevu almak istiyorum.`;
@@ -150,6 +161,11 @@ export default function Program() {
               <p className="text-neutral-600 text-center py-8 text-sm">Program henüz ayarlanmadı.</p>
             )}
           </div>
+          {updatedAt && (
+            <p className="mt-4 text-neutral-600 text-xs">
+              Son güncelleme: {formatUpdatedAt(updatedAt)}
+            </p>
+          )}
         </MotionReveal>
       </div>
     </section>

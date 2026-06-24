@@ -26,7 +26,7 @@ export async function onRequest({ env, request }) {
       return json({ error: "Geçersiz veri" }, 400);
     }
     if (env.INANC_KV) {
-      await env.INANC_KV.put("schedule", JSON.stringify({ slots: body.slots }));
+      await env.INANC_KV.put("schedule", JSON.stringify({ slots: body.slots, updatedAt: new Date().toISOString() }));
     }
     return json({ ok: true });
   }
