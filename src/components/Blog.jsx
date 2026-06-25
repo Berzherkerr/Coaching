@@ -63,7 +63,7 @@ export default function Blog() {
 
   return (
     <>
-      <section id="blog" className="relative z-10 bg-neutral-950 pt-20 pb-16 px-4 sm:px-8 lg:px-20">
+      <section id="blog" className="relative z-10 bg-neutral-950 pt-[5.25rem] pb-[4.2rem] px-4 sm:px-8 lg:px-20">
         <div className="max-w-6xl mx-auto">
           <MotionReveal>
             <div className="text-center mb-12">

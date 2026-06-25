@@ -144,7 +144,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews, ca
   const ctaStars = Math.round(Number(shownRating) || 0);
 
   return (
-    <section className="w-full pt-5 pb-16 px-4 sm:px-8 lg:px-20 select-none bg-neutral-950">
+    <section className="w-full pt-[1.3rem] pb-[4.2rem] px-4 sm:px-8 lg:px-20 select-none bg-neutral-950">
       <div className="max-w-6xl mx-auto">
         <MotionReveal>
           <header className="mb-8 text-center">

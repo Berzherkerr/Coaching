@@ -59,7 +59,7 @@ function Iletisim() {
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d543.1339278799962!2d27.882835267360313!3d39.64004822604878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b701fa525cd461%3A0xa8bfb319985f0dfe!2zxLBuYW7DpyBDb2FjaGluZw!5e0!3m2!1sen!2sde!4v1754712858841!5m2!1sen!2sde";
 
   return (
-    <section id="contact" className="bg-neutral-950 py-20 px-4 sm:px-6 lg:px-8">
+    <section id="contact" className="bg-neutral-950 py-[5.25rem] px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         {/* 2 Sütun: Tablet ve Desktop */}
         <div className="hidden md:flex md:flex-row md:space-between md:items-start md:gap-8">

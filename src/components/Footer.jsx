@@ -7,7 +7,7 @@ import {
 
 function Footer() {
   return (
-    <footer className="bg-[#111] text-white pt-12 pb-8 px-6">
+    <footer className="bg-[#111] text-white pt-[3.15rem] pb-[2.1rem] px-6">
       <div className="max-w-6xl mx-auto w-full flex flex-col items-center md:items-start gap-6 px-4 sm:px-6 lg:px-0">
         {/* Üst kısım */}
         <div className="w-full flex flex-col md:flex-row md:items-stretch md:justify-between">
