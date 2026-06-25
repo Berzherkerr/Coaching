@@ -65,7 +65,7 @@ function calendarDays_ADM(year, month) {
 const SLOT_STYLE = {
   bos:    { bg: "bg-emerald-500/20 hover:bg-emerald-500/40 border-emerald-500/40 text-emerald-400", label: "Müsait" },
   dolu:   { bg: "bg-red-500/20 hover:bg-red-500/40 border-red-500/40 text-red-400",               label: "Dolu"   },
-  kapali: { bg: "bg-neutral-800/60 hover:bg-neutral-700/60 border-neutral-700/40 text-neutral-600", label: ""     },
+  kapali: { bg: "bg-neutral-800/60 hover:bg-neutral-700/60 border-neutral-700/70 text-neutral-500", label: ""     },
 };
 
 async function apiFetch(path, token, opts = {}) {
@@ -447,11 +447,11 @@ function ScheduleEditor({ token }) {
 
         {/* Takvim */}
         <div className="w-full md:w-[38%] bg-neutral-900 border border-neutral-800 rounded-xl p-4 select-none flex flex-col">
-          <div className="flex items-center gap-2 mb-4">
-            <select value={viewDate.getMonth()} onChange={(e) => setViewDate(new Date(viewDate.getFullYear(), +e.target.value, 1))} className={`flex-1 ${selectCls}`}>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <select value={viewDate.getMonth()} onChange={(e) => setViewDate(new Date(viewDate.getFullYear(), +e.target.value, 1))} className={`w-[48%] ${selectCls}`}>
               {AYLAR_ADM.map((a, i) => <option key={i} value={i}>{a}</option>)}
             </select>
-            <select value={viewDate.getFullYear()} onChange={(e) => setViewDate(new Date(+e.target.value, viewDate.getMonth(), 1))} className={selectCls}>
+            <select value={viewDate.getFullYear()} onChange={(e) => setViewDate(new Date(+e.target.value, viewDate.getMonth(), 1))} className={`w-[48%] ${selectCls}`}>
               {[2025,2026,2027,2028].map(y => <option key={y} value={y}>{y}</option>)}
             </select>
           </div>
@@ -523,7 +523,7 @@ function ScheduleEditor({ token }) {
                       ? "bg-emerald-500/15 hover:bg-emerald-500/30 border-emerald-500/40 text-emerald-400"
                       : durum === "dolu"
                         ? "bg-red-500/15 hover:bg-red-500/30 border-red-500/40 text-red-400 line-through"
-                        : "bg-neutral-800/60 hover:bg-neutral-700/60 border-neutral-700/40 text-neutral-600",
+                        : "bg-neutral-800/60 hover:bg-neutral-700/60 border-neutral-700/70 text-neutral-500",
                   ].join(" ")}
                 >
                   {saat}

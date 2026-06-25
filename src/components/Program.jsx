@@ -101,17 +101,17 @@ export default function Program() {
 
             {/* Takvim */}
             <div className="w-full md:w-[38%] bg-neutral-900 border border-neutral-800 rounded-xl p-4 select-none flex flex-col">
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center justify-center gap-2 mb-4">
                 <select
                   value={viewDate.getMonth()}
                   onChange={(e) => setViewDate(new Date(viewDate.getFullYear(), +e.target.value, 1))}
-                  className="flex-1 bg-neutral-800 border border-neutral-700 text-white text-sm rounded-lg px-2 py-1.5 focus:outline-none focus:border-orange-500 cursor-pointer">
+                  className="w-[48%] bg-neutral-800 border border-neutral-700 text-white text-sm rounded-lg px-2 py-1.5 focus:outline-none focus:border-orange-500 cursor-pointer">
                   {AYLAR.map((a, i) => <option key={i} value={i}>{a}</option>)}
                 </select>
                 <select
                   value={viewDate.getFullYear()}
                   onChange={(e) => setViewDate(new Date(+e.target.value, viewDate.getMonth(), 1))}
-                  className="bg-neutral-800 border border-neutral-700 text-white text-sm rounded-lg px-2 py-1.5 focus:outline-none focus:border-orange-500 cursor-pointer">
+                  className="w-[48%] bg-neutral-800 border border-neutral-700 text-white text-sm rounded-lg px-2 py-1.5 focus:outline-none focus:border-orange-500 cursor-pointer">
                   {[2025,2026,2027,2028].map(y => <option key={y} value={y}>{y}</option>)}
                 </select>
               </div>
@@ -182,7 +182,7 @@ export default function Program() {
                   );
                   return (
                     <span key={saat}
-                      className="w-full h-full rounded-lg border border-neutral-800/50 text-neutral-700 text-[11px] flex items-center justify-center">
+                      className="w-full h-full rounded-lg border border-neutral-700/70 text-neutral-500 text-[11px] flex items-center justify-center">
                       {saat}
                     </span>
                   );
