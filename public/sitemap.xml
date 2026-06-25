@@ -23,6 +23,15 @@
   </url>
 
   <url>
+    <loc>https://balikesirpt.com/#hizmetler</loc>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://balikesirpt.com/#hizmetler"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://balikesirpt.com/#hizmetler"/>
+  </url>
+
+  <url>
     <loc>https://balikesirpt.com/blog</loc>
     <lastmod>2026-06-26</lastmod>
     <changefreq>weekly</changefreq>
