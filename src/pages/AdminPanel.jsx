@@ -480,7 +480,7 @@ function ScheduleEditor({ token }) {
                         : cur ? "hover:bg-neutral-800 text-neutral-200 cursor-pointer" : "text-neutral-500",
                   ].filter(Boolean).join(" ")}
                 >
-                  <span className="text-xs leading-none">{date.getDate()}</span>
+                  <span className="text-[13px] leading-none">{date.getDate()}</span>
                   {cur && durum !== "yok" && (
                     <span className={["mt-[2px] w-[5px] h-[5px] rounded-full", isSelected ? "bg-black/30" : durum === "bos" ? "bg-emerald-400" : "bg-red-500"].join(" ")} />
                   )}
@@ -512,7 +512,7 @@ function ScheduleEditor({ token }) {
             </div>
           </div>
 
-          <div className="flex-1 min-h-0 grid grid-cols-6 gap-1.5" style={{ gridAutoRows: "1fr" }}>
+          <div className="flex-1 min-h-[300px] md:min-h-0 grid grid-cols-6 gap-1.5" style={{ gridAutoRows: "1fr" }}>
             {SAATLER.map((saat) => {
               const durum = slots[aktifKey]?.[saat] || "kapali";
               return (

@@ -141,7 +141,7 @@ export default function Program() {
                             : cur ? "hover:bg-neutral-800 text-neutral-200 cursor-pointer" : "text-neutral-500",
                       ].filter(Boolean).join(" ")}
                     >
-                      <span className="text-xs leading-none">{date.getDate()}</span>
+                      <span className="text-[13px] leading-none">{date.getDate()}</span>
                       {cur && !isPast && durum !== "yok" && (
                         <span className={["mt-[2px] w-[5px] h-[5px] rounded-full",
                           isSelected ? "bg-black/30" : durum === "bos" ? "bg-emerald-400" : "bg-red-500",
@@ -165,7 +165,7 @@ export default function Program() {
                 <span className="text-neutral-500 ml-2">{dateToGun(selectedDate)}</span>
               </p>
 
-              <div className="flex-1 min-h-0 grid grid-cols-6 gap-1.5" style={{ gridAutoRows: "1fr" }}>
+              <div className="flex-1 min-h-[300px] md:min-h-0 grid grid-cols-6 gap-1.5" style={{ gridAutoRows: "1fr" }}>
                 {SAATLER.map((saat) => {
                   const durum = getSlot(selectedDate, saat);
                   if (durum === "bos") return (
