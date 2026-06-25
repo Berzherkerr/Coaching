@@ -65,7 +65,7 @@ export default function Hakkimda() {
   return (
     <section
       id="hakkimda"
-      className="relative bg-neutral-950 py-[4.2rem] sm:py-[5.25rem] px-4 sm:px-8 lg:px-20"
+      className="relative bg-neutral-950 py-[4.62rem] sm:py-[5.78rem] px-4 sm:px-8 lg:px-20"
     >
     
 

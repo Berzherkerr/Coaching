@@ -56,7 +56,7 @@ export default function Fiyatlar() {
   }, []);
 
   return (
-    <section id="fiyatlar" className="relative z-10 bg-neutral-950 pt-[7.35rem] px-4 sm:px-8 lg:px-20">
+    <section id="fiyatlar" className="relative z-10 bg-neutral-950 pt-[8.09rem] px-4 sm:px-8 lg:px-20">
       <MotionReveal>
         <div className="max-w-6xl mx-auto text-center mb-14">
           <RevealHeading as="h2" mode="word"
