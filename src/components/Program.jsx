@@ -24,149 +24,131 @@ export default function Program() {
   const [slots, setSlots] = useState({});
   const [updatedAt, setUpdatedAt] = useState(null);
   const [loaded, setLoaded] = useState(false);
+  const [selectedGun, setSelectedGun] = useState(null);
 
   useEffect(() => {
     fetch("/api/schedule")
       .then((r) => r.json())
-      .then((d) => { setSlots(d.slots || {}); setUpdatedAt(d.updatedAt || null); setLoaded(true); })
+      .then((d) => {
+        setSlots(d.slots || {});
+        setUpdatedAt(d.updatedAt || null);
+        setLoaded(true);
+      })
       .catch(() => setLoaded(true));
   }, []);
 
   const getSlot = (gun, saat) => slots[gun]?.[saat] || "kapali";
 
+  const gunDurumu = (gun) => {
+    const aktif = SAATLER.filter((s) => getSlot(gun, s) !== "kapali");
+    if (!aktif.length) return "yok";
+    const bosSayisi = aktif.filter((s) => getSlot(gun, s) === "bos").length;
+    if (bosSayisi > 0) return "bos";
+    return "dolu";
+  };
+
   const hicSlotVar = loaded && GUNLER.some((g) => SAATLER.some((s) => getSlot(g, s) !== "kapali"));
   if (!loaded || !hicSlotVar) return null;
+
+  // İlk yüklemede varsayılan gün: ilk aktif gün
+  const aktifGun = selectedGun || GUNLER.find((g) => gunDurumu(g) !== "yok") || GUNLER[0];
+
+  const aktifSaatler = SAATLER.filter((s) => getSlot(aktifGun, s) !== "kapali");
 
   const handleBook = (gun, saat) => {
     const msg = `Merhaba, ${gun} günü saat ${saat} için randevu almak istiyorum.`;
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
   };
 
-  // Sadece en az bir aktif slot olan satırları göster
-  const aktifSaatler = SAATLER.filter((saat) =>
-    GUNLER.some((g) => getSlot(g, saat) !== "kapali")
-  );
-
   return (
     <section id="program" className="relative z-10 bg-neutral-950 pt-[5.25rem] pb-[4.2rem] px-4 sm:px-8 lg:px-20">
       <div className="max-w-6xl mx-auto">
         <MotionReveal>
           <div className="text-center mb-12">
-            <RevealHeading
-              as="h2"
-              mode="word"
-              className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] tracking-[-0.02em]"
-            >
+            <RevealHeading as="h2" mode="word"
+              className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] tracking-[-0.02em]">
               Haftalık Program
             </RevealHeading>
             <p className="mt-4 text-base md:text-lg font-medium text-neutral-300 max-w-2xl mx-auto leading-relaxed">
-              Müsait saatlerden birini seçerek WhatsApp üzerinden hemen randevu alabilirsin.
+              Gün seç, müsait saati bul, WhatsApp'tan randevu al.
             </p>
           </div>
         </MotionReveal>
 
         <MotionReveal delay={80}>
-          <div className="hidden md:block overflow-x-auto rounded-sm border border-neutral-800">
-            <table className="w-full border-collapse text-sm table-fixed">
-              <thead>
-                <tr>
-                  <th className="bg-neutral-900 text-neutral-500 font-medium px-3 py-3 text-left border-b border-r border-neutral-800 w-16">
-                    Saat
-                  </th>
-                  {GUNLER.map((gun, i) => (
-                    <th key={gun} className="bg-neutral-900 text-neutral-300 font-semibold py-3 border-b border-r border-neutral-800 last:border-r-0 text-center">
-                      <span className="hidden lg:block">{gun}</span>
-                      <span className="lg:hidden">{GUN_KISA[i]}</span>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {aktifSaatler.length === 0 ? (
-                  <tr>
-                    <td colSpan={8} className="text-center text-neutral-600 py-10 text-sm">
-                      Program henüz ayarlanmadı.
-                    </td>
-                  </tr>
-                ) : (
-                  aktifSaatler.map((saat) => (
-                    <tr key={saat} className="border-b border-neutral-800 last:border-b-0">
-                      <td className="bg-neutral-900/40 text-neutral-500 font-mono px-3 py-2 border-r border-neutral-800 whitespace-nowrap text-xs">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+
+            {/* Sol: gün seçici (1/3) */}
+            <div className="md:w-1/3 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-1 md:pb-0">
+              {GUNLER.map((gun, idx) => {
+                const durum = gunDurumu(gun);
+                const secili = gun === aktifGun;
+                return (
+                  <button
+                    key={gun}
+                    onClick={() => durum !== "yok" && setSelectedGun(gun)}
+                    disabled={durum === "yok"}
+                    className={`flex-shrink-0 md:flex-shrink w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all duration-150 text-left
+                      ${secili
+                        ? "bg-orange-500/15 border-orange-500/60 text-white"
+                        : durum === "yok"
+                          ? "bg-neutral-900/30 border-neutral-800/50 text-neutral-700 cursor-not-allowed"
+                          : "bg-neutral-900 border-neutral-800 text-neutral-300 hover:border-neutral-600 hover:text-white"
+                      }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className={`text-sm font-semibold hidden md:block ${secili ? "text-white" : ""}`}>{gun}</span>
+                      <span className={`text-sm font-semibold md:hidden ${secili ? "text-white" : ""}`}>{GUN_KISA[idx]}</span>
+                    </div>
+                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                      durum === "bos" ? "bg-emerald-400" :
+                      durum === "dolu" ? "bg-red-500" :
+                      "bg-neutral-800"
+                    }`} />
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Sağ: seçilen günün saatleri (2/3) */}
+            <div className="md:w-2/3 bg-neutral-900 border border-neutral-800 rounded-xl p-5 min-h-[240px]">
+              <p className="text-neutral-400 text-xs font-semibold uppercase tracking-widest mb-4">
+                {aktifGun} — Saatler
+              </p>
+
+              {aktifSaatler.length === 0 ? (
+                <p className="text-neutral-600 text-sm py-8 text-center">Bu gün için müsait saat yok.</p>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {aktifSaatler.map((saat) => {
+                    const durum = getSlot(aktifGun, saat);
+                    if (durum === "bos") return (
+                      <button key={saat} onClick={() => handleBook(aktifGun, saat)}
+                        className="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 text-xs font-semibold transition-all">
                         {saat}
-                      </td>
-                      {GUNLER.map((gun) => {
-                        const durum = getSlot(gun, saat);
-                        return (
-                          <td key={gun} className="border-r border-neutral-800 last:border-r-0 p-1.5">
-                            {durum === "bos" ? (
-                              <button
-                                onClick={() => handleBook(gun, saat)}
-                                className="w-full py-1.5 rounded-sm bg-emerald-500/15 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 text-xs font-semibold transition-all"
-                              >
-                                Müsait
-                              </button>
-                            ) : durum === "dolu" ? (
-                              <span className="flex w-full py-1.5 justify-center rounded-sm bg-red-500/10 border border-red-500/20 text-red-500/60 text-xs">
-                                Dolu
-                              </span>
-                            ) : (
-                              <span className="flex w-full py-1.5 justify-center text-neutral-800 text-xs">—</span>
-                            )}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                      </button>
+                    );
+                    if (durum === "dolu") return (
+                      <span key={saat}
+                        className="px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500/50 text-xs line-through">
+                        {saat}
+                      </span>
+                    );
+                    return null;
+                  })}
+                </div>
+              )}
+
+              <div className="mt-6 flex items-center gap-4 text-xs text-neutral-600">
+                <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-400" /> Müsait</span>
+                <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-red-500" /> Dolu</span>
+              </div>
+            </div>
+
           </div>
 
-          {/* Mobil: günlere göre kart listesi */}
-          <div className="md:hidden space-y-3">
-            {GUNLER.map((gun) => {
-              const boslar = SAATLER.filter((s) => getSlot(gun, s) === "bos");
-              const dolular = SAATLER.filter((s) => getSlot(gun, s) === "dolu");
-              if (boslar.length === 0 && dolular.length === 0) return null;
-              return (
-                <div key={gun} className="bg-neutral-900 border border-neutral-800 rounded-sm p-4">
-                  <p className="text-white font-semibold mb-3 text-sm">{gun}</p>
-                  {boslar.length > 0 && (
-                    <div className="mb-2">
-                      <p className="text-neutral-500 text-xs mb-1.5">Müsait</p>
-                      <div className="flex flex-wrap gap-2">
-                        {boslar.map((s) => (
-                          <button key={s} onClick={() => handleBook(gun, s)}
-                            className="py-1 px-3 rounded-sm bg-emerald-500/15 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 text-xs font-semibold transition-all">
-                            {s}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {dolular.length > 0 && (
-                    <div>
-                      <p className="text-neutral-500 text-xs mb-1.5">Dolu</p>
-                      <div className="flex flex-wrap gap-2">
-                        {dolular.map((s) => (
-                          <span key={s} className="py-1 px-3 rounded-sm bg-red-500/10 border border-red-500/20 text-red-500/60 text-xs">
-                            {s}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-            {GUNLER.every((g) => SAATLER.every((s) => getSlot(g, s) === "kapali")) && (
-              <p className="text-neutral-600 text-center py-8 text-sm">Program henüz ayarlanmadı.</p>
-            )}
-          </div>
           {updatedAt && (
-            <p className="mt-4 text-neutral-600 text-xs">
-              Son güncelleme: {formatUpdatedAt(updatedAt)}
-            </p>
+            <p className="mt-4 text-neutral-600 text-xs">Son güncelleme: {formatUpdatedAt(updatedAt)}</p>
           )}
         </MotionReveal>
       </div>
