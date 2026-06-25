@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import MotionReveal from "./MotionReveal";
 import { RevealHeading } from "./TextReveal";
 
@@ -152,6 +153,18 @@ export default function Hizmetler() {
             </MotionReveal>
           ))}
         </div>
+
+        <MotionReveal delay={160}>
+          <div className="mt-12 flex justify-center">
+            <Link
+              to="/fiyatlar"
+              className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400 text-black font-bold px-8 py-3.5 rounded-xl text-sm sm:text-base tracking-tight transition-colors shadow-lg"
+            >
+              Paketleri İncele
+              <span className="text-base">→</span>
+            </Link>
+          </div>
+        </MotionReveal>
       </div>
     </section>
   );
