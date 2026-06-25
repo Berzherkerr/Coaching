@@ -892,18 +892,31 @@ function HakkimdaEditor({ token }) {
 }
 
 
+const VERGI_URL = "/vergi-levhasi.png";
+
 function IletisimEditor({ token }) {
-  const [form, setForm] = useState({ telefon: "", email: "", konum: "", instagram: "", vergiLevhasi: "" });
+  const [form, setForm] = useState({ telefon: "", email: "", konum: "", instagram: "", vergiLevhasi: VERGI_URL });
   const [status, setStatus] = useState("idle");
+  const [vergiStatus, setVergiStatus] = useState("idle");
 
   useEffect(() => {
     apiFetch("/api/admin/iletisim", token)
       .then((r) => r.json())
-      .then((d) => { if (d.telefon) setForm({ telefon: "", email: "", konum: "", instagram: "", vergiLevhasi: "", ...d }); })
+      .then((d) => { if (d.telefon) setForm({ telefon: "", email: "", konum: "", instagram: "", vergiLevhasi: VERGI_URL, ...d }); })
       .catch(() => {});
   }, [token]);
 
   const set = (field, val) => { setForm((f) => ({ ...f, [field]: val })); setStatus("idle"); };
+
+  const toggleVergi = async () => {
+    const newVal = form.vergiLevhasi ? "" : VERGI_URL;
+    const newForm = { ...form, vergiLevhasi: newVal };
+    setForm(newForm);
+    setVergiStatus("saving");
+    const r = await apiFetch("/api/admin/iletisim", token, { method: "PUT", body: JSON.stringify(newForm) });
+    setVergiStatus(r.ok ? "saved" : "error");
+    setTimeout(() => setVergiStatus("idle"), 2000);
+  };
 
   const save = async () => {
     setStatus("saving");
@@ -913,9 +926,27 @@ function IletisimEditor({ token }) {
   };
 
   const inputCls = "w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2.5 focus:outline-none focus:border-orange-500 transition-colors text-sm";
+  const vergiAcik = !!form.vergiLevhasi;
 
   return (
     <div className="space-y-4">
+      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
+        <p className="text-neutral-400 text-xs font-semibold uppercase tracking-widest mb-5">Vergi Levhası</p>
+        <div className="flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-white font-medium text-sm">Footer'da göster</p>
+            <p className="text-neutral-500 text-xs mt-1">Açınca © yılının yanında "Vergi Levhası" linki çıkar.</p>
+          </div>
+          <button onClick={toggleVergi} aria-pressed={vergiAcik}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors duration-200 ${vergiAcik ? "bg-orange-500" : "bg-neutral-700"}`}>
+            <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-200 ${vergiAcik ? "translate-x-6" : "translate-x-1"}`} />
+          </button>
+        </div>
+        {vergiStatus === "saved"  && <p className="text-green-400 text-xs mt-3">✓ Kaydedildi</p>}
+        {vergiStatus === "error"  && <p className="text-red-400 text-xs mt-3">Hata oluştu</p>}
+        {vergiStatus === "saving" && <p className="text-neutral-500 text-xs mt-3">Kaydediliyor...</p>}
+      </div>
+
       <div>
         <label className="text-neutral-500 text-xs mb-1.5 block">Telefon — header ve iletişim bölümünde kullanılır (başında + olmadan, örn: 905334409803)</label>
         <input value={form.telefon} onChange={(e) => set("telefon", e.target.value)} className={inputCls} />
@@ -931,10 +962,6 @@ function IletisimEditor({ token }) {
       <div>
         <label className="text-neutral-500 text-xs mb-1.5 block">Instagram URL</label>
         <input type="url" value={form.instagram} onChange={(e) => set("instagram", e.target.value)} placeholder="https://www.instagram.com/..." className={inputCls} />
-      </div>
-      <div>
-        <label className="text-neutral-500 text-xs mb-1.5 block">Vergi Levhası URL — footer'da görünür, boş bırakılırsa gizlenir</label>
-        <input value={form.vergiLevhasi} onChange={(e) => set("vergiLevhasi", e.target.value)} placeholder="/vergi-levhasi.png.png" className={inputCls} />
       </div>
 
       <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 text-xs text-neutral-500">
