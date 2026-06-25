@@ -46,7 +46,7 @@ function Footer() {
           <p className="italic text-center md:text-right">
             &copy; 2026 İnanç Coaching &nbsp;·&nbsp;
             <a
-              href="/vergi-levhasi.png"
+              href="/vergi-levhasi.png.png"
               target="_blank"
               rel="noreferrer"
               className="not-italic hover:text-white transition-colors underline underline-offset-2"
