@@ -8,8 +8,35 @@ const SAATLER = [
   "19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30",
   "23:00","23:30","24:00",
 ];
-const PAKET_LABELS = { uzaktan: "Uzaktan Eğitim", online: "Online Koçluk", birebir: "Birebir Koçluk" };
 const SURE_SEC = [{ value: "ay", label: "/ ay" }, { value: "seans", label: "/ seans" }, { value: "program", label: "/ program" }];
+
+const RENK_SECENEKLER = [
+  { key: "blue",    label: "Mavi",   dot: "bg-blue-500"    },
+  { key: "purple",  label: "Mor",    dot: "bg-purple-500"  },
+  { key: "amber",   label: "Amber",  dot: "bg-amber-500"   },
+  { key: "emerald", label: "Yeşil",  dot: "bg-emerald-500" },
+  { key: "rose",    label: "Kırmızı",dot: "bg-rose-500"    },
+  { key: "cyan",    label: "Cyan",   dot: "bg-cyan-500"    },
+  { key: "orange",  label: "Turuncu",dot: "bg-orange-500"  },
+];
+
+const VARSAYILAN_PAKETLER = [
+  {
+    id: "uzaktan", title: "Uzaktan Eğitim", tagline: "Spora yeni başlayanlara uygun çözüm",
+    fiyat: "3.000", sure: "ay", etiket: "YENİ BAŞLAYANLARA", renk: "blue",
+    ozellikler: ["Özel antrenman ve beslenme programı","Haftalık online değerlendirme ve takip","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi"],
+  },
+  {
+    id: "online", title: "Online Koçluk", tagline: "Canlı birebir seans ve geri bildirim",
+    fiyat: "7.000", sure: "ay", etiket: "EN ÇOK TERCİH EDİLEN", renk: "purple",
+    ozellikler: ["Online birebir antrenman seansları","Seans sonrası değerlendirme ve düzenleme","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi"],
+  },
+  {
+    id: "birebir", title: "Birebir Koçluk", tagline: "Balıkesir'de anlaşmalı salonlarda birebir çalışma",
+    fiyat: "10.000", sure: "ay", etiket: "EN İYİ SONUÇ", renk: "amber",
+    ozellikler: ["Balıkesir'de salonda birebir antrenman","Anlık takip, analiz ve düzenli ölçüm","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi"],
+  },
+];
 
 // kapali → bos → dolu → kapali
 const CYCLE = { kapali: "bos", bos: "dolu", dolu: "kapali" };
@@ -100,70 +127,193 @@ function Dashboard({ onNavigate }) {
 
 
 function PricesEditor({ token }) {
-  const [prices, setPrices] = useState([]);
+  const [paketler, setPaketler] = useState([]);
+  const [acik, setAcik] = useState(null);
   const [status, setStatus] = useState("idle");
 
   useEffect(() => {
     apiFetch("/api/admin/prices", token)
       .then((r) => r.json())
-      .then((d) => { if (d.paketler) setPrices(d.paketler); })
-      .catch(() => {});
+      .then((d) => {
+        const raw = d.paketler || [];
+        // Eski formattan (sadece fiyat/sure) yeni formata geç
+        const merged = VARSAYILAN_PAKETLER.map((def) => {
+          const kv = raw.find((x) => x.id === def.id);
+          if (!kv) return def;
+          return { ...def, ...kv, ozellikler: kv.ozellikler || def.ozellikler };
+        });
+        // KV'de varsayılanlarda olmayan ekstra paketler
+        const ekstra = raw.filter((x) => !VARSAYILAN_PAKETLER.find((d) => d.id === x.id));
+        setPaketler([...merged, ...ekstra]);
+      })
+      .catch(() => setPaketler(VARSAYILAN_PAKETLER));
   }, [token]);
 
-  const update = (i, field, val) => {
-    setPrices((p) => { const n = [...p]; n[i] = { ...n[i], [field]: val }; return n; });
+  const set = (i, field, val) => {
+    setPaketler((prev) => { const n = [...prev]; n[i] = { ...n[i], [field]: val }; return n; });
     setStatus("idle");
   };
 
-  const save = async (e) => {
-    e.preventDefault();
+  const setOzellik = (pi, oi, val) => {
+    setPaketler((prev) => {
+      const n = [...prev];
+      const oz = [...(n[pi].ozellikler || [])];
+      oz[oi] = val;
+      n[pi] = { ...n[pi], ozellikler: oz };
+      return n;
+    });
+    setStatus("idle");
+  };
+
+  const addOzellik = (pi) => {
+    setPaketler((prev) => {
+      const n = [...prev];
+      n[pi] = { ...n[pi], ozellikler: [...(n[pi].ozellikler || []), ""] };
+      return n;
+    });
+  };
+
+  const removeOzellik = (pi, oi) => {
+    setPaketler((prev) => {
+      const n = [...prev];
+      n[pi] = { ...n[pi], ozellikler: n[pi].ozellikler.filter((_, idx) => idx !== oi) };
+      return n;
+    });
+    setStatus("idle");
+  };
+
+  const addPaket = () => {
+    const yeni = {
+      id: `paket_${Date.now()}`,
+      title: "Yeni Paket",
+      tagline: "",
+      fiyat: "0",
+      sure: "ay",
+      etiket: "",
+      renk: "cyan",
+      ozellikler: ["", "", "", "", ""],
+    };
+    setPaketler((prev) => [...prev, yeni]);
+    setAcik(paketler.length);
+    setStatus("idle");
+  };
+
+  const deletePaket = (i) => {
+    if (!confirm("Bu paketi silmek istiyor musun?")) return;
+    setPaketler((prev) => prev.filter((_, idx) => idx !== i));
+    setAcik(null);
+    setStatus("idle");
+  };
+
+  const save = async () => {
     setStatus("saving");
-    const r = await apiFetch("/api/admin/prices", token, { method: "PUT", body: JSON.stringify({ paketler: prices }) });
+    const r = await apiFetch("/api/admin/prices", token, { method: "PUT", body: JSON.stringify({ paketler }) });
     setStatus(r.ok ? "saved" : "error");
     if (r.ok) setTimeout(() => setStatus("idle"), 2500);
   };
 
+  const inputCls = "w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2.5 focus:outline-none focus:border-orange-500 transition-colors text-sm";
+
   return (
-    <form onSubmit={save} className="space-y-4">
-      {prices.map((p, i) => (
-        <div key={p.id} className="bg-neutral-900 border border-neutral-800 rounded-2xl p-5">
-          <p className="text-neutral-400 text-xs font-semibold uppercase tracking-widest mb-4">
-            {PAKET_LABELS[p.id] || p.id}
-          </p>
-          <div className="flex gap-3">
-            <div className="flex-1">
-              <label className="text-neutral-500 text-xs mb-1.5 block">Fiyat (₺)</label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-sm">₺</span>
-                <input type="text" value={p.fiyat} onChange={(e) => update(i, "fiyat", e.target.value)}
-                  className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl pl-8 pr-4 py-2.5 focus:outline-none focus:border-orange-500 transition-colors" />
+    <div className="space-y-3">
+      {paketler.map((p, i) => (
+        <div key={p.id} className="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden">
+          <button type="button" onClick={() => setAcik(acik === i ? null : i)}
+            className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-neutral-800/50 transition-colors">
+            <div className="flex items-center gap-3">
+              <span className={`w-3 h-3 rounded-full flex-shrink-0 ${RENK_SECENEKLER.find(r => r.key === p.renk)?.dot || "bg-neutral-500"}`} />
+              <span className="text-white font-medium text-sm">{p.title}</span>
+              <span className="text-neutral-500 text-xs">₺{p.fiyat} / {p.sure}</span>
+            </div>
+            <span className="text-neutral-500 text-xs">{acik === i ? "▲" : "▼"}</span>
+          </button>
+
+          {acik === i && (
+            <div className="px-5 pb-5 space-y-4 border-t border-neutral-800 pt-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-neutral-500 text-xs mb-1.5 block">Başlık</label>
+                  <input value={p.title} onChange={(e) => set(i, "title", e.target.value)} className={inputCls} />
+                </div>
+                <div>
+                  <label className="text-neutral-500 text-xs mb-1.5 block">Etiket (badge)</label>
+                  <input value={p.etiket || ""} onChange={(e) => set(i, "etiket", e.target.value)} placeholder="EN ÇOK TERCİH EDİLEN" className={inputCls} />
+                </div>
               </div>
+
+              <div>
+                <label className="text-neutral-500 text-xs mb-1.5 block">Alt açıklama</label>
+                <input value={p.tagline || ""} onChange={(e) => set(i, "tagline", e.target.value)} className={inputCls} />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-neutral-500 text-xs mb-1.5 block">Fiyat (₺)</label>
+                  <input value={p.fiyat} onChange={(e) => set(i, "fiyat", e.target.value)} className={inputCls} />
+                </div>
+                <div>
+                  <label className="text-neutral-500 text-xs mb-1.5 block">Periyot</label>
+                  <select value={p.sure} onChange={(e) => set(i, "sure", e.target.value)}
+                    className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-3 py-2.5 focus:outline-none focus:border-orange-500 transition-colors text-sm">
+                    {SURE_SEC.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-neutral-500 text-xs mb-2 block">Renk teması</label>
+                <div className="flex gap-2 flex-wrap">
+                  {RENK_SECENEKLER.map((r) => (
+                    <button key={r.key} type="button" onClick={() => set(i, "renk", r.key)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-colors ${p.renk === r.key ? "bg-neutral-700 text-white border border-neutral-500" : "bg-neutral-800 text-neutral-400 border border-neutral-700 hover:bg-neutral-700"}`}>
+                      <span className={`w-2.5 h-2.5 rounded-full ${r.dot}`} />
+                      {r.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-neutral-500 text-xs mb-2 block">Özellikler</label>
+                <div className="space-y-2">
+                  {(p.ozellikler || []).map((oz, oi) => (
+                    <div key={oi} className="flex gap-2 items-center">
+                      <input value={oz} onChange={(e) => setOzellik(i, oi, e.target.value)}
+                        className="flex-1 bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2 focus:outline-none focus:border-orange-500 transition-colors text-sm" />
+                      {(p.ozellikler || []).length > 1 && (
+                        <button type="button" onClick={() => removeOzellik(i, oi)}
+                          className="text-red-400 hover:text-red-300 px-2 text-lg leading-none">✕</button>
+                      )}
+                    </div>
+                  ))}
+                  <button type="button" onClick={() => addOzellik(i)}
+                    className="text-xs text-orange-500 hover:text-orange-400 transition-colors">+ Madde ekle</button>
+                </div>
+              </div>
+
+              <button type="button" onClick={() => deletePaket(i)}
+                className="text-xs text-red-500 hover:text-red-400 transition-colors pt-1">
+                Bu paketi sil
+              </button>
             </div>
-            <div className="w-32">
-              <label className="text-neutral-500 text-xs mb-1.5 block">Periyot</label>
-              <select value={p.sure} onChange={(e) => update(i, "sure", e.target.value)}
-                className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-3 py-2.5 focus:outline-none focus:border-orange-500 transition-colors">
-                {SURE_SEC.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-              </select>
-            </div>
-          </div>
-          <div className="mt-3 pt-3 border-t border-neutral-800 flex items-baseline gap-1">
-            <span className="text-neutral-500 text-xs">Önizleme:</span>
-            <span className="text-white font-black text-lg ml-1">₺{p.fiyat}</span>
-            <span className="text-neutral-400 text-xs">/ {p.sure}</span>
-          </div>
+          )}
         </div>
       ))}
-      {prices.length === 0 && <p className="text-neutral-600 text-center py-8">Yükleniyor...</p>}
-      <button type="submit" disabled={status === "saving" || prices.length === 0}
+
+      <button type="button" onClick={addPaket}
+        className="w-full py-3 rounded-xl border border-dashed border-neutral-700 text-neutral-400 hover:border-orange-500 hover:text-orange-400 text-sm transition-colors">
+        + Yeni Paket Ekle
+      </button>
+
+      <button type="button" onClick={save} disabled={status === "saving"}
         className={`w-full font-bold py-3.5 rounded-xl transition-all ${
           status === "saved" ? "bg-green-600 text-white"
           : status === "error" ? "bg-red-600 text-white"
-          : "bg-orange-500 hover:bg-orange-400 disabled:bg-neutral-700 disabled:text-neutral-500 text-black"
+          : "bg-orange-500 hover:bg-orange-400 disabled:opacity-50 text-black"
         }`}>
-        {status === "saving" ? "Kaydediliyor..." : status === "saved" ? "✓ Kaydedildi" : status === "error" ? "Hata, tekrar dene" : "Fiyatları Kaydet"}
+        {status === "saving" ? "Kaydediliyor..." : status === "saved" ? "✓ Kaydedildi" : status === "error" ? "Hata, tekrar dene" : "Tüm Paketleri Kaydet"}
       </button>
-    </form>
+    </div>
   );
 }
 
