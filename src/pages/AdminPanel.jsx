@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 
 const GUNLER = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
 const SAATLER = [
-  "07:00","08:00","09:00","10:00","11:00","12:00",
-  "13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00",
+  "07:00","07:30","08:00","08:30","09:00","09:30","10:00","10:30",
+  "11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30",
+  "15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30",
+  "19:00","19:30","20:00","20:30","21:00",
 ];
 const PAKET_LABELS = { uzaktan: "Uzaktan Eğitim", online: "Online Koçluk", birebir: "Birebir Koçluk" };
 const SURE_SEC = [{ value: "ay", label: "/ ay" }, { value: "seans", label: "/ seans" }, { value: "program", label: "/ program" }];
@@ -303,8 +305,8 @@ function ReviewsSettings({ token }) {
       <p className="text-neutral-400 text-xs font-semibold uppercase tracking-widest mb-5">Google Yorumlar Bölümü</p>
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-white font-medium text-sm">Yorum akışını göster</p>
-          <p className="text-neutral-500 text-xs mt-1">Kapatırsan sitede yorum bölümü gözükmez.</p>
+          <p className="text-white font-medium text-sm">Yorum kartlarını göster</p>
+          <p className="text-neutral-500 text-xs mt-1">Kapatırsan akan yorum kutuları gizlenir, başlık ve butonlar kalır.</p>
         </div>
         <button onClick={() => save(!visible)} aria-pressed={visible}
           className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors duration-200 ${visible ? "bg-orange-500" : "bg-neutral-700"}`}>

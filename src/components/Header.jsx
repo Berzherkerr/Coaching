@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-/** Pixel-perfect telefon ikonu (24px grid, net stroke) */
 function PhoneIcon({ className = "h-4 w-4" }) {
   return (
     <svg
@@ -20,47 +20,37 @@ function PhoneIcon({ className = "h-4 w-4" }) {
   );
 }
 
+const MENU_ITEMS = [
+  { label: "Hakkımda",  href: "#hakkimda",  isPage: false },
+  { label: "Hizmetler", href: "#hizmetler", isPage: false },
+  { label: "Paketler",  href: "/fiyatlar",  isPage: true  },
+];
+
 function Header() {
   const [isVisible, setIsVisible] = useState(true);
-  const [hasProgram, setHasProgram] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/schedule")
-      .then((r) => r.json())
-      .then((d) => {
-        const slots = d.slots || {};
-        const aktif = Object.values(slots).some((gun) =>
-          Object.values(gun).some((durum) => durum !== "kapali")
-        );
-        setHasProgram(aktif);
-      })
-      .catch(() => {});
-  }, []);
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
   const lastYRef = useRef(0);
   const rafRef = useRef(null);
   const hideTimeoutRef = useRef(null);
 
-  const SHOW_UP_THRESHOLD = 6;
-  const HIDE_DOWN_THRESHOLD = 6;
-  const HIDE_DELAY_MS = 7000; // 7 saniye sonra gizle
+  const HIDE_DELAY_MS = 7000;
 
-  const menuItems = [
-    { label: "Hakkımda", href: "#hakkimda" },
-    { label: "Hizmetler", href: "#hizmetler" },
-    ...(hasProgram ? [{ label: "Program", href: "#program" }] : []),
-    { label: "Paketler", href: "#fiyatlar" },
-  ];
-
-  const handleNav = (href) => (e) => {
+  const handleAnchor = (anchor) => (e) => {
     e.preventDefault();
-    const el =
-      document.querySelector(href) ||
-      (href === "#hero" ? document.querySelector('[data-hero="true"]') : null);
-
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (isHome) {
+      const el = document.querySelector(anchor);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      else window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
+      window.location.href = "/" + anchor;
+    }
+  };
+
+  const handleLogo = (e) => {
+    if (isHome) {
+      e.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
@@ -68,42 +58,26 @@ function Header() {
   useEffect(() => {
     lastYRef.current = window.scrollY;
 
-    const clearHideTimeout = () => {
-      if (hideTimeoutRef.current) {
-        clearTimeout(hideTimeoutRef.current);
-        hideTimeoutRef.current = null;
-      }
+    const clearHide = () => {
+      if (hideTimeoutRef.current) { clearTimeout(hideTimeoutRef.current); hideTimeoutRef.current = null; }
     };
 
     const onScroll = () => {
       if (rafRef.current) return;
-
       rafRef.current = requestAnimationFrame(() => {
         const y = window.scrollY;
         const dy = y - lastYRef.current;
 
-        // En üstlere yakınken her zaman göster + timer sıfırla
         if (y <= 12) {
-          clearHideTimeout();
+          clearHide();
           if (!isVisible) setIsVisible(true);
         } else {
-          // Yukarı kaydırma → hemen göster + timer sıfırla
-          if (dy < -SHOW_UP_THRESHOLD) {
-            clearHideTimeout();
-            if (!isVisible) setIsVisible(true);
-          }
-
-          // Aşağı kaydırma → 7 saniye sonra gizle (hala aşağıda ise)
-          if (dy > HIDE_DOWN_THRESHOLD) {
-            if (!hideTimeoutRef.current) {
-              hideTimeoutRef.current = setTimeout(() => {
-                // hala en üstte değilse gizle
-                if (window.scrollY > 12) {
-                  setIsVisible(false);
-                }
-                hideTimeoutRef.current = null;
-              }, HIDE_DELAY_MS);
-            }
+          if (dy < -6) { clearHide(); if (!isVisible) setIsVisible(true); }
+          if (dy > 6 && !hideTimeoutRef.current) {
+            hideTimeoutRef.current = setTimeout(() => {
+              if (window.scrollY > 12) setIsVisible(false);
+              hideTimeoutRef.current = null;
+            }, HIDE_DELAY_MS);
           }
         }
 
@@ -120,54 +94,39 @@ function Header() {
     };
   }, [isVisible]);
 
+  const renderItem = (item, idx, extraClass = "") => {
+    const active = item.isPage && location.pathname === item.href;
+    const cls = `transition ${active ? "text-orange-400" : "text-neutral-200 hover:text-orange-400"} ${extraClass}`;
+    if (item.isPage) {
+      return <Link key={idx} to={item.href} className={cls}>{item.label}</Link>;
+    }
+    return (
+      <a key={idx} href={item.href} onClick={handleAnchor(item.href)} className={cls}>
+        {item.label}
+      </a>
+    );
+  };
+
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 
+      className={`fixed top-0 left-0 w-full z-50
         transition-all duration-400 ease-[cubic-bezier(.22,1,.36,1)]
-        ${
-          isVisible
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-0 pointer-events-none"
-        }
+        ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 pointer-events-none"}
         bg-neutral-950/70 backdrop-blur-sm
-        shadow-[0_8px_24px_rgba(0,0,0,0)]
       `}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-0">
+        {/* Masaüstü */}
         <div className="hidden md:flex items-center py-[0.64rem] relative">
-          <a
-            href="#hero"
-            onClick={handleNav("#hero")}
-            className="flex items-center pt-5 pl-4 z-10"
-            aria-label="Hero bölümüne dön"
-            title="Hero"
-          >
-            <img
-              src="/ardalogo.svg"
-              alt="İnanç Hoca Logo"
-              className="h-12 -ml-8 w-auto scale-[6] origin-left filter invert brightness-0"
-            />
-          </a>
+          <Link to="/" onClick={handleLogo} className="flex items-center pt-5 pl-4 z-10" aria-label="Ana sayfa">
+            <img src="/ardalogo.svg" alt="İnanç Hoca Logo" className="h-12 -ml-8 w-auto scale-[6] origin-left filter invert brightness-0" />
+          </Link>
 
-          {/* Menü */}
-          <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-8 whitespace-nowrap">
-            {menuItems.map((item, idx) => (
-              <a
-                key={idx}
-                href={item.href}
-                onClick={handleNav(item.href)}
-                className="text-sm font-medium text-neutral-200 hover:text-orange-400 transition"
-              >
-                {item.label}
-              </a>
-            ))}
+          <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-8 whitespace-nowrap text-sm font-medium">
+            {MENU_ITEMS.map((item, idx) => renderItem(item, idx))}
           </nav>
 
-          {/* Telefon butonu */}
-          <a
-            href="tel:+905334409803"
-            className="ml-auto flex items-center gap-2 text-orange-500 hover:text-orange-400 transition text-sm font-semibold"
-          >
+          <a href="tel:+905334409803" className="ml-auto flex items-center gap-2 text-orange-500 hover:text-orange-400 transition text-sm font-semibold">
             <PhoneIcon className="h-4 w-4" />
             <span>Bana Ulaşın</span>
           </a>
@@ -175,55 +134,19 @@ function Header() {
 
         {/* Mobil */}
         <div className="md:hidden flex flex-col">
-          {/* Üst satır: Logo + Telefon */}
           <div className="relative flex items-center h-14">
-            {/* Logo */}
-            <a
-              href="#hero"
-              onClick={handleNav("#hero")}
-              className="flex items-center min-w-0 z-10"
-              aria-label="Hero bölümüne dön"
-              title="Hero"
-            >
-              <img
-                src="/ardalogo.svg"
-                alt="İnanç Hoca Logo"
-                className="h-15 -mb-2.5 -ml-1 w-auto filter invert brightness-0"
-              />
-            </a>
+            <Link to="/" onClick={handleLogo} className="flex items-center min-w-0 z-10" aria-label="Ana sayfa">
+              <img src="/ardalogo.svg" alt="İnanç Hoca Logo" className="h-15 -mb-2.5 -ml-1 w-auto filter invert brightness-0" />
+            </Link>
 
-            {/* 3 öğe: menü ortada (absolute) */}
-            {menuItems.length < 4 && (
-              <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-5 text-[13px] font-bold text-neutral-200 whitespace-nowrap">
-                {menuItems.map((item, index) => (
-                  <a key={index} href={item.href} onClick={handleNav(item.href)} className="hover:text-orange-400 transition">
-                    {item.label}
-                  </a>
-                ))}
-              </nav>
-            )}
+            <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-5 text-[13px] font-bold whitespace-nowrap">
+              {MENU_ITEMS.map((item, idx) => renderItem(item, idx))}
+            </nav>
 
-            {/* Telefon ikonu */}
-            <a
-              href="tel:+905334409803"
-              className="ml-auto flex items-center text-orange-500 hover:text-orange-400 transition"
-              aria-label="Ara"
-              title="Ara"
-            >
+            <a href="tel:+905334409803" className="ml-auto flex items-center text-orange-500 hover:text-orange-400 transition" aria-label="Ara">
               <PhoneIcon className="h-5 w-5" />
             </a>
           </div>
-
-          {/* Alt satır: 4 öğe varsa menü buraya */}
-          {menuItems.length >= 4 && (
-            <nav className="flex items-center justify-between pb-2.5 px-2 text-[13px] font-bold text-neutral-200">
-              {menuItems.map((item, index) => (
-                <a key={index} href={item.href} onClick={handleNav(item.href)} className="hover:text-orange-400 transition">
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-          )}
         </div>
       </div>
     </header>

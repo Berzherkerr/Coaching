@@ -67,7 +67,7 @@ const CARD_W = 300;
 const CARD_H = 196;
 const GAP = 16;
 
-export default function GoogleReviews({ placeId, averageRating, totalReviews }) {
+export default function GoogleReviews({ placeId, averageRating, totalReviews, cardsVisible = true }) {
   const [reviews, setReviews] = useState([]);
   const [autoData, setAutoData] = useState(null);
   const [mobileIndex, setMobileIndex] = useState(0);
@@ -163,7 +163,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
 
         <MotionReveal delay={120}>
           <>
-            {reviews.length > 0 && (
+            {cardsVisible && reviews.length > 0 && (
               <div className="sm:hidden">
                 <div className="relative overflow-hidden" style={{ height: CARD_H }}>
                   {reviews.map((r, i) => (
@@ -182,28 +182,30 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews }) 
               </div>
             )}
 
-            <div
-              className="hidden sm:block relative overflow-hidden bg-transparent cursor-pointer"
-              onMouseDown={onPointerDown} onMouseUp={onPointerUp} onMouseLeave={onPointerUp}
-              onTouchStart={onPointerDown} onTouchEnd={onPointerUp}
-              style={{ isolation: "isolate", touchAction: "pan-y" }}
-            >
-              <div className="pointer-events-none absolute inset-y-0 left-0 w-24 z-10"
-                style={{ background: "linear-gradient(to right, rgb(10,10,10) 0%, transparent 100%)" }} />
-              <div className="pointer-events-none absolute inset-y-0 right-0 w-24 z-10"
-                style={{ background: "linear-gradient(to left, rgb(10,10,10) 0%, transparent 100%)" }} />
-              <div className="overflow-hidden">
-                <div ref={containerRef} className="flex" style={{ gap: `${GAP}px`, willChange: "transform", backfaceVisibility: "hidden" }}>
-                  {[...reviews, ...reviews].map((r, i) => (
-                    <div key={i} className="flex-shrink-0" style={{ width: CARD_W, height: CARD_H }}>
-                      <ReviewCard r={r} />
-                    </div>
-                  ))}
+            {cardsVisible && (
+              <div
+                className="hidden sm:block relative overflow-hidden bg-transparent cursor-pointer"
+                onMouseDown={onPointerDown} onMouseUp={onPointerUp} onMouseLeave={onPointerUp}
+                onTouchStart={onPointerDown} onTouchEnd={onPointerUp}
+                style={{ isolation: "isolate", touchAction: "pan-y" }}
+              >
+                <div className="pointer-events-none absolute inset-y-0 left-0 w-24 z-10"
+                  style={{ background: "linear-gradient(to right, rgb(10,10,10) 0%, transparent 100%)" }} />
+                <div className="pointer-events-none absolute inset-y-0 right-0 w-24 z-10"
+                  style={{ background: "linear-gradient(to left, rgb(10,10,10) 0%, transparent 100%)" }} />
+                <div className="overflow-hidden">
+                  <div ref={containerRef} className="flex" style={{ gap: `${GAP}px`, willChange: "transform", backfaceVisibility: "hidden" }}>
+                    {[...reviews, ...reviews].map((r, i) => (
+                      <div key={i} className="flex-shrink-0" style={{ width: CARD_W, height: CARD_H }}>
+                        <ReviewCard r={r} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            <div className="mt-12 flex flex-row gap-3 items-center justify-center">
+            <div className={`flex flex-row gap-3 items-center justify-center ${cardsVisible ? "mt-12" : "mt-6"}`}>
               <a href={resolvedPlaceUrl || "#"} target="_blank" rel="noreferrer"
                 className={`inline-flex items-center justify-center h-11 px-4 sm:px-5 rounded-xl text-sm md:text-base font-semibold tracking-tight border transition-colors ${
                   resolvedPlaceUrl ? "border-neutral-700 bg-neutral-900/80 text-neutral-100 hover:border-orange-500" : "border-neutral-800 bg-neutral-900/60 text-neutral-500 cursor-not-allowed"

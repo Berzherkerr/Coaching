@@ -59,6 +59,12 @@ const hizmetler = [
     description:
       "Büyüme döneminde omurga sağlığını koruyan, güvenli ve destekleyici egzersizlerle potansiyelini destekliyorum.",
   },
+  {
+    icon: "🏃‍♂️",
+    title: "Kondisyon & Dayanıklılık",
+    description:
+      "Nefes yönetimi, kalp atış hızı kontrolü ve kademeli yüklenme prensipleriyle genel kondisyon seviyeni yukarı taşıyoruz.",
+  },
 ];
 
 function handleWhatsappClick(title) {
@@ -108,7 +114,7 @@ export default function Hizmetler() {
                         </div>
                       </div>
 
-                      <h3 className="col-start-2 text-md font-semibold text-white leading-snug">
+                      <h3 className="col-start-2 text-lg font-semibold text-white leading-snug">
                         {item.title}
                       </h3>
 
@@ -136,7 +142,7 @@ export default function Hizmetler() {
                 <div className="text-4xl mb-1 group-hover-emoji-pulse-soft">
                   {item.icon}
                 </div>
-                <h3 className="text-lg md:text-xl font-semibold text-white leading-snug">
+                <h3 className="text-xl md:text-2xl font-semibold text-white leading-snug">
                   {item.title}
                 </h3>
                 <p className="text-neutral-300/90 text-sm leading-relaxed font-normal max-w-[280px]">

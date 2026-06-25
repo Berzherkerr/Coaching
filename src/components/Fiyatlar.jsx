@@ -1,10 +1,7 @@
-// FIYATLAR BÖLÜMÜ - Paket fiyatlandırması
 import { useEffect, useState } from "react";
 import MotionReveal from "./MotionReveal";
 import { RevealHeading } from "./TextReveal";
 
-// WHATSAPP NUMARANI BURAYA YAZ
-// ÖRNEK FORMAT: 905555555555 (başında + işareti yok)
 const WHATSAPP_NUMBER = "905334409803";
 
 const ortakOzellikler = [
@@ -87,7 +84,7 @@ export default function Fiyatlar() {
   return (
     <section
       id="fiyatlar"
-      className="relative z-10 bg-neutral-950 pt-20  px-4 sm:px-8 lg:px-20"
+      className="relative z-10 bg-neutral-950 pt-28 px-4 sm:px-8 lg:px-20"
     >
       <MotionReveal>
         <div className="max-w-6xl mx-auto text-center mb-14">
