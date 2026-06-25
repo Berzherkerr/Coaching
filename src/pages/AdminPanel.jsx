@@ -93,6 +93,8 @@ const MENU_ITEMS = [
   { key: "schedule", icon: "📅", label: "Haftalık Program", desc: "Müsait / dolu saatleri ayarla"  },
   { key: "reviews",  icon: "⭐", label: "Yorum Akışı",     desc: "Google yorumlarını aç / kapat"  },
   { key: "blog",     icon: "✍️", label: "Blog",            desc: "Yazı yaz ve yayınla"            },
+  { key: "hakkimda", icon: "👤", label: "Hakkımda",        desc: "Tanıtım metnini düzenle"         },
+  { key: "iletisim", icon: "📞", label: "İletişim",        desc: "Telefon, e-posta ve konum güncelle" },
 ];
 
 function Dashboard({ onNavigate }) {
@@ -631,6 +633,138 @@ function BlogEditor({ token }) {
 }
 
 
+function HakkimdaEditor({ token }) {
+  const [intro, setIntro] = useState("");
+  const [paragraflar, setParagraflar] = useState([]);
+  const [status, setStatus] = useState("idle");
+
+  useEffect(() => {
+    apiFetch("/api/admin/hakkimda", token)
+      .then((r) => r.json())
+      .then((d) => {
+        setIntro(d.intro || "");
+        setParagraflar(d.paragraflar || []);
+      })
+      .catch(() => {});
+  }, [token]);
+
+  const setParagraf = (i, val) => {
+    setParagraflar((prev) => { const n = [...prev]; n[i] = val; return n; });
+    setStatus("idle");
+  };
+
+  const addParagraf = () => { setParagraflar((p) => [...p, ""]); };
+  const removeParagraf = (i) => { setParagraflar((p) => p.filter((_, idx) => idx !== i)); setStatus("idle"); };
+
+  const save = async () => {
+    setStatus("saving");
+    const r = await apiFetch("/api/admin/hakkimda", token, {
+      method: "PUT",
+      body: JSON.stringify({ intro, paragraflar }),
+    });
+    setStatus(r.ok ? "saved" : "error");
+    if (r.ok) setTimeout(() => setStatus("idle"), 2500);
+  };
+
+  const areaCls = "w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors text-sm leading-relaxed resize-none";
+
+  return (
+    <div className="space-y-5">
+      <div>
+        <label className="text-neutral-500 text-xs mb-1.5 block">Giriş cümlesi</label>
+        <textarea rows={3} value={intro} onChange={(e) => { setIntro(e.target.value); setStatus("idle"); }}
+          className={areaCls} />
+      </div>
+
+      <div>
+        <label className="text-neutral-500 text-xs mb-2 block">Paragraflar</label>
+        <div className="space-y-3">
+          {paragraflar.map((p, i) => (
+            <div key={i} className="flex gap-2 items-start">
+              <textarea rows={4} value={p} onChange={(e) => setParagraf(i, e.target.value)}
+                className={`flex-1 ${areaCls}`} />
+              {paragraflar.length > 1 && (
+                <button type="button" onClick={() => removeParagraf(i)}
+                  className="text-red-400 hover:text-red-300 text-lg leading-none mt-3">✕</button>
+              )}
+            </div>
+          ))}
+          <button type="button" onClick={addParagraf}
+            className="text-xs text-orange-500 hover:text-orange-400 transition-colors">+ Paragraf ekle</button>
+        </div>
+      </div>
+
+      <button type="button" onClick={save} disabled={status === "saving"}
+        className={`w-full font-bold py-3.5 rounded-xl transition-all ${
+          status === "saved" ? "bg-green-600 text-white"
+          : status === "error" ? "bg-red-600 text-white"
+          : "bg-orange-500 hover:bg-orange-400 disabled:opacity-50 text-black"
+        }`}>
+        {status === "saving" ? "Kaydediliyor..." : status === "saved" ? "✓ Kaydedildi" : status === "error" ? "Hata, tekrar dene" : "Kaydet"}
+      </button>
+    </div>
+  );
+}
+
+
+function IletisimEditor({ token }) {
+  const [form, setForm] = useState({ telefon: "", email: "", konum: "", instagram: "" });
+  const [status, setStatus] = useState("idle");
+
+  useEffect(() => {
+    apiFetch("/api/admin/iletisim", token)
+      .then((r) => r.json())
+      .then((d) => { if (d.telefon) setForm({ telefon: "", email: "", konum: "", instagram: "", ...d }); })
+      .catch(() => {});
+  }, [token]);
+
+  const set = (field, val) => { setForm((f) => ({ ...f, [field]: val })); setStatus("idle"); };
+
+  const save = async () => {
+    setStatus("saving");
+    const r = await apiFetch("/api/admin/iletisim", token, { method: "PUT", body: JSON.stringify(form) });
+    setStatus(r.ok ? "saved" : "error");
+    if (r.ok) setTimeout(() => setStatus("idle"), 2500);
+  };
+
+  const inputCls = "w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2.5 focus:outline-none focus:border-orange-500 transition-colors text-sm";
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <label className="text-neutral-500 text-xs mb-1.5 block">Telefon (başında + olmadan, örn: 905334409803)</label>
+        <input value={form.telefon} onChange={(e) => set("telefon", e.target.value)} className={inputCls} />
+      </div>
+      <div>
+        <label className="text-neutral-500 text-xs mb-1.5 block">E-posta</label>
+        <input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} className={inputCls} />
+      </div>
+      <div>
+        <label className="text-neutral-500 text-xs mb-1.5 block">Konum metni</label>
+        <input value={form.konum} onChange={(e) => set("konum", e.target.value)} placeholder="Altıeylül, BALIKESİR" className={inputCls} />
+      </div>
+      <div>
+        <label className="text-neutral-500 text-xs mb-1.5 block">Instagram URL</label>
+        <input type="url" value={form.instagram} onChange={(e) => set("instagram", e.target.value)} placeholder="https://www.instagram.com/..." className={inputCls} />
+      </div>
+
+      <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 text-xs text-neutral-500">
+        Harita embed kodu değiştirmek için kod tabanına ulaşın → <code className="text-neutral-400">Iletisim.jsx</code>
+      </div>
+
+      <button type="button" onClick={save} disabled={status === "saving"}
+        className={`w-full font-bold py-3.5 rounded-xl transition-all ${
+          status === "saved" ? "bg-green-600 text-white"
+          : status === "error" ? "bg-red-600 text-white"
+          : "bg-orange-500 hover:bg-orange-400 disabled:opacity-50 text-black"
+        }`}>
+        {status === "saving" ? "Kaydediliyor..." : status === "saved" ? "✓ Kaydedildi" : status === "error" ? "Hata, tekrar dene" : "Kaydet"}
+      </button>
+    </div>
+  );
+}
+
+
 export default function AdminPanel() {
   const [token, setToken] = useState(() => localStorage.getItem("admin_token") || "");
   const [page, setPage] = useState("dashboard");
@@ -648,7 +782,7 @@ export default function AdminPanel() {
 
   if (!token) return <LoginScreen onLogin={handleLogin} />;
 
-  const PAGE_LABELS = { dashboard: "Panel", prices: "Fiyatlar", schedule: "Haftalık Program", reviews: "Yorum Akışı", blog: "Blog" };
+  const PAGE_LABELS = { dashboard: "Panel", prices: "Fiyatlar", schedule: "Haftalık Program", reviews: "Yorum Akışı", blog: "Blog", hakkimda: "Hakkımda", iletisim: "İletişim" };
 
   return (
     <div className="min-h-screen bg-neutral-950 px-4 py-10">
@@ -678,6 +812,8 @@ export default function AdminPanel() {
         {page === "schedule"  && <ScheduleEditor token={token} />}
         {page === "reviews"   && <ReviewsSettings token={token} />}
         {page === "blog"      && <BlogEditor token={token} />}
+        {page === "hakkimda"  && <HakkimdaEditor token={token} />}
+        {page === "iletisim"  && <IletisimEditor token={token} />}
       </div>
     </div>
   );

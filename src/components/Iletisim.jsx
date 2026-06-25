@@ -1,4 +1,12 @@
+import { useEffect, useState } from "react";
 import { Mail, MapPin, Phone, Instagram } from "lucide-react";
+
+const DEFAULT_ILETISIM = {
+  telefon: "905334409803",
+  email: "inancoaching@gmail.com",
+  konum: "Altıeylül, BALIKESİR",
+  instagram: "https://www.instagram.com/inanccoaching/",
+};
 
 // WhatsApp – orijinal şekil, currentColor ile (yeşil yapacağız)
 function WhatsAppIcon({ className = "h-6 w-6" }) {
@@ -35,9 +43,18 @@ function GoogleIcon({ className = "h-6 w-6" }) {
 }
 
 function Iletisim() {
-  const phoneE164 = "+905334409803";
-  const instagramUrl = "https://www.instagram.com/inanccoaching/";
-  const emailTo = "inancoaching@gmail.com";
+  const [info, setInfo] = useState(DEFAULT_ILETISIM);
+
+  useEffect(() => {
+    fetch("/api/iletisim")
+      .then((r) => r.json())
+      .then((d) => { if (d.telefon) setInfo({ ...DEFAULT_ILETISIM, ...d }); })
+      .catch(() => {});
+  }, []);
+
+  const phoneE164 = `+${info.telefon}`;
+  const instagramUrl = info.instagram;
+  const emailTo = info.email;
   const googleMapsUrl =
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d543.1339278799962!2d27.882835267360313!3d39.64004822604878!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b701fa525cd461%3A0xa8bfb319985f0dfe!2zxLBuYW7DpyBDb2FjaGluZw!5e0!3m2!1sen!2sde!4v1754712858841!5m2!1sen!2sde";
 
@@ -54,8 +71,7 @@ function Iletisim() {
               </h3>
               <ul className="space-y-2 text-neutral-200 text-sm sm:text-base leading-relaxed">
                 <li className="flex items-center justify-center gap-2">
-                  <MapPin className="w-5 h-5 text-neutral-300" /> Altıeylül,
-                  BALIKESİR
+                  <MapPin className="w-5 h-5 text-neutral-300" /> {info.konum}
                 </li>
                 <li className="flex items-center justify-center gap-2">
                   <Phone className="w-5 h-5 text-neutral-300" />
@@ -63,7 +79,7 @@ function Iletisim() {
                     href={`tel:${phoneE164}`}
                     className="hover:text-orange-400 transition"
                   >
-                    +90 533 440 98 03
+                    {phoneE164}
                   </a>
                 </li>
                 <li className="flex items-center justify-center gap-2">
@@ -149,7 +165,7 @@ function Iletisim() {
                   href={`tel:${phoneE164}`}
                   className="hover:text-orange-400 transition"
                 >
-                  +90 533 440 98 03
+                  {phoneE164}
                 </a>
               </li>
               <li className="flex items-center justify-center gap-2">

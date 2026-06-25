@@ -1,12 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 import MotionReveal from "./MotionReveal";
-import { RevealHeading } from "./TextReveal";
 
 const images = ["/12345.jpeg", "/123456.jpeg", "/arda2.png"];
 
+const DEFAULT_HAKKIMDA = {
+  intro: "Merhaba, ben Arda İnanç Kurt. Balıkesir Merkez'de kişiye özel programlarla öğrencilerimin hayatlarına dokunduğum bir yaşantı sürmekteyim.",
+  paragraflar: [
+    "Yaklaşık 10 senedir birebir ve online koçluk ile antrenmanla birlikte beslenme planlaması oluşturarak danışanlarımın yağ kaybı, kas gelişimi ve postür - duruş iyileştirmesi gibi hedeflerine ulaşmalarına yardımcı oluyorum.",
+    "Her danışan için, onların günlük hayat temposuna uyumlu ve sürdürülebilir bir sistem kurmaya odaklanıyorum. Dersler benim müsait olduğum zamanlara değil öğrencinin müsait olduğu zamanlara planlanmakta.",
+    "Benim için antrenörlük; sadece antrenman yazmak değil, öğrencime disiplin, kararlılık ve özgüven kazandırma süreci. Hedefinize, yaşantınıza ve fiziksel seviyenize göre, net bir plan ve ölçülebilir adımlarla ilerliyoruz.",
+  ],
+};
+
 export default function Hakkimda() {
   const [index, setIndex] = useState(0);
+  const [content, setContent] = useState(DEFAULT_HAKKIMDA);
   const timerRef = useRef(null);
+
+  useEffect(() => {
+    fetch("/api/hakkimda")
+      .then((r) => r.json())
+      .then((d) => { if (d.intro || d.paragraflar) setContent({ ...DEFAULT_HAKKIMDA, ...d }); })
+      .catch(() => {});
+  }, []);
 
   // Otomatik slayt
   useEffect(() => {
@@ -99,35 +115,15 @@ export default function Hakkimda() {
             </div>
           </MotionReveal>
 
-          {/* METİN */}
           <MotionReveal delay={80} className="h-full">
             <div className="relative text-center lg:text-center h-full flex flex-col justify-center">
               <p className="text-base sm:text-lg font-medium text-neutral-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                Merhaba, ben{" "}
-                <strong className="text-neutral-100">Arda İnanç Kurt</strong>.
-                Balıkesir Merkez&apos;de kişiye özel programlarla öğrencilerimin
-                hayatlarına dokunduğum bir yaşantı sürmekteyim.
+                {content.intro}
               </p>
-
               <div className="mt-4 space-y-3 text-sm sm:text-base text-neutral-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                <p>
-                  Yaklaşık 10 senedir birebir ve online koçluk ile antrenmanla
-                  birlikte beslenme planlaması oluşturarak danışanlarımın yağ
-                  kaybı, kas gelişimi ve postür - duruş iyileştirmesi gibi
-                  hedeflerine ulaşmalarına yardımcı oluyorum.
-                </p>
-                <p>
-                  Her danışan için, onların günlük hayat temposuna uyumlu ve
-                  sürdürülebilir bir sistem kurmaya odaklanıyorum. Dersler benim
-                  müsait olduğum zamanlara değil öğrencinin müsait olduğu
-                  zamanlara planlanmakta.
-                </p>
-                <p>
-                  Benim için antrenörlük; sadece antrenman yazmak değil,
-                  öğrencime disiplin, kararlılık ve özgüven kazandırma süreci.
-                  Hedefinize, yaşantınıza ve fiziksel seviyenize göre, net bir
-                  plan ve ölçülebilir adımlarla ilerliyoruz.
-                </p>
+                {(content.paragraflar || []).map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
               </div>
             </div>
           </MotionReveal>
