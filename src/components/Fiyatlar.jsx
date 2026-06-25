@@ -111,9 +111,12 @@ export default function Fiyatlar() {
                   <div className="mt-4 h-px bg-neutral-800" />
                 </div>
 
-                <div className="mt-5 flex items-baseline gap-1.5">
-                  <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">₺{paket.fiyat}</span>
-                  <span className="text-neutral-500 text-sm">/ {paket.sure}</span>
+                <div className="mt-5">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">₺{paket.fiyat}</span>
+                    <span className="text-neutral-500 text-sm">/ {paket.sure}</span>
+                  </div>
+                  <p className="text-neutral-600 text-[11px] mt-0.5">K.D.V. dahildir</p>
                 </div>
 
                 <ul className="mt-5 space-y-2.5 text-sm text-neutral-300/90 leading-relaxed flex-1">
