@@ -169,23 +169,19 @@ export default function Program() {
               <div className="flex-1 min-h-[300px] md:min-h-0 grid grid-cols-6 gap-1.5" style={{ gridAutoRows: "1fr" }}>
                 {SAATLER.map((saat) => {
                   const durum = getSlot(selectedDate, saat);
-                  if (durum === "bos") return (
+                  return (
                     <button key={saat} onClick={() => handleBook(saat)}
-                      className="w-full h-full rounded-lg bg-emerald-500/10 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-400 text-[11px] font-semibold transition-all flex items-center justify-center">
+                      className={[
+                        "w-full h-full rounded-lg border text-[11px] font-semibold transition-all flex items-center justify-center",
+                        durum === "bos"
+                          ? "bg-emerald-500/10 hover:bg-emerald-500/25 border-emerald-500/30 text-emerald-400"
+                          : durum === "dolu"
+                            ? "border-red-500/20 text-red-500/50 line-through hover:bg-red-500/5"
+                            : "border-neutral-700/70 text-neutral-500 hover:bg-neutral-800/60 hover:text-neutral-300",
+                      ].join(" ")}
+                    >
                       {saat}
                     </button>
-                  );
-                  if (durum === "dolu") return (
-                    <span key={saat}
-                      className="w-full h-full rounded-lg border border-red-500/20 text-red-500/50 text-[11px] line-through flex items-center justify-center">
-                      {saat}
-                    </span>
-                  );
-                  return (
-                    <span key={saat}
-                      className="w-full h-full rounded-lg border border-neutral-700/70 text-neutral-500 text-[11px] flex items-center justify-center">
-                      {saat}
-                    </span>
                   );
                 })}
               </div>
