@@ -28,8 +28,16 @@ const MENU_ITEMS = [
 
 function Header() {
   const [isVisible, setIsVisible] = useState(true);
+  const [phone, setPhone] = useState("905334409803");
   const location = useLocation();
   const isHome = location.pathname === "/";
+
+  useEffect(() => {
+    fetch("/api/iletisim")
+      .then((r) => r.json())
+      .then((d) => { if (d.telefon) setPhone(d.telefon); })
+      .catch(() => {});
+  }, []);
 
   const lastYRef = useRef(0);
   const rafRef = useRef(null);
@@ -126,7 +134,7 @@ function Header() {
             {MENU_ITEMS.map((item, idx) => renderItem(item, idx))}
           </nav>
 
-          <a href="tel:+905334409803" className="ml-auto flex items-center gap-2 text-orange-500 hover:text-orange-400 transition text-sm font-semibold">
+          <a href={`tel:+${phone}`} className="ml-auto flex items-center gap-2 text-orange-500 hover:text-orange-400 transition text-sm font-semibold">
             <PhoneIcon className="h-4 w-4" />
             <span>Bana Ulaşın</span>
           </a>
@@ -143,7 +151,7 @@ function Header() {
               {MENU_ITEMS.map((item, idx) => renderItem(item, idx))}
             </nav>
 
-            <a href="tel:+905334409803" className="ml-auto flex items-center text-orange-500 hover:text-orange-400 transition" aria-label="Ara">
+            <a href={`tel:+${phone}`} className="ml-auto flex items-center text-orange-500 hover:text-orange-400 transition" aria-label="Ara">
               <PhoneIcon className="h-5 w-5" />
             </a>
           </div>

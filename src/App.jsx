@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import FiyatlarPage from './pages/FiyatlarPage'
+import BlogPage from './pages/BlogPage'
 import AdminPanel from './pages/AdminPanel'
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage cardsVisible={reviewsVisible} />} />
         <Route path="/fiyatlar" element={<FiyatlarPage />} />
+        <Route path="/blog" element={<BlogPage />} />
       </Routes>
     </BrowserRouter>
   )

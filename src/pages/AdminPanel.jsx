@@ -893,13 +893,13 @@ function HakkimdaEditor({ token }) {
 
 
 function IletisimEditor({ token }) {
-  const [form, setForm] = useState({ telefon: "", email: "", konum: "", instagram: "" });
+  const [form, setForm] = useState({ telefon: "", email: "", konum: "", instagram: "", vergiLevhasi: "" });
   const [status, setStatus] = useState("idle");
 
   useEffect(() => {
     apiFetch("/api/admin/iletisim", token)
       .then((r) => r.json())
-      .then((d) => { if (d.telefon) setForm({ telefon: "", email: "", konum: "", instagram: "", ...d }); })
+      .then((d) => { if (d.telefon) setForm({ telefon: "", email: "", konum: "", instagram: "", vergiLevhasi: "", ...d }); })
       .catch(() => {});
   }, [token]);
 
@@ -917,7 +917,7 @@ function IletisimEditor({ token }) {
   return (
     <div className="space-y-4">
       <div>
-        <label className="text-neutral-500 text-xs mb-1.5 block">Telefon (başında + olmadan, örn: 905334409803)</label>
+        <label className="text-neutral-500 text-xs mb-1.5 block">Telefon — header ve iletişim bölümünde kullanılır (başında + olmadan, örn: 905334409803)</label>
         <input value={form.telefon} onChange={(e) => set("telefon", e.target.value)} className={inputCls} />
       </div>
       <div>
@@ -931,6 +931,10 @@ function IletisimEditor({ token }) {
       <div>
         <label className="text-neutral-500 text-xs mb-1.5 block">Instagram URL</label>
         <input type="url" value={form.instagram} onChange={(e) => set("instagram", e.target.value)} placeholder="https://www.instagram.com/..." className={inputCls} />
+      </div>
+      <div>
+        <label className="text-neutral-500 text-xs mb-1.5 block">Vergi Levhası URL — footer'da görünür, boş bırakılırsa gizlenir</label>
+        <input value={form.vergiLevhasi} onChange={(e) => set("vergiLevhasi", e.target.value)} placeholder="/vergi-levhasi.png.png" className={inputCls} />
       </div>
 
       <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 text-xs text-neutral-500">

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   FaInstagram,
   FaFacebookF,
@@ -6,6 +7,15 @@ import {
 } from "react-icons/fa6";
 
 function Footer() {
+  const [vergiLevhasi, setVergiLevhasi] = useState("/vergi-levhasi.png.png");
+
+  useEffect(() => {
+    fetch("/api/iletisim")
+      .then((r) => r.json())
+      .then((d) => { if (d.vergiLevhasi !== undefined) setVergiLevhasi(d.vergiLevhasi); })
+      .catch(() => {});
+  }, []);
+
   return (
     <footer className="bg-[#111] text-white pt-[3.15rem] pb-[2.1rem] px-6">
       <div className="max-w-6xl mx-auto w-full flex flex-col items-center md:items-start gap-6 px-4 sm:px-6 lg:px-0">
@@ -14,7 +24,7 @@ function Footer() {
           {/* Sol blok: 1. cümle */}
           <div className="w-full md:w-[45%] flex items-center justify-center md:justify-start">
             <p className="text-sm md:text-base text-gray-400 leading-relaxed text-center md:text-left max-w-[30rem]">
-              Balıkesir’de Fitness, Body Building, kilo verme, kas kazanma, boy
+              Balıkesir'de Fitness, Body Building, kilo verme, kas kazanma, boy
               gelişimi ve postür düzeltme alanlarında birebir koçluk veriyorum.
             </p>
           </div>
@@ -44,15 +54,20 @@ function Footer() {
         {/* Sağ metin */}
         <div className="w-full md:w-[45%] flex justify-center md:justify-end mt-2 md:mt-0">
           <p className="italic text-center md:text-right">
-            &copy; 2026 İnanç Coaching &nbsp;·&nbsp;
-            <a
-              href="/vergi-levhasi.png.png"
-              target="_blank"
-              rel="noreferrer"
-              className="not-italic hover:text-white transition-colors underline underline-offset-2"
-            >
-              Vergi Levhası
-            </a>
+            &copy; 2026 İnanç Coaching
+            {vergiLevhasi && (
+              <>
+                &nbsp;·&nbsp;
+                <a
+                  href={vergiLevhasi}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="not-italic hover:text-white transition-colors underline underline-offset-2"
+                >
+                  Vergi Levhası
+                </a>
+              </>
+            )}
           </p>
         </div>
       </div>
