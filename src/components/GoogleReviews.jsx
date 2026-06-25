@@ -173,12 +173,6 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews, ca
                     </div>
                   ))}
                 </div>
-                <div className="flex justify-center gap-1.5 mt-4">
-                  {reviews.map((_, i) => (
-                    <button key={i} onClick={() => setMobileIndex(i)}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${i === mobileIndex ? "w-5 bg-orange-500" : "w-1.5 bg-neutral-700"}`} />
-                  ))}
-                </div>
               </div>
             )}
 
