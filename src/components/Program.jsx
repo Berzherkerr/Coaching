@@ -139,23 +139,20 @@ export default function Program() {
                     <button
                       key={idx}
                       onClick={() => {
-                        if (!cur || durum === "yok") return;
+                        if (!cur) return;
                         setSelectedDate(date);
                         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
                       }}
                       className={[
                         "relative flex flex-col items-center justify-center h-9 w-full rounded-lg transition-all duration-100",
                         !cur ? "opacity-20 cursor-default pointer-events-none" : "",
-                        cur && durum === "yok" ? "cursor-default" : "",
                         isSelected && cur
                           ? "bg-orange-500 text-black font-bold shadow-[0_0_12px_rgba(249,115,22,0.4)]"
                           : isToday && cur
-                            ? "ring-1 ring-orange-500/50 text-white"
-                            : hasSlots
+                            ? "ring-1 ring-orange-500/50 text-white hover:bg-neutral-800 cursor-pointer"
+                            : cur
                               ? "hover:bg-neutral-800 text-neutral-200 cursor-pointer"
-                              : cur
-                                ? "text-neutral-600 cursor-default"
-                                : "text-neutral-500",
+                              : "text-neutral-500",
                       ].filter(Boolean).join(" ")}
                     >
                       <span className="text-xs leading-none">{date.getDate()}</span>
@@ -176,48 +173,39 @@ export default function Program() {
 
               {/* Lejant */}
               <div className="mt-4 pt-3 border-t border-neutral-800 flex items-center gap-5 text-[10px] text-neutral-600">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-[5px] h-[5px] rounded-full bg-emerald-400" /> Müsait
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-[5px] h-[5px] rounded-full bg-red-500" /> Dolu
-                </span>
+                <span className="flex items-center gap-1.5"><span className="w-[5px] h-[5px] rounded-full bg-emerald-400" /> Müsait</span>
+                <span className="flex items-center gap-1.5"><span className="w-[5px] h-[5px] rounded-full bg-red-500" /> Dolu</span>
               </div>
             </div>
 
             {/* ── Saatler (sağ 62%) ── */}
-            <div className="w-full md:w-[62%] bg-neutral-900 border border-neutral-800 rounded-xl p-5 min-h-[280px]">
-              <p className="text-neutral-500 text-xs mb-0.5">
-                {selectedDate.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}
+            <div className="w-full md:w-[62%] bg-neutral-900 border border-neutral-800 rounded-xl p-5">
+              <p className="text-white font-semibold text-base mb-5">
+                {selectedDate.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })} {aktifGun}
               </p>
-              <p className="text-white font-semibold text-base mb-6">{aktifGun}</p>
 
-              {aktifSaatler.length === 0 ? (
-                <p className="text-neutral-600 text-sm py-10 text-center">Bu gün için müsait saat yok.</p>
-              ) : (
-                <div className="flex flex-wrap gap-2">
-                  {aktifSaatler.map((saat) => {
-                    const durum = getSlot(aktifGun, saat);
-                    if (durum === "bos") return (
-                      <button key={saat} onClick={() => handleBook(saat)}
-                        className="px-4 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-400 text-xs font-semibold transition-all">
-                        {saat}
-                      </button>
-                    );
-                    if (durum === "dolu") return (
-                      <span key={saat}
-                        className="px-4 py-2 rounded-xl bg-neutral-800/50 border border-neutral-700/40 text-neutral-600 text-xs line-through">
-                        {saat}
-                      </span>
-                    );
-                    return null;
-                  })}
-                </div>
-              )}
-
-              <div className="mt-8 flex items-center gap-5 text-[10px] text-neutral-600">
-                <span className="flex items-center gap-1.5"><span className="w-[5px] h-[5px] rounded-full bg-emerald-400" /> Tıkla → WhatsApp randevu</span>
-                <span className="flex items-center gap-1.5"><span className="w-[5px] h-[5px] rounded-full bg-red-500" /> Dolu</span>
+              <div className="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-7 gap-1.5">
+                {SAATLER.map((saat) => {
+                  const durum = getSlot(aktifGun, saat);
+                  if (durum === "bos") return (
+                    <button key={saat} onClick={() => handleBook(saat)}
+                      className="py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-400 text-[11px] font-semibold transition-all text-center">
+                      {saat}
+                    </button>
+                  );
+                  if (durum === "dolu") return (
+                    <span key={saat}
+                      className="py-2 rounded-lg bg-red-500/8 border border-red-500/20 text-red-500/60 text-[11px] line-through text-center">
+                      {saat}
+                    </span>
+                  );
+                  return (
+                    <span key={saat}
+                      className="py-2 rounded-lg border border-neutral-800/60 text-neutral-700 text-[11px] text-center">
+                      {saat}
+                    </span>
+                  );
+                })}
               </div>
             </div>
 
