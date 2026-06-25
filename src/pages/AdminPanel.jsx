@@ -346,14 +346,29 @@ function PricesEditor({ token }) {
         + Yeni Paket Ekle
       </button>
 
-      <button type="button" onClick={save} disabled={status === "saving"}
-        className={`w-full font-bold py-3.5 rounded-xl transition-all ${
-          status === "saved" ? "bg-green-600 text-white"
-          : status === "error" ? "bg-red-600 text-white"
-          : "bg-orange-500 hover:bg-orange-400 disabled:opacity-50 text-black"
-        }`}>
-        {status === "saving" ? "Kaydediliyor..." : status === "saved" ? "✓ Kaydedildi" : status === "error" ? "Hata, tekrar dene" : "Tüm Paketleri Kaydet"}
-      </button>
+      <div className="flex gap-3">
+        <button type="button" onClick={save} disabled={status === "saving"}
+          className={`flex-1 font-bold py-3.5 rounded-xl transition-all ${
+            status === "saved" ? "bg-green-600 text-white"
+            : status === "error" ? "bg-red-600 text-white"
+            : "bg-orange-500 hover:bg-orange-400 disabled:opacity-50 text-black"
+          }`}>
+          {status === "saving" ? "Kaydediliyor..." : status === "saved" ? "✓ Kaydedildi" : status === "error" ? "Hata" : "Tüm Paketleri Kaydet"}
+        </button>
+        <button type="button"
+          onClick={async () => {
+            if (!confirm("Paketleri varsayılana sıfırlamak istediğine emin misin?")) return;
+            setPaketler(VARSAYILAN_PAKETLER);
+            setAcik(null);
+            setStatus("saving");
+            const r = await apiFetch("/api/admin/prices", token, { method: "PUT", body: JSON.stringify({ paketler: VARSAYILAN_PAKETLER }) });
+            setStatus(r.ok ? "saved" : "error");
+            if (r.ok) setTimeout(() => setStatus("idle"), 2500);
+          }}
+          className="px-4 py-3.5 rounded-xl border border-neutral-700 text-neutral-400 hover:border-red-500 hover:text-red-400 text-xs transition-all">
+          Sıfırla
+        </button>
+      </div>
     </div>
   );
 }

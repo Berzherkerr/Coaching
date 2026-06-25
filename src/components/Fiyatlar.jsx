@@ -44,14 +44,13 @@ export default function Fiyatlar() {
     fetch("/api/prices")
       .then((r) => r.json())
       .then((d) => {
-        const raw = d.paketler || [];
+        const raw = (d.paketler || []).filter(Boolean);
         if (!raw.length) return;
-        // Eski format (sadece fiyat/sure): KV verisini varsayılanla birleştir
         const merged = raw.map((kv) => {
           const def = VARSAYILAN.find((x) => x.id === kv.id) || {};
-          return { ...def, ...kv, ozellikler: kv.ozellikler || def.ozellikler || [] };
-        });
-        setPaketler(merged);
+          return { ...def, ...kv, ozellikler: Array.isArray(kv.ozellikler) ? kv.ozellikler : (def.ozellikler || []) };
+        }).filter((p) => p && p.id);
+        if (merged.length) setPaketler(merged);
       })
       .catch(() => {});
   }, []);
