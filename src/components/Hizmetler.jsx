@@ -132,7 +132,7 @@ export default function Hizmetler() {
         {/* Desktop / Tablet görünüm – 3x3 grid */}
         <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[1fr] items-stretch">
           {hizmetler.map((item, index) => (
-            <MotionReveal key={index} delay={index * 60}>
+            <MotionReveal key={index} delay={index * 60} className={index === 9 ? "lg:hidden" : ""}>
               <button
                 type="button"
                 onClick={() => handleWhatsappClick(item.title)}
