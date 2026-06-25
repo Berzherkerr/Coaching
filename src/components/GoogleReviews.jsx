@@ -204,7 +204,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews, ca
               </a>
               <a href={resolvedWriteUrl || "#"} target="_blank" rel="noreferrer"
                 className={`inline-flex items-center justify-center h-11 px-4 sm:px-5 rounded-xl text-sm md:text-base font-semibold tracking-tight transition-colors ${
-                  resolvedWriteUrl ? "bg-orange-600 hover:bg-orange-500 text-white shadow-sm" : "bg-neutral-800 text-neutral-500 cursor-not-allowed"
+                  resolvedWriteUrl ? "bg-orange-500 hover:bg-orange-400 text-white shadow-sm" : "bg-neutral-800 text-neutral-500 cursor-not-allowed"
                 }`} aria-disabled={!resolvedWriteUrl}>
                 Yorum yaz
               </a>

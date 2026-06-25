@@ -29,9 +29,26 @@ const MENU_ITEMS = [
 function Header() {
   const [isVisible, setIsVisible] = useState(true);
   const [phone, setPhone] = useState("905334409803");
+  const [activeSection, setActiveSection] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
+
+  useEffect(() => {
+    if (!isHome) { setActiveSection(null); return; }
+    const sections = ["hakkimda", "hizmetler"];
+    const observers = sections.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
+        { rootMargin: "-40% 0px -50% 0px", threshold: 0 }
+      );
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach((o) => o && o.disconnect());
+  }, [isHome, location.pathname]);
 
   useEffect(() => {
     fetch("/api/iletisim")
@@ -104,7 +121,10 @@ function Header() {
   }, [isVisible]);
 
   const renderItem = (item, idx, extraClass = "") => {
-    const active = item.isPage && location.pathname === item.href;
+    const sectionId = item.href.replace("#", "");
+    const active = item.isPage
+      ? location.pathname === item.href
+      : isHome && activeSection === sectionId;
     const cls = `transition ${active ? "text-orange-400" : "text-neutral-200 hover:text-orange-400"} ${extraClass}`;
     if (item.isPage) {
       return <Link key={idx} to={item.href} className={cls}>{item.label}</Link>;

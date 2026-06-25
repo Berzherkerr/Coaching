@@ -169,6 +169,13 @@ export default function Program() {
               <div className="flex-1 min-h-[300px] md:min-h-0 grid grid-cols-6 gap-1.5" style={{ gridAutoRows: "1fr" }}>
                 {SAATLER.map((saat) => {
                   const durum = getSlot(selectedDate, saat);
+                  const isPastDate = selectedDate < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                  if (isPastDate) return (
+                    <span key={saat}
+                      className="w-full h-full rounded-lg border border-neutral-800/40 text-neutral-800 text-[11px] flex items-center justify-center">
+                      {saat}
+                    </span>
+                  );
                   return (
                     <button key={saat} onClick={() => handleBook(saat)}
                       className={[
