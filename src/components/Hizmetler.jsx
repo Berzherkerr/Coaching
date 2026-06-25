@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MotionReveal from "./MotionReveal";
 import { RevealHeading } from "./TextReveal";
+import { openWhatsApp } from "../utils/whatsapp";
 
 const WHATSAPP_NUMBER = "905334409803";
 
@@ -22,7 +23,7 @@ function handleWhatsappClick(title) {
   const message = `İnanç Coaching web sitenizdeki "${title}" hizmetiniz hakkında bilgi almak istiyorum.`;
   const encoded = encodeURIComponent(message.trim());
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
-  window.open(url, "_blank", "noopener,noreferrer");
+  openWhatsApp(url);
 }
 
 export default function Hizmetler() {

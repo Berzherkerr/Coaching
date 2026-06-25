@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import MotionReveal from "./MotionReveal";
 import { RevealHeading } from "./TextReveal";
+import { openWhatsApp } from "../utils/whatsapp";
 
 const GUNLER = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"];
 const GUN_KISA = ["Pt", "Sa", "Ça", "Pe", "Cu", "Ct", "Pa"];
@@ -78,7 +79,7 @@ export default function Program() {
     const tarih = selectedDate.toLocaleDateString("tr-TR", { day: "numeric", month: "long" });
     const gun = dateToGun(selectedDate);
     const msg = `Merhaba, ${tarih} ${gun} günü saat ${saat} için randevu almak istiyorum.`;
-    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
+    openWhatsApp(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`);
   };
 
   return (

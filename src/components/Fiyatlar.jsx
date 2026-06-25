@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import MotionReveal from "./MotionReveal";
 import { RevealHeading } from "./TextReveal";
+import { openWhatsApp } from "../utils/whatsapp";
 
 const WHATSAPP_NUMBER = "905334409803";
 
@@ -34,7 +35,7 @@ const VARSAYILAN = [
 
 function handleWhatsappClick(title) {
   const msg = `Sitenizden "${title}" paketiniz için iletişime geçiyorum. Bilgi alabilir miyim lütfen?`;
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg.trim())}`, "_blank", "noopener,noreferrer");
+  openWhatsApp(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg.trim())}`);
 }
 
 export default function Fiyatlar() {
@@ -107,7 +108,7 @@ export default function Fiyatlar() {
                 )}
 
                 <div>
-                  <h3 className="text-sm sm:text-base lg:text-lg font-semibold uppercase tracking-[0.12em] text-neutral-100">
+                  <h3 className="text-[17px] sm:text-base lg:text-lg font-semibold uppercase tracking-[0.12em] text-neutral-100">
                     {paket.title}
                   </h3>
                   {paket.tagline && (

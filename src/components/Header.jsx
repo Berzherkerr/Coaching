@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function PhoneIcon({ className = "h-4 w-4" }) {
   return (
@@ -30,6 +30,7 @@ function Header() {
   const [isVisible, setIsVisible] = useState(true);
   const [phone, setPhone] = useState("905334409803");
   const location = useLocation();
+  const navigate = useNavigate();
   const isHome = location.pathname === "/";
 
   useEffect(() => {
@@ -52,7 +53,7 @@ function Header() {
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
       else window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      window.location.href = "/" + anchor;
+      navigate("/" + anchor);
     }
   };
 

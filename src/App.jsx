@@ -4,6 +4,8 @@ import HomePage from './pages/HomePage'
 import FiyatlarPage from './pages/FiyatlarPage'
 import BlogPage from './pages/BlogPage'
 import AdminPanel from './pages/AdminPanel'
+import ScrollToTop from './components/ScrollToTop'
+import WhatsAppModal from './components/WhatsAppModal'
 
 function App() {
   const [reviewsVisible, setReviewsVisible] = useState(true)
@@ -30,6 +32,8 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
+      <WhatsAppModal />
       <Routes>
         <Route path="/" element={<HomePage cardsVisible={reviewsVisible} />} />
         <Route path="/fiyatlar" element={<FiyatlarPage />} />

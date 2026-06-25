@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Mail, MapPin, Phone, Instagram } from "lucide-react";
+import { openWhatsApp } from "../utils/whatsapp";
 
 const DEFAULT_ILETISIM = {
   telefon: "905334409803",
@@ -98,36 +99,44 @@ function Iletisim() {
             <div className="grid grid-cols-3 gap-4 justify-center">
               {[
                 {
-                  href: `https://wa.me/${phoneE164.replace("+", "")}`,
-                  icon: (
-                    <WhatsAppIcon className="h-10 w-10 text-[#25D366]" />
-                  ), // yeşil
+                  onClick: () => openWhatsApp(`https://wa.me/${phoneE164.replace("+", "")}`),
+                  icon: <WhatsAppIcon className="h-10 w-10 text-[#25D366]" />,
                   label: "WhatsApp",
                 },
                 {
                   href: instagramUrl,
-                  icon: (
-                    <InstagramBrandIcon className="h-10 w-10 text-orange-400" />
-                  ), // turuncu
+                  icon: <InstagramBrandIcon className="h-10 w-10 text-orange-400" />,
                   label: "Instagram",
                 },
                 {
                   href: googleMapsUrl,
-                  icon: <GoogleIcon className="h-10 w-10" />, // orijinal renkli
+                  icon: <GoogleIcon className="h-10 w-10" />,
                   label: "Google",
                 },
               ].map((it, i) => (
-                <a
-                  key={i}
-                  href={it.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center justify-center h-14 w-14 transition-transform duration-150 hover:scale-105"
-                  aria-label={it.label}
-                  title={it.label}
-                >
-                  {it.icon}
-                </a>
+                it.onClick ? (
+                  <button
+                    key={i}
+                    onClick={it.onClick}
+                    className="flex items-center justify-center h-14 w-14 transition-transform duration-150 hover:scale-105"
+                    aria-label={it.label}
+                    title={it.label}
+                  >
+                    {it.icon}
+                  </button>
+                ) : (
+                  <a
+                    key={i}
+                    href={it.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-center h-14 w-14 transition-transform duration-150 hover:scale-105"
+                    aria-label={it.label}
+                    title={it.label}
+                  >
+                    {it.icon}
+                  </a>
+                )
               ))}
             </div>
           </div>
@@ -182,17 +191,13 @@ function Iletisim() {
             <div className="grid grid-cols-3 pt-6 gap-5 mx-[1rem]">
               {[
                 {
-                  href: `https://wa.me/${phoneE164.replace("+", "")}`,
-                  icon: (
-                    <WhatsAppIcon className="h-10 w-10 text-[#25D366]" />
-                  ),
+                  onClick: () => openWhatsApp(`https://wa.me/${phoneE164.replace("+", "")}`),
+                  icon: <WhatsAppIcon className="h-10 w-10 text-[#25D366]" />,
                   label: "WhatsApp",
                 },
                 {
                   href: instagramUrl,
-                  icon: (
-                    <InstagramBrandIcon className="h-10 w-10 text-orange-400" />
-                  ),
+                  icon: <InstagramBrandIcon className="h-10 w-10 text-orange-400" />,
                   label: "Instagram",
                 },
                 {
@@ -201,17 +206,19 @@ function Iletisim() {
                   label: "Google",
                 },
               ].map((it, i) => (
-                <a
-                  key={i}
-                  href={it.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center justify-center h-14 w-14 transition-transform duration-150 hover:scale-105"
-                  aria-label={it.label}
-                  title={it.label}
-                >
-                  {it.icon}
-                </a>
+                it.onClick ? (
+                  <button key={i} onClick={it.onClick}
+                    className="flex items-center justify-center h-14 w-14 transition-transform duration-150 hover:scale-105"
+                    aria-label={it.label} title={it.label}>
+                    {it.icon}
+                  </button>
+                ) : (
+                  <a key={i} href={it.href} target="_blank" rel="noreferrer"
+                    className="flex items-center justify-center h-14 w-14 transition-transform duration-150 hover:scale-105"
+                    aria-label={it.label} title={it.label}>
+                    {it.icon}
+                  </a>
+                )
               ))}
             </div>
           </div>
