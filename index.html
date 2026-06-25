@@ -1,79 +1,299 @@
-<!-- index.html (Vite kök dosyası) -->
 <!doctype html>
-<html lang="tr">
+<html lang="tr" prefix="og: https://ogp.me/ns#">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-    <!-- ================== SEO EKLEMELERİ ================== -->
-    <title>Balıkesir Personal Trainer | İnanç Coaching</title>
-
-     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&display=swap"
-      rel="stylesheet"
-    />
-    <meta
-      name="description"
-      content="Balıkesir’de birebir personal trainer ve fitness koçluğu. Online ve birebir dersler ile hedefe özel antrenman planı, beslenme rehberliği ve kalıcı sonuçlar."
-    />
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  PRIMARY SEO                                               -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <title>Balıkesir Personal Trainer | Online Koçluk Türkiye | İnanç Coaching</title>
+    <meta name="description" content="Balıkesir'de birebir personal trainer ve online fitness koçu. Kilo verme, kas kazanma, beslenme danışmanlığı. Tüm Türkiye'ye uzaktan spor eğitimi. Online coaching Turkey — Personal trainer Balikesir — كوتش رياضي تركيا." />
+    <meta name="keywords" content="personal trainer balıkesir, online koçluk, uzaktan spor eğitimi, birebir antrenman balıkesir, fitness koçu, kilo verme programı, kas kazanma, beslenme danışmanı, bodybuilding koçu, online personal trainer turkey, fitness coach turkey, balikesir gym trainer, personal training online, inanç coaching, مدرب شخصي تركيا, تدريب شخصي أونلاين, كوتش رياضي بالقسير" />
+    <meta name="author" content="Arda İnanç Kurt — İnanç Coaching" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="language" content="Turkish" />
+    <meta name="geo.region" content="TR-10" />
+    <meta name="geo.placename" content="Balıkesir" />
+    <meta name="geo.position" content="39.6400;27.8828" />
+    <meta name="ICBM" content="39.6400, 27.8828" />
     <link rel="canonical" href="https://balikesirpt.com/" />
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="İnanç Coaching | Balıkesir Personal Trainer | Online Antrenör" />
-    <meta property="og:site_name" content="İnanç Coaching" />
-    <meta property="og:description" content="Kişiye özel antrenman, beslenme rehberliği ve ölçülebilir sonuçlarla Balıkesir’in profesyonel spor koçu." />
-    <meta property="og:url" content="https://balikesirpt.com/" />
+    <!-- hreflang: same URL, different audience signals -->
+    <link rel="alternate" hreflang="tr" href="https://balikesirpt.com/" />
+    <link rel="alternate" hreflang="tr-TR" href="https://balikesirpt.com/" />
+    <link rel="alternate" hreflang="en" href="https://balikesirpt.com/" />
+    <link rel="alternate" hreflang="ar" href="https://balikesirpt.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://balikesirpt.com/" />
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  OPEN GRAPH                                                -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="İnanç Coaching" />
+    <meta property="og:title" content="Balıkesir Personal Trainer | Online Koçluk | İnanç Coaching" />
+    <meta property="og:description" content="Balıkesir'de birebir ve Türkiye genelinde online fitness koçluğu. Kişiye özel antrenman, beslenme rehberliği ve ölçülebilir sonuçlar." />
+    <meta property="og:url" content="https://balikesirpt.com/" />
     <meta property="og:image" content="https://balikesirpt.com/ogol.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="İnanç Coaching — Balıkesir Personal Trainer" />
     <meta property="og:locale" content="tr_TR" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="ar_SA" />
 
-   
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Balıkesir Personal Trainer | Online Koçluk | İnanç Coaching" />
+    <meta name="twitter:description" content="Balıkesir'de birebir ve Türkiye genelinde online fitness koçluğu. Kişiye özel antrenman ve beslenme rehberliği." />
+    <meta name="twitter:image" content="https://balikesirpt.com/ogol.jpg" />
 
-    <!-- LocalBusiness JSON-LD (yerel SEO) -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  JSON-LD: LocalBusiness (Yerel SEO)                       -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "İnanç Coaching",
-        "alternateName": "İnanç Coaching",
-        "image": "https://balikesirpt.com/ogol.jpg",
-        "url": "https://balikesirpt.com/",
-        "telephone": "+90 533 440 9803",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Balıkesir",
-          "addressRegion": "Marmara",
-          "addressCountry": "TR"
+    {
+      "@context": "https://schema.org",
+      "@type": ["LocalBusiness", "HealthClub", "SportsActivityLocation"],
+      "@id": "https://balikesirpt.com/#business",
+      "name": "İnanç Coaching",
+      "alternateName": ["Inanc Coaching", "İnanç Koçluk", "Balikesir Personal Trainer", "Balıkesir Fitness Koçu", "Online PT Turkey"],
+      "description": "Balıkesir'de birebir personal training ve Türkiye genelinde online fitness koçluğu. Kilo verme, kas kazanma, beslenme danışmanlığı ve uzaktan spor eğitimi hizmetleri.",
+      "url": "https://balikesirpt.com/",
+      "telephone": "+905334409803",
+      "email": "inancoaching@gmail.com",
+      "priceRange": "₺₺₺",
+      "currenciesAccepted": "TRY",
+      "paymentAccepted": "Cash, Credit Card, Bank Transfer",
+      "image": [
+        "https://balikesirpt.com/ogol.jpg",
+        "https://balikesirpt.com/ardalogo.svg"
+      ],
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://balikesirpt.com/ardalogo.svg",
+        "width": 200,
+        "height": 60
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Altıeylül",
+        "addressLocality": "Balıkesir",
+        "addressRegion": "Balıkesir",
+        "postalCode": "10010",
+        "addressCountry": "TR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 39.6400,
+        "longitude": 27.8828
+      },
+      "hasMap": "https://maps.google.com/?q=İnanç+Coaching+Balıkesir",
+      "sameAs": [
+        "https://www.instagram.com/inanccoaching/"
+      ],
+      "areaServed": [
+        {
+          "@type": "City",
+          "name": "Balıkesir",
+          "containedInPlace": {"@type": "Country", "name": "Turkey"}
         },
-        "areaServed": "Balıkesir"
-      }
-    </script>
-
-    <script type="application/ld+json">
-      {
-        "@context":"https://schema.org",
-        "@type":"FAQPage",
-        "mainEntity":[
-          {"@type":"Question","name":"Balıkesir'de personal training ücretleri nedir?","acceptedAnswer":{"@type":"Answer","text":"Hedef ve seans sıklığına göre değişir. Ücretsiz tanışmada ölçümler sonrası net paketi öneriyorum."}},
-          {"@type":"Question","name":"İlk seans nasıl ilerler?","acceptedAnswer":{"@type":"Answer","text":"Postür ve hareket değerlendirmesi, başlangıç testi, hedefe göre plan ve ilk uygulama."}},
-          {"@type":"Question","name":"Online PT var mı?","acceptedAnswer":{"@type":"Answer","text":"Evet. Haftalık plan, video form kontrolü ve mesaj desteği ile uzaktan birebir koçluk sunuyorum."}}
+        {
+          "@type": "Country",
+          "name": "Turkey",
+          "name": "Türkiye"
+        }
+      ],
+      "knowsLanguage": ["tr", "en"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Koçluk Paketleri",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "name": "Uzaktan Eğitim",
+            "description": "Özel antrenman ve beslenme programı ile haftalık online takip",
+            "price": "3000",
+            "priceCurrency": "TRY",
+            "availability": "https://schema.org/InStock"
+          },
+          {
+            "@type": "Offer",
+            "name": "Online Koçluk",
+            "description": "Canlı birebir seans ve geri bildirim ile online personal training",
+            "price": "7000",
+            "priceCurrency": "TRY",
+            "availability": "https://schema.org/InStock"
+          },
+          {
+            "@type": "Offer",
+            "name": "Birebir Koçluk",
+            "description": "Balıkesir'de anlaşmalı salonlarda birebir personal training",
+            "price": "10000",
+            "priceCurrency": "TRY",
+            "availability": "https://schema.org/InStock"
+          }
         ]
       }
+    }
     </script>
 
-    <!-- Favicons  -->
-    <link rel="icon" href="/ogol.jpg" type="image/svg+xml" />
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  JSON-LD: Person (E-E-A-T sinyali)                        -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://balikesirpt.com/#trainer",
+      "name": "Arda İnanç Kurt",
+      "alternateName": "İnanç Coaching",
+      "jobTitle": "Lisanslı Personal Trainer & Fitness Koçu",
+      "description": "Balıkesir'de birebir ve Türkiye genelinde online koçluk hizmeti veren sertifikalı personal trainer. Fitness, bodybuilding, kilo kontrolü ve beslenme alanlarında uzman.",
+      "url": "https://balikesirpt.com/",
+      "telephone": "+905334409803",
+      "email": "inancoaching@gmail.com",
+      "image": "https://balikesirpt.com/ogol.jpg",
+      "sameAs": [
+        "https://www.instagram.com/inanccoaching/"
+      ],
+      "worksFor": {
+        "@id": "https://balikesirpt.com/#business"
+      },
+      "knowsAbout": [
+        "Personal Training",
+        "Fitness Coaching",
+        "Bodybuilding",
+        "Nutrition Consulting",
+        "Weight Loss",
+        "Muscle Gain",
+        "Online Coaching",
+        "Posture Correction",
+        "Athletic Performance",
+        "Kilo Verme",
+        "Kas Kazanma",
+        "Beslenme Danışmanlığı",
+        "Online Spor Eğitimi",
+        "Uzaktan Koçluk"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Balıkesir",
+        "addressCountry": "TR"
+      }
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  JSON-LD: Service                                         -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Online Personal Training & Fitness Koçluğu",
+      "alternateName": ["Uzaktan Spor Eğitimi", "Online Coaching Turkey", "Remote Fitness Training"],
+      "description": "Tüm Türkiye'ye ve yurt dışına online personal training. Kişiye özel antrenman programı, beslenme planı ve haftalık online takip.",
+      "provider": {"@id": "https://balikesirpt.com/#trainer"},
+      "serviceType": ["Personal Training", "Fitness Coaching", "Nutrition Consulting", "Online Coaching"],
+      "areaServed": [
+        {"@type": "Country", "name": "Turkey"},
+        {"@type": "Country", "name": "Türkiye"}
+      ],
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "serviceUrl": "https://balikesirpt.com/",
+        "availableLanguage": [
+          {"@type": "Language", "name": "Turkish"},
+          {"@type": "Language", "name": "English"}
+        ]
+      },
+      "hasOfferCatalog": {"@id": "https://balikesirpt.com/#business"}
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  JSON-LD: FAQ (TR + EN + AR sinyalleri)                   -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Balıkesir'de en iyi personal trainer kimdir?",
+          "acceptedAnswer": {"@type": "Answer", "text": "İnanç Coaching olarak Balıkesir'de birebir personal training hizmeti sunuyorum. Fitness, bodybuilding, kilo verme ve kas kazanma konularında kişiye özel program hazırlıyorum."}
+        },
+        {
+          "@type": "Question",
+          "name": "Online koçluk hizmeti nasıl işliyor?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Tüm Türkiye ve dünyadan müşterilere online koçluk sunuyorum. Kişiye özel antrenman programı, beslenme planı ve haftalık video/mesaj takibi ile hedefine ulaşmanı sağlıyorum."}
+        },
+        {
+          "@type": "Question",
+          "name": "Uzaktan spor eğitimi fiyatları ne kadar?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Uzaktan eğitim paketi aylık 3.000 TL'den başlıyor. Online birebir koçluk 7.000 TL/ay, Balıkesir'de salon antrenmanı ise 10.000 TL/ay'dan başlamaktadır. Tüm paketler KDV dahildir."}
+        },
+        {
+          "@type": "Question",
+          "name": "What is the best personal trainer in Balikesir Turkey?",
+          "acceptedAnswer": {"@type": "Answer", "text": "İnanç Coaching offers professional personal training in Balikesir and online coaching throughout Turkey and worldwide. Specializing in fitness, bodybuilding, weight loss and muscle gain programs."}
+        },
+        {
+          "@type": "Question",
+          "name": "Is online personal training available in Turkey?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Yes, İnanç Coaching provides online personal training and remote fitness coaching to clients across Turkey and internationally. Services include custom workout plans, nutrition guidance and weekly check-ins."}
+        },
+        {
+          "@type": "Question",
+          "name": "هل يوجد مدرب شخصي في بالقسير تركيا؟",
+          "acceptedAnswer": {"@type": "Answer", "text": "نعم، يقدم إيناتش كوتشينغ خدمات التدريب الشخصي في بالقسير تركيا، بالإضافة إلى التدريب الشخصي عبر الإنترنت لجميع أنحاء تركيا والعالم."}
+        },
+        {
+          "@type": "Question",
+          "name": "Birebir antrenman için nasıl randevu alabilirim?",
+          "acceptedAnswer": {"@type": "Answer", "text": "WhatsApp üzerinden +90 533 440 9803 numarasına ulaşarak ya da sitedeki iletişim formunu kullanarak hemen randevu alabilirsiniz."}
+        }
+      ]
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  JSON-LD: WebSite + SearchAction                          -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://balikesirpt.com/#website",
+      "name": "İnanç Coaching",
+      "url": "https://balikesirpt.com/",
+      "description": "Balıkesir Personal Trainer ve Online Fitness Koçluğu",
+      "inLanguage": ["tr-TR", "en"],
+      "publisher": {"@id": "https://balikesirpt.com/#business"}
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  PERFORMANCE & FONTS                                      -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.google.com" />
+    <link rel="dns-prefetch" href="https://maps.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&display=swap" rel="stylesheet" />
+
+    <!-- Favicons -->
+    <link rel="icon" href="/ogol.jpg" type="image/jpeg" />
+    <link rel="apple-touch-icon" href="/ogol.jpg" />
     <meta name="theme-color" content="#0a0a0a" />
+    <meta name="msapplication-TileColor" content="#0a0a0a" />
   </head>
 
   <body>
     <div id="root"></div>
-    <!-- Vite giriş noktası  -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
