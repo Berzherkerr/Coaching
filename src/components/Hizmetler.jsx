@@ -92,37 +92,47 @@ export default function Hizmetler() {
         {/* Desktop / Tablet görünüm */}
         {(() => {
           const n = hizmetler.length;
-          const loneAtSm = n % 2 === 1;
-          const loneAtLg = n % 3 === 1;
-          const lastItemClass = [
-            loneAtSm ? "sm:col-span-2 sm:justify-self-center sm:max-w-[calc(50%-1rem)]" : "",
-            loneAtSm ? "lg:col-span-1 lg:max-w-none lg:justify-self-stretch" : "",
-            loneAtLg ? "lg:col-start-2" : "",
-          ].filter(Boolean).join(" ");
+          // Tablette tüm itemlar, desktop'ta ilk 9
+          const smN = n;
+          const lgN = Math.min(n, 9);
+          const loneAtSm = smN % 2 === 1;
+          // 9 item 3x3 tam dolduruyor, simetri sorunsuz
+          const loneAtLg = lgN % 3 === 1;
 
           return (
             <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[1fr] items-stretch">
-              {hizmetler.map((item, index) => (
-                <MotionReveal key={index} delay={index * 60}
-                  className={index === n - 1 ? lastItemClass : ""}>
-                  <button
-                    type="button"
-                    onClick={() => handleWhatsappClick(item.title)}
-                    className="group bg-neutral-900/90 p-4 pt-6 pb-5 rounded-sm border border-neutral-800 shadow-lg ring-1 ring-transparent hover:-translate-y-[4px] hover:shadow-[0_22px_55px_rgba(0,0,0,0.50)] hover:border-orange-500 transition-all duration-300 ease-out h-full flex flex-col items-center text-center gap-3 w-full"
-                    style={{ transformOrigin: "center" }}
-                  >
-                    <div className="text-4xl mb-1 group-hover-emoji-pulse-soft">
-                      {item.icon}
-                    </div>
-                    <h3 className="text-xl md:text-2xl font-semibold text-white leading-snug">
-                      {item.title}
-                    </h3>
-                    <p className="text-neutral-300/90 text-sm leading-relaxed font-normal max-w-[280px]">
-                      {item.description}
-                    </p>
-                  </button>
-                </MotionReveal>
-              ))}
+              {hizmetler.map((item, index) => {
+                const isLgHidden = index >= 9;
+                const isLastSm = index === smN - 1;
+                const isLastLg = index === lgN - 1;
+                const cls = [
+                  isLgHidden ? "lg:hidden" : "",
+                  isLastSm && loneAtSm ? "sm:col-span-2 sm:justify-self-center sm:max-w-[calc(50%-1rem)]" : "",
+                  isLastSm && loneAtSm ? "lg:col-span-1 lg:max-w-none lg:justify-self-stretch" : "",
+                  isLastLg && loneAtLg && !isLgHidden ? "lg:col-start-2" : "",
+                ].filter(Boolean).join(" ");
+
+                return (
+                  <MotionReveal key={index} delay={index * 60} className={cls}>
+                    <button
+                      type="button"
+                      onClick={() => handleWhatsappClick(item.title)}
+                      className="group bg-neutral-900/90 p-4 pt-6 pb-5 rounded-sm border border-neutral-800 shadow-lg ring-1 ring-transparent hover:-translate-y-[4px] hover:shadow-[0_22px_55px_rgba(0,0,0,0.50)] hover:border-orange-500 transition-all duration-300 ease-out h-full flex flex-col items-center text-center gap-3 w-full"
+                      style={{ transformOrigin: "center" }}
+                    >
+                      <div className="text-4xl mb-1 group-hover-emoji-pulse-soft">
+                        {item.icon}
+                      </div>
+                      <h3 className="text-xl md:text-2xl font-semibold text-white leading-snug">
+                        {item.title}
+                      </h3>
+                      <p className="text-neutral-300/90 text-sm leading-relaxed font-normal max-w-[280px]">
+                        {item.description}
+                      </p>
+                    </button>
+                  </MotionReveal>
+                );
+              })}
             </div>
           );
         })()}
