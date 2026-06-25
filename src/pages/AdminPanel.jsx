@@ -117,9 +117,13 @@ function Dashboard({ onNavigate }) {
                 Yakında
               </span>
             )}
-            <span className="text-2xl mb-3 block">{item.icon}</span>
-            <p className="text-white font-semibold text-sm mb-1">{item.label}</p>
-            <p className="text-neutral-500 text-xs">{item.desc}</p>
+            <div className="flex items-center gap-4">
+              <span className="text-3xl flex-shrink-0 w-10 text-center">{item.icon}</span>
+              <div>
+                <p className="text-white font-semibold text-sm mb-0.5">{item.label}</p>
+                <p className="text-neutral-500 text-xs">{item.desc}</p>
+              </div>
+            </div>
           </button>
         ))}
       </div>
