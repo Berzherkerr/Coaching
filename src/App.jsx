@@ -12,6 +12,17 @@ function App() {
       .then(r => r.json())
       .then(d => { if (typeof d.reviewsVisible === 'boolean') setReviewsVisible(d.reviewsVisible) })
       .catch(() => {})
+
+    // Ziyaret say
+    fetch('/api/track', { method: 'POST' }).catch(() => {})
+
+    // Aktif kullanıcı ping (her 60s)
+    let sid = sessionStorage.getItem('_sid')
+    if (!sid) { sid = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2); sessionStorage.setItem('_sid', sid) }
+    const ping = () => fetch('/api/ping', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sid }) }).catch(() => {})
+    ping()
+    const t = setInterval(ping, 60000)
+    return () => clearInterval(t)
   }, [])
 
   if (window.location.pathname === '/admin') return <AdminPanel />

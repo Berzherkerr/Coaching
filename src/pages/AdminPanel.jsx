@@ -93,9 +93,44 @@ const MENU_ITEMS = [
   { key: "schedule", icon: "📅", label: "Haftalık Program", desc: "Müsait / dolu saatleri ayarla"  },
   { key: "reviews",  icon: "⭐", label: "Yorum Akışı",     desc: "Google yorumlarını aç / kapat"  },
   { key: "blog",     icon: "✍️", label: "Blog",            desc: "Yazı yaz ve yayınla"            },
-  { key: "hakkimda", icon: "👤", label: "Hakkımda",        desc: "Tanıtım metnini düzenle"         },
-  { key: "iletisim", icon: "📞", label: "İletişim",        desc: "Telefon, e-posta ve konum güncelle" },
+  { key: "hakkimda",  icon: "👤", label: "Hakkımda",        desc: "Tanıtım metnini düzenle"              },
+  { key: "iletisim",  icon: "📞", label: "İletişim",        desc: "Telefon, e-posta ve konum güncelle"   },
+  { key: "hero",      icon: "🎬", label: "Hero Yazısı",     desc: "Ana sayfa başlık ve alt yazıyı düzenle" },
+  { key: "hizmetler", icon: "🛠️", label: "Hizmetler",       desc: "Hizmet kutularını düzenle"            },
 ];
+
+function AnalyticsBar({ token }) {
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    apiFetch("/api/admin/analytics", token)
+      .then((r) => r.json())
+      .then((d) => setStats(d))
+      .catch(() => {});
+    const t = setInterval(() => {
+      apiFetch("/api/admin/analytics", token).then((r) => r.json()).then(setStats).catch(() => {});
+    }, 30000);
+    return () => clearInterval(t);
+  }, [token]);
+
+  if (!stats) return null;
+
+  return (
+    <div className="grid grid-cols-3 gap-3 mb-8">
+      {[
+        { label: "Toplam Ziyaret", value: stats.total?.toLocaleString("tr-TR") ?? "—" },
+        { label: "Bugün",          value: stats.today?.toLocaleString("tr-TR") ?? "—" },
+        { label: "Şu An Sitede",   value: stats.active ?? "—" },
+      ].map((item) => (
+        <div key={item.label} className="bg-neutral-900 border border-neutral-800 rounded-2xl px-4 py-4 text-center">
+          <p className="text-white font-bold text-2xl">{item.value}</p>
+          <p className="text-neutral-500 text-xs mt-1">{item.label}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 
 function Dashboard({ onNavigate }) {
   return (
@@ -637,6 +672,155 @@ function BlogEditor({ token }) {
 }
 
 
+function HeroEditor({ token }) {
+  const [form, setForm] = useState({ baslik: "", alt: "", cta: "" });
+  const [status, setStatus] = useState("idle");
+
+  useEffect(() => {
+    apiFetch("/api/admin/hero", token)
+      .then((r) => r.json())
+      .then((d) => { if (d.baslik) setForm({ baslik: "", alt: "", cta: "", ...d }); })
+      .catch(() => {});
+  }, [token]);
+
+  const set = (field, val) => { setForm((f) => ({ ...f, [field]: val })); setStatus("idle"); };
+
+  const save = async () => {
+    setStatus("saving");
+    const r = await apiFetch("/api/admin/hero", token, { method: "PUT", body: JSON.stringify(form) });
+    setStatus(r.ok ? "saved" : "error");
+    if (r.ok) setTimeout(() => setStatus("idle"), 2500);
+  };
+
+  const inputCls = "w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2.5 focus:outline-none focus:border-orange-500 transition-colors text-sm";
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <label className="text-neutral-500 text-xs mb-1.5 block">Ana başlık</label>
+        <textarea rows={3} value={form.baslik} onChange={(e) => set("baslik", e.target.value)}
+          className={`${inputCls} resize-none leading-relaxed`} />
+      </div>
+      <div>
+        <label className="text-neutral-500 text-xs mb-1.5 block">Alt yazı (solda kalan kısım)</label>
+        <input value={form.alt} onChange={(e) => set("alt", e.target.value)} className={inputCls} />
+      </div>
+      <div>
+        <label className="text-neutral-500 text-xs mb-1.5 block">CTA metni (turuncu kısım)</label>
+        <input value={form.cta} onChange={(e) => set("cta", e.target.value)} className={inputCls} />
+      </div>
+      <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 text-xs text-neutral-500">
+        Önizleme: <span className="text-neutral-300">{form.alt || "Yarın değil,"} </span>
+        <span className="text-orange-500">{form.cta || "BUGÜN BAŞLA!"}</span>
+      </div>
+      <button type="button" onClick={save} disabled={status === "saving"}
+        className={`w-full font-bold py-3.5 rounded-xl transition-all ${
+          status === "saved" ? "bg-green-600 text-white"
+          : status === "error" ? "bg-red-600 text-white"
+          : "bg-orange-500 hover:bg-orange-400 disabled:opacity-50 text-black"
+        }`}>
+        {status === "saving" ? "Kaydediliyor..." : status === "saved" ? "✓ Kaydedildi" : status === "error" ? "Hata, tekrar dene" : "Kaydet"}
+      </button>
+    </div>
+  );
+}
+
+
+function HizmetlerEditor({ token }) {
+  const [liste, setListe] = useState([]);
+  const [acik, setAcik] = useState(null);
+  const [status, setStatus] = useState("idle");
+
+  useEffect(() => {
+    apiFetch("/api/admin/hizmetler", token)
+      .then((r) => r.json())
+      .then((d) => { if (Array.isArray(d.hizmetler)) setListe(d.hizmetler); })
+      .catch(() => {});
+  }, [token]);
+
+  const set = (i, field, val) => {
+    setListe((prev) => { const n = [...prev]; n[i] = { ...n[i], [field]: val }; return n; });
+    setStatus("idle");
+  };
+
+  const add = () => {
+    setListe((prev) => [...prev, { icon: "⭐", title: "Yeni Hizmet", description: "" }]);
+    setAcik(liste.length);
+    setStatus("idle");
+  };
+
+  const remove = (i) => {
+    if (!confirm("Bu hizmeti silmek istiyor musun?")) return;
+    setListe((prev) => prev.filter((_, idx) => idx !== i));
+    setAcik(null);
+    setStatus("idle");
+  };
+
+  const save = async () => {
+    setStatus("saving");
+    const r = await apiFetch("/api/admin/hizmetler", token, { method: "PUT", body: JSON.stringify({ hizmetler: liste }) });
+    setStatus(r.ok ? "saved" : "error");
+    if (r.ok) setTimeout(() => setStatus("idle"), 2500);
+  };
+
+  const inputCls = "w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-2.5 focus:outline-none focus:border-orange-500 transition-colors text-sm";
+
+  return (
+    <div className="space-y-3">
+      {liste.map((h, i) => (
+        <div key={i} className="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden">
+          <button type="button" onClick={() => setAcik(acik === i ? null : i)}
+            className="w-full flex items-center justify-between px-5 py-3.5 text-left hover:bg-neutral-800/50 transition-colors">
+            <div className="flex items-center gap-3">
+              <span className="text-xl w-7 text-center flex-shrink-0">{h.icon}</span>
+              <span className="text-white text-sm font-medium">{h.title}</span>
+            </div>
+            <span className="text-neutral-500 text-xs">{acik === i ? "▲" : "▼"}</span>
+          </button>
+
+          {acik === i && (
+            <div className="px-5 pb-5 space-y-3 border-t border-neutral-800 pt-4">
+              <div className="flex gap-3">
+                <div className="w-20">
+                  <label className="text-neutral-500 text-xs mb-1.5 block">İkon</label>
+                  <input value={h.icon} onChange={(e) => set(i, "icon", e.target.value)}
+                    className="w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-3 py-2.5 text-center text-xl focus:outline-none focus:border-orange-500 transition-colors" />
+                </div>
+                <div className="flex-1">
+                  <label className="text-neutral-500 text-xs mb-1.5 block">Başlık</label>
+                  <input value={h.title} onChange={(e) => set(i, "title", e.target.value)} className={inputCls} />
+                </div>
+              </div>
+              <div>
+                <label className="text-neutral-500 text-xs mb-1.5 block">Açıklama</label>
+                <textarea rows={3} value={h.description} onChange={(e) => set(i, "description", e.target.value)}
+                  className={`${inputCls} resize-none leading-relaxed`} />
+              </div>
+              <button type="button" onClick={() => remove(i)}
+                className="text-xs text-red-500 hover:text-red-400 transition-colors">Bu hizmeti sil</button>
+            </div>
+          )}
+        </div>
+      ))}
+
+      <button type="button" onClick={add}
+        className="w-full py-3 rounded-xl border border-dashed border-neutral-700 text-neutral-400 hover:border-orange-500 hover:text-orange-400 text-sm transition-colors">
+        + Yeni Hizmet Ekle
+      </button>
+
+      <button type="button" onClick={save} disabled={status === "saving"}
+        className={`w-full font-bold py-3.5 rounded-xl transition-all ${
+          status === "saved" ? "bg-green-600 text-white"
+          : status === "error" ? "bg-red-600 text-white"
+          : "bg-orange-500 hover:bg-orange-400 disabled:opacity-50 text-black"
+        }`}>
+        {status === "saving" ? "Kaydediliyor..." : status === "saved" ? "✓ Kaydedildi" : status === "error" ? "Hata, tekrar dene" : "Tüm Hizmetleri Kaydet"}
+      </button>
+    </div>
+  );
+}
+
+
 function HakkimdaEditor({ token }) {
   const [intro, setIntro] = useState("");
   const [paragraflar, setParagraflar] = useState([]);
@@ -685,16 +869,13 @@ function HakkimdaEditor({ token }) {
         <div className="space-y-3">
           {paragraflar.map((p, i) => (
             <div key={i} className="flex gap-2 items-start">
-              <textarea rows={4} value={p} onChange={(e) => setParagraf(i, e.target.value)}
-                className={`flex-1 ${areaCls}`} />
-              {paragraflar.length > 1 && (
-                <button type="button" onClick={() => removeParagraf(i)}
-                  className="text-red-400 hover:text-red-300 text-lg leading-none mt-3">✕</button>
-              )}
+              <textarea value={p} onChange={(e) => setParagraf(i, e.target.value)}
+                className={`flex-1 ${areaCls}`}
+                style={{ height: "96px", resize: "none", overflowY: "auto" }} />
+              <button type="button" onClick={() => removeParagraf(i)}
+                className="text-red-400 hover:text-red-300 text-lg leading-none mt-3 flex-shrink-0">✕</button>
             </div>
           ))}
-          <button type="button" onClick={addParagraf}
-            className="text-xs text-orange-500 hover:text-orange-400 transition-colors">+ Paragraf ekle</button>
         </div>
       </div>
 
@@ -786,7 +967,7 @@ export default function AdminPanel() {
 
   if (!token) return <LoginScreen onLogin={handleLogin} />;
 
-  const PAGE_LABELS = { dashboard: "Panel", prices: "Fiyatlar", schedule: "Haftalık Program", reviews: "Yorum Akışı", blog: "Blog", hakkimda: "Hakkımda", iletisim: "İletişim" };
+  const PAGE_LABELS = { dashboard: "Panel", prices: "Fiyatlar", schedule: "Haftalık Program", reviews: "Yorum Akışı", blog: "Blog", hakkimda: "Hakkımda", iletisim: "İletişim", hero: "Hero Yazısı", hizmetler: "Hizmetler" };
 
   return (
     <div className="min-h-screen bg-neutral-950 px-4 py-10">
@@ -811,13 +992,15 @@ export default function AdminPanel() {
           </button>
         </div>
 
-        {page === "dashboard" && <Dashboard onNavigate={setPage} />}
+        {page === "dashboard" && <><AnalyticsBar token={token} /><Dashboard onNavigate={setPage} /></>}
         {page === "prices"    && <PricesEditor token={token} />}
         {page === "schedule"  && <ScheduleEditor token={token} />}
         {page === "reviews"   && <ReviewsSettings token={token} />}
         {page === "blog"      && <BlogEditor token={token} />}
         {page === "hakkimda"  && <HakkimdaEditor token={token} />}
         {page === "iletisim"  && <IletisimEditor token={token} />}
+        {page === "hero"      && <HeroEditor token={token} />}
+        {page === "hizmetler" && <HizmetlerEditor token={token} />}
       </div>
     </div>
   );

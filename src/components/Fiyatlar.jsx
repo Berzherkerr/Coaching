@@ -70,16 +70,30 @@ export default function Fiyatlar() {
         </div>
       </MotionReveal>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 max-w-6xl mx-auto items-stretch auto-rows-[1fr]">
-        {paketler.map((paket, index, arr) => {
-          const isTabletSingleInRow = arr.length % 2 !== 0 && index === arr.length - 1;
+      {(() => {
+        const n = paketler.length;
+        // Desktop sütun sayısı: 4 paket tek sıra, diğerleri 3
+        const lgCols = n === 4 ? 4 : n <= 2 ? n : 3;
+        const lgGridClass = lgCols === 4 ? "lg:grid-cols-4" : lgCols === 2 ? "lg:grid-cols-2" : lgCols === 1 ? "lg:grid-cols-1" : "lg:grid-cols-3";
+        // Simetri: son kart tekse ortala
+        const loneAtSm = n % 2 === 1;
+        const loneAtLg = n % lgCols === 1;
+        const lastItemClass = [
+          loneAtSm ? "sm:col-span-2 sm:justify-self-center sm:max-w-[calc(50%-1rem)]" : "",
+          loneAtSm ? "lg:col-span-1 lg:max-w-none lg:justify-self-stretch" : "",
+          loneAtLg ? `lg:col-start-${Math.floor(lgCols / 2) + 1}` : "",
+        ].filter(Boolean).join(" ");
+
+        return (
+      <div className={`grid grid-cols-1 sm:grid-cols-2 ${lgGridClass} gap-6 sm:gap-8 lg:gap-10 max-w-6xl mx-auto items-stretch auto-rows-[1fr]`}>
+        {paketler.map((paket, index) => {
           const tema = RENK_MAP[paket.renk] || RENK_MAP.blue;
 
           return (
-            <MotionReveal key={paket.id} delay={index * 80}>
+            <MotionReveal key={paket.id} delay={index * 80}
+              className={index === n - 1 ? lastItemClass : ""}>
               <div
                 className={`relative bg-neutral-900/95 border border-neutral-800 ring-1 ring-transparent rounded-sm p-6 shadow-lg transition-all duration-300 ease-out hover:-translate-y-[3px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] flex flex-col h-full ${tema.kart}`}
-                style={{ marginLeft: isTabletSingleInRow ? "auto" : undefined, marginRight: isTabletSingleInRow ? "auto" : undefined }}
               >
                 {paket.etiket && (
                   <div className={`${tema.etiket} absolute -top-3 right-3 text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow-md tracking-[0.12em] uppercase`}>
@@ -122,6 +136,8 @@ export default function Fiyatlar() {
           );
         })}
       </div>
+        );
+      })()}
     </section>
   );
 }

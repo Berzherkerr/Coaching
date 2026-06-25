@@ -1,71 +1,21 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MotionReveal from "./MotionReveal";
 import { RevealHeading } from "./TextReveal";
 
 const WHATSAPP_NUMBER = "905334409803";
 
-const hizmetler = [
-  {
-    icon: "🏋️‍♂️",
-    title: "Birebir Koçluk",
-    description:
-      "Balıkesir'de spor salonunda birebir çalışarak, sana özel programla formunu ve gücünü adım adım birlikte geliştiriyoruz.",
-  },
-  {
-    icon: "💻",
-    title: "Online Koçluk",
-    description:
-      "Nerede olursan ol; online program, video analiz ve düzenli takip ile seni hedeflerine güvenle ilerletiyorum.",
-  },
-  {
-    icon: "🥗",
-    title: "Beslenme Danışmanlığı",
-    description:
-      "Günlük hayatına uyan, yasaklara değil dengeye dayalı bir beslenme planı ile sürecini destekliyorum.",
-  },
-  {
-    icon: "⚖️",
-    title: "Kilo Yönetimi",
-    description:
-      "Kilo verme ya da alma hedefini; tartı stresini büyütmeden, kontrollü ve sürdürülebilir şekilde yönetiyoruz.",
-  },
-  {
-    icon: "🏠",
-    title: "Ev Antrenmanı",
-    description:
-      "Salona gelemiyorsan, evde basit ekipmanlarla uygulayabileceğin net ve takip edilebilir bir plan kuruyoruz.",
-  },
-  {
-    icon: "🧍‍♂️",
-    title: "Form & Postür",
-    description:
-      "Duruşunu ve hareket kaliteni analiz ederek daha dik, dengeli ve ağrısız bir vücut mekaniği hedefliyoruz.",
-  },
-  {
-    icon: "🤸‍♂️",
-    title: "Mobilite & Esneklik",
-    description:
-      "Uzun süre oturmaya bağlı duruş bozuklukları ve hareket kısıtlılıkları için, özel programlar hazırlıyorum.",
-  },
-  {
-    icon: "💪",
-    title: "Kas Gelişimi",
-    description:
-      "Bilinçli yüklenme prensipleriyle kas kütleni artıran, güç odaklı ve ölçülebilir programlar tasarlıyorum.",
-  },
-  {
-    icon: "📈",
-    title: "Boy Gelişimi",
-    description:
-      "Büyüme döneminde omurga sağlığını koruyan, güvenli ve destekleyici egzersizlerle potansiyelini destekliyorum.",
-  },
-  {
-    icon: "🏃‍♂️",
-    title: "Kondisyon & Dayanıklılık",
-    description:
-      "Nefes yönetimi, kalp atış hızı kontrolü ve kademeli yüklenme prensipleriyle genel kondisyon seviyeni yukarı taşıyoruz.",
-  },
+const VARSAYILAN_HIZMETLER = [
+  { icon: "🏋️‍♂️", title: "Birebir Koçluk", description: "Balıkesir'de spor salonunda birebir çalışarak, sana özel programla formunu ve gücünü adım adım birlikte geliştiriyoruz." },
+  { icon: "💻", title: "Online Koçluk", description: "Nerede olursan ol; online program, video analiz ve düzenli takip ile seni hedeflerine güvenle ilerletiyorum." },
+  { icon: "🥗", title: "Beslenme Danışmanlığı", description: "Günlük hayatına uyan, yasaklara değil dengeye dayalı bir beslenme planı ile sürecini destekliyorum." },
+  { icon: "⚖️", title: "Kilo Yönetimi", description: "Kilo verme ya da alma hedefini; tartı stresini büyütmeden, kontrollü ve sürdürülebilir şekilde yönetiyoruz." },
+  { icon: "🏠", title: "Ev Antrenmanı", description: "Salona gelemiyorsan, evde basit ekipmanlarla uygulayabileceğin net ve takip edilebilir bir plan kuruyoruz." },
+  { icon: "🧍‍♂️", title: "Form & Postür", description: "Duruşunu ve hareket kaliteni analiz ederek daha dik, dengeli ve ağrısız bir vücut mekaniği hedefliyoruz." },
+  { icon: "🤸‍♂️", title: "Mobilite & Esneklik", description: "Uzun süre oturmaya bağlı duruş bozuklukları ve hareket kısıtlılıkları için, özel programlar hazırlıyorum." },
+  { icon: "💪", title: "Kas Gelişimi", description: "Bilinçli yüklenme prensipleriyle kas kütleni artıran, güç odaklı ve ölçülebilir programlar tasarlıyorum." },
+  { icon: "📈", title: "Boy Gelişimi", description: "Büyüme döneminde omurga sağlığını koruyan, güvenli ve destekleyici egzersizlerle potansiyelini destekliyorum." },
+  { icon: "🏃‍♂️", title: "Kondisyon & Dayanıklılık", description: "Nefes yönetimi, kalp atış hızı kontrolü ve kademeli yüklenme prensipleriyle genel kondisyon seviyeni yukarı taşıyoruz." },
 ];
 
 function handleWhatsappClick(title) {
@@ -76,6 +26,15 @@ function handleWhatsappClick(title) {
 }
 
 export default function Hizmetler() {
+  const [hizmetler, setHizmetler] = useState(VARSAYILAN_HIZMETLER);
+
+  useEffect(() => {
+    fetch("/api/hizmetler")
+      .then((r) => r.json())
+      .then((d) => { if (Array.isArray(d.hizmetler) && d.hizmetler.length) setHizmetler(d.hizmetler); })
+      .catch(() => {});
+  }, []);
+
   return (
     <section
       id="hizmetler"
@@ -130,38 +89,51 @@ export default function Hizmetler() {
           </ul>
         </div>
 
-        {/* Desktop / Tablet görünüm – 3x3 grid */}
-        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[1fr] items-stretch">
-          {hizmetler.map((item, index) => (
-            <MotionReveal key={index} delay={index * 60} className={index === 9 ? "lg:hidden" : ""}>
-              <button
-                type="button"
-                onClick={() => handleWhatsappClick(item.title)}
-                className="group bg-neutral-900/90 p-4 pt-6 pb-5 rounded-sm border border-neutral-800 shadow-lg ring-1 ring-transparent hover:-translate-y-[4px] hover:shadow-[0_22px_55px_rgba(0,0,0,0.50)] hover:border-orange-500 transition-all duration-300 ease-out h-full flex flex-col items-center text-center gap-3 w-full"
-                style={{ transformOrigin: "center" }}
-              >
-                <div className="text-4xl mb-1 group-hover-emoji-pulse-soft">
-                  {item.icon}
-                </div>
-                <h3 className="text-xl md:text-2xl font-semibold text-white leading-snug">
-                  {item.title}
-                </h3>
-                <p className="text-neutral-300/90 text-sm leading-relaxed font-normal max-w-[280px]">
-                  {item.description}
-                </p>
-              </button>
-            </MotionReveal>
-          ))}
-        </div>
+        {/* Desktop / Tablet görünüm */}
+        {(() => {
+          const n = hizmetler.length;
+          const loneAtSm = n % 2 === 1;
+          const loneAtLg = n % 3 === 1;
+          const lastItemClass = [
+            loneAtSm ? "sm:col-span-2 sm:justify-self-center sm:max-w-[calc(50%-1rem)]" : "",
+            loneAtSm ? "lg:col-span-1 lg:max-w-none lg:justify-self-stretch" : "",
+            loneAtLg ? "lg:col-start-2" : "",
+          ].filter(Boolean).join(" ");
+
+          return (
+            <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[1fr] items-stretch">
+              {hizmetler.map((item, index) => (
+                <MotionReveal key={index} delay={index * 60}
+                  className={index === n - 1 ? lastItemClass : ""}>
+                  <button
+                    type="button"
+                    onClick={() => handleWhatsappClick(item.title)}
+                    className="group bg-neutral-900/90 p-4 pt-6 pb-5 rounded-sm border border-neutral-800 shadow-lg ring-1 ring-transparent hover:-translate-y-[4px] hover:shadow-[0_22px_55px_rgba(0,0,0,0.50)] hover:border-orange-500 transition-all duration-300 ease-out h-full flex flex-col items-center text-center gap-3 w-full"
+                    style={{ transformOrigin: "center" }}
+                  >
+                    <div className="text-4xl mb-1 group-hover-emoji-pulse-soft">
+                      {item.icon}
+                    </div>
+                    <h3 className="text-xl md:text-2xl font-semibold text-white leading-snug">
+                      {item.title}
+                    </h3>
+                    <p className="text-neutral-300/90 text-sm leading-relaxed font-normal max-w-[280px]">
+                      {item.description}
+                    </p>
+                  </button>
+                </MotionReveal>
+              ))}
+            </div>
+          );
+        })()}
 
         <MotionReveal delay={160}>
           <div className="mt-12 flex justify-center">
             <Link
               to="/fiyatlar"
-              className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400 text-black font-bold px-8 py-3.5 rounded-xl text-sm sm:text-base tracking-tight transition-colors shadow-lg"
+              className="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-400 text-white font-bold px-8 py-3.5 rounded-xl text-sm sm:text-base tracking-tight transition-colors shadow-lg"
             >
               Paketleri İncele
-              <span className="text-base">→</span>
             </Link>
           </div>
         </MotionReveal>
