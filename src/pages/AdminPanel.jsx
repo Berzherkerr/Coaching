@@ -6,7 +6,7 @@ const SAATLER = [
   "11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30",
   "15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30",
   "19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30",
-  "23:00","23:30","24:00",
+  "23:00","23:30","24:00","24:30",
 ];
 const SURE_SEC = [{ value: "ay", label: "/ ay" }, { value: "seans", label: "/ seans" }, { value: "program", label: "/ program" }];
 
@@ -38,15 +38,19 @@ const VARSAYILAN_PAKETLER = [
   },
 ];
 
-// kapali → bos → dolu → kapali
 const CYCLE = { kapali: "bos", bos: "dolu", dolu: "kapali" };
-
-// Takvim yardımcıları
 const AYLAR_ADM = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
 const GUN_KISA_ADM = ["Pt","Sa","Ça","Pe","Cu","Ct","Pa"];
+const GUNLER_ADM = ["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
 const jsTR_ADM = (d) => (d + 6) % 7;
-const dateToGun_ADM = (date) => GUNLER[jsTR_ADM(date.getDay())];
+const dateToGun_ADM = (date) => GUNLER_ADM[jsTR_ADM(date.getDay())];
 const sameDay_ADM = (a, b) => a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+const fmtKey_ADM = (date) => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth()+1).padStart(2,"0");
+  const d = String(date.getDate()).padStart(2,"0");
+  return `${y}-${m}-${d}`;
+};
 function calendarDays_ADM(year, month) {
   const first = new Date(year, month, 1);
   const last  = new Date(year, month + 1, 0);
@@ -405,22 +409,17 @@ function ScheduleEditor({ token }) {
       .catch(() => {});
   }, [token]);
 
-  const aktifGun = dateToGun_ADM(selectedDate);
-  const getSlot = (gun, saat) => slots[gun]?.[saat] || "kapali";
+  const aktifKey = fmtKey_ADM(selectedDate);
+  const getSlot = (date, saat) => slots[fmtKey_ADM(date)]?.[saat] || "kapali";
 
   const toggle = (saat) => {
-    setSlots((prev) => ({
-      ...prev,
-      [aktifGun]: { ...(prev[aktifGun] || {}), [saat]: CYCLE[getSlot(aktifGun, saat)] },
-    }));
+    const cur = slots[aktifKey]?.[saat] || "kapali";
+    setSlots((prev) => ({ ...prev, [aktifKey]: { ...(prev[aktifKey] || {}), [saat]: CYCLE[cur] } }));
     setStatus("idle");
   };
 
   const fillGun = (durum) => {
-    setSlots((prev) => ({
-      ...prev,
-      [aktifGun]: Object.fromEntries(SAATLER.map((s) => [s, durum])),
-    }));
+    setSlots((prev) => ({ ...prev, [aktifKey]: Object.fromEntries(SAATLER.map((s) => [s, durum])) }));
     setStatus("idle");
   };
 
@@ -434,24 +433,27 @@ function ScheduleEditor({ token }) {
   const today = new Date();
   const days = calendarDays_ADM(viewDate.getFullYear(), viewDate.getMonth());
 
-  const gunDurumu = (gun) => {
-    const aktif = SAATLER.filter((s) => getSlot(gun, s) !== "kapali");
+  const dateDurumu = (date) => {
+    const aktif = SAATLER.filter((s) => getSlot(date, s) !== "kapali");
     if (!aktif.length) return "yok";
-    return aktif.some((s) => getSlot(gun, s) === "bos") ? "bos" : "dolu";
+    return aktif.some((s) => getSlot(date, s) === "bos") ? "bos" : "dolu";
   };
+
+  const selectCls = "bg-neutral-800 border border-neutral-700 text-white text-sm rounded-lg px-2 py-1.5 focus:outline-none focus:border-orange-500 cursor-pointer";
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row gap-5">
+      <div className="flex flex-col md:flex-row gap-5 items-stretch">
 
-        {/* ── Takvim ── */}
-        <div className="w-full md:w-[38%] bg-neutral-900 border border-neutral-800 rounded-xl p-4 select-none">
-          <div className="flex items-center justify-between mb-4">
-            <button onClick={() => setViewDate((v) => new Date(v.getFullYear(), v.getMonth() - 1, 1))}
-              className="w-8 h-8 flex items-center justify-center rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors text-lg">‹</button>
-            <span className="text-white text-sm font-semibold">{AYLAR_ADM[viewDate.getMonth()]} {viewDate.getFullYear()}</span>
-            <button onClick={() => setViewDate((v) => new Date(v.getFullYear(), v.getMonth() + 1, 1))}
-              className="w-8 h-8 flex items-center justify-center rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors text-lg">›</button>
+        {/* Takvim */}
+        <div className="w-full md:w-[38%] bg-neutral-900 border border-neutral-800 rounded-xl p-4 select-none flex flex-col">
+          <div className="flex items-center gap-2 mb-4">
+            <select value={viewDate.getMonth()} onChange={(e) => setViewDate(new Date(viewDate.getFullYear(), +e.target.value, 1))} className={`flex-1 ${selectCls}`}>
+              {AYLAR_ADM.map((a, i) => <option key={i} value={i}>{a}</option>)}
+            </select>
+            <select value={viewDate.getFullYear()} onChange={(e) => setViewDate(new Date(+e.target.value, viewDate.getMonth(), 1))} className={selectCls}>
+              {[2025,2026,2027,2028].map(y => <option key={y} value={y}>{y}</option>)}
+            </select>
           </div>
 
           <div className="grid grid-cols-7 mb-1">
@@ -462,8 +464,7 @@ function ScheduleEditor({ token }) {
 
           <div className="grid grid-cols-7 gap-y-1">
             {days.map(({ date, cur }, idx) => {
-              const gun = dateToGun_ADM(date);
-              const durum = gunDurumu(gun);
+              const durum = dateDurumu(date);
               const isToday    = sameDay_ADM(date, today);
               const isSelected = sameDay_ADM(date, selectedDate);
               return (
@@ -476,9 +477,7 @@ function ScheduleEditor({ token }) {
                       ? "bg-orange-500 text-black font-bold shadow-[0_0_12px_rgba(249,115,22,0.4)]"
                       : isToday && cur
                         ? "ring-1 ring-orange-500/50 text-white hover:bg-neutral-800 cursor-pointer"
-                        : cur
-                          ? "hover:bg-neutral-800 text-neutral-200 cursor-pointer"
-                          : "text-neutral-500",
+                        : cur ? "hover:bg-neutral-800 text-neutral-200 cursor-pointer" : "text-neutral-500",
                   ].filter(Boolean).join(" ")}
                 >
                   <span className="text-xs leading-none">{date.getDate()}</span>
@@ -491,35 +490,33 @@ function ScheduleEditor({ token }) {
           </div>
 
           <div className="mt-4 pt-3 border-t border-neutral-800 flex items-center gap-5 text-[10px] text-neutral-600">
-            <span className="flex items-center gap-1.5"><span className="w-[5px] h-[5px] rounded-full bg-emerald-400" /> Müsait saat var</span>
-            <span className="flex items-center gap-1.5"><span className="w-[5px] h-[5px] rounded-full bg-red-500" /> Hepsi dolu</span>
+            <span className="flex items-center gap-1.5"><span className="w-[5px] h-[5px] rounded-full bg-emerald-400" /> Müsait</span>
+            <span className="flex items-center gap-1.5"><span className="w-[5px] h-[5px] rounded-full bg-red-500" /> Dolu</span>
           </div>
         </div>
 
-        {/* ── Saat grid ── */}
-        <div className="w-full md:w-[62%] bg-neutral-900 border border-neutral-800 rounded-xl p-5">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <p className="text-base font-semibold">
-                <span className="text-white">{selectedDate.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}</span>
-                <span className="text-neutral-500 ml-2">{aktifGun}</span>
-              </p>
-            </div>
+        {/* Saat grid */}
+        <div className="w-full md:w-[62%] bg-neutral-900 border border-neutral-800 rounded-xl p-5 flex flex-col">
+          <div className="flex items-center justify-between mb-4 flex-shrink-0">
+            <p className="text-base font-semibold">
+              <span className="text-white">{selectedDate.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}</span>
+              <span className="text-neutral-500 ml-2">{dateToGun_ADM(selectedDate)}</span>
+            </p>
             <div className="flex gap-2 flex-shrink-0">
-              <button onClick={() => fillGun("bos")} title="Tümü müsait"
+              <button onClick={() => fillGun("bos")}
                 className="px-2.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/30 text-emerald-400 text-[10px] font-semibold transition-colors">Tümü Müsait</button>
-              <button onClick={() => fillGun("dolu")} title="Tümü dolu"
+              <button onClick={() => fillGun("dolu")}
                 className="px-2.5 py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/30 text-red-400 text-[10px] font-semibold transition-colors">Tümü Dolu</button>
-              <button onClick={() => fillGun("kapali")} title="Tümü kapat"
+              <button onClick={() => fillGun("kapali")}
                 className="px-2.5 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-500 text-[10px] font-semibold transition-colors">Temizle</button>
             </div>
           </div>
 
-          <div className="flex-1 grid grid-cols-6 gap-1.5 mt-4" style={{ gridAutoRows: "1fr" }}>
+          <div className="flex-1 min-h-0 grid grid-cols-6 gap-1.5" style={{ gridAutoRows: "1fr" }}>
             {SAATLER.map((saat) => {
-              const durum = getSlot(aktifGun, saat);
+              const durum = slots[aktifKey]?.[saat] || "kapali";
               return (
-                <button key={saat} onClick={() => toggle(saat)} title={`${saat} — ${durum}`}
+                <button key={saat} onClick={() => toggle(saat)}
                   className={[
                     "w-full h-full rounded-lg border text-[11px] font-semibold transition-all flex items-center justify-center",
                     durum === "bos"
@@ -545,7 +542,6 @@ function ScheduleEditor({ token }) {
         }`}>
         {status === "saving" ? "Kaydediliyor..." : status === "saved" ? "✓ Kaydedildi" : status === "error" ? "Hata, tekrar dene" : "Programı Kaydet"}
       </button>
-      <p className="text-neutral-600 text-xs text-center mt-2">Değişiklikler sitede anında güncellenir.</p>
     </div>
   );
 }
