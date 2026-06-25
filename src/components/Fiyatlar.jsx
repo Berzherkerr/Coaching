@@ -46,10 +46,16 @@ export default function Fiyatlar() {
       .then((d) => {
         const raw = (d.paketler || []).filter(Boolean);
         if (!raw.length) return;
-        const merged = raw.map((kv) => {
-          const def = VARSAYILAN.find((x) => x.id === kv.id) || {};
-          return { ...def, ...kv, ozellikler: Array.isArray(kv.ozellikler) ? kv.ozellikler : (def.ozellikler || []) };
-        }).filter((p) => p && p.id);
+        const merged = raw
+          .map((kv) => {
+            if (!kv || !kv.id) return null;
+            const def = VARSAYILAN.find((x) => x.id === kv.id) || {};
+            const ozellikler = Array.isArray(kv.ozellikler)
+              ? kv.ozellikler.filter((s) => s && String(s).trim())
+              : (def.ozellikler || []);
+            return { ...def, ...kv, ozellikler };
+          })
+          .filter(Boolean);
         if (merged.length) setPaketler(merged);
       })
       .catch(() => {});
@@ -119,7 +125,7 @@ export default function Fiyatlar() {
                 </div>
 
                 <ul className="mt-5 space-y-2.5 text-sm text-neutral-300/90 leading-relaxed flex-1">
-                  {(paket.ozellikler || []).map((satir, idx) => (
+                  {(paket.ozellikler || []).filter((s) => s && String(s).trim()).map((satir, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-left">
                       <span className="mt-[3px] inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border border-neutral-600">
                         <span className="h-2 w-2 rounded-full bg-neutral-400" />
