@@ -88,6 +88,24 @@ function Header() {
       if (hideTimeoutRef.current) { clearTimeout(hideTimeoutRef.current); hideTimeoutRef.current = null; }
     };
 
+    const show = () => {
+      clearHide();
+      setIsVisible(true);
+    };
+
+    const scheduleHide = () => {
+      if (!hideTimeoutRef.current) {
+        hideTimeoutRef.current = setTimeout(() => {
+          if (window.scrollY > 12) setIsVisible(false);
+          hideTimeoutRef.current = null;
+        }, HIDE_DELAY_MS);
+      }
+    };
+
+    const onActivity = () => {
+      if (window.scrollY > 12) { show(); scheduleHide(); }
+    };
+
     const onScroll = () => {
       if (rafRef.current) return;
       rafRef.current = requestAnimationFrame(() => {
@@ -96,15 +114,10 @@ function Header() {
 
         if (y <= 12) {
           clearHide();
-          if (!isVisible) setIsVisible(true);
+          setIsVisible(true);
         } else {
-          if (dy < -6) { clearHide(); if (!isVisible) setIsVisible(true); }
-          if (dy > 6 && !hideTimeoutRef.current) {
-            hideTimeoutRef.current = setTimeout(() => {
-              if (window.scrollY > 12) setIsVisible(false);
-              hideTimeoutRef.current = null;
-            }, HIDE_DELAY_MS);
-          }
+          if (dy < -6) { show(); }
+          if (dy > 6) { scheduleHide(); }
         }
 
         lastYRef.current = y;
@@ -113,12 +126,21 @@ function Header() {
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("click", onActivity);
+    window.addEventListener("mousemove", onActivity, { passive: true });
+    window.addEventListener("touchstart", onActivity, { passive: true });
+    window.addEventListener("keydown", onActivity);
+
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("click", onActivity);
+      window.removeEventListener("mousemove", onActivity);
+      window.removeEventListener("touchstart", onActivity);
+      window.removeEventListener("keydown", onActivity);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
     };
-  }, [isVisible]);
+  }, []);
 
   const renderItem = (item, idx, extraClass = "") => {
     const sectionId = item.href.replace("#", "");
