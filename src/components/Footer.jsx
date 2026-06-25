@@ -7,7 +7,7 @@ import {
 } from "react-icons/fa6";
 
 function Footer() {
-  const [vergiLevhasi, setVergiLevhasi] = useState("/vergi-levhasi.png.png");
+  const [vergiLevhasi, setVergiLevhasi] = useState("/vergi-levhasi.png");
 
   useEffect(() => {
     fetch("/api/iletisim")

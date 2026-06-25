@@ -5,7 +5,7 @@ const DEFAULT = {
   email: "inancoaching@gmail.com",
   konum: "Altıeylül, BALIKESİR",
   instagram: "https://www.instagram.com/inanccoaching/",
-  vergiLevhasi: "/vergi-levhasi.png.png",
+  vergiLevhasi: "/vergi-levhasi.png",
 };
 
 async function authenticate({ env, request }) {
