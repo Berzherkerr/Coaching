@@ -40,6 +40,24 @@ const VARSAYILAN_PAKETLER = [
 
 // kapali → bos → dolu → kapali
 const CYCLE = { kapali: "bos", bos: "dolu", dolu: "kapali" };
+
+// Takvim yardımcıları
+const AYLAR_ADM = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+const GUN_KISA_ADM = ["Pt","Sa","Ça","Pe","Cu","Ct","Pa"];
+const jsTR_ADM = (d) => (d + 6) % 7;
+const dateToGun_ADM = (date) => GUNLER[jsTR_ADM(date.getDay())];
+const sameDay_ADM = (a, b) => a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+function calendarDays_ADM(year, month) {
+  const first = new Date(year, month, 1);
+  const last  = new Date(year, month + 1, 0);
+  const offset = jsTR_ADM(first.getDay());
+  const days = [];
+  for (let i = offset - 1; i >= 0; i--) days.push({ date: new Date(year, month, -i), cur: false });
+  for (let d = 1; d <= last.getDate(); d++) days.push({ date: new Date(year, month, d), cur: true });
+  const fill = 42 - days.length;
+  for (let d = 1; d <= fill; d++) days.push({ date: new Date(year, month + 1, d), cur: false });
+  return days;
+}
 const SLOT_STYLE = {
   bos:    { bg: "bg-emerald-500/20 hover:bg-emerald-500/40 border-emerald-500/40 text-emerald-400", label: "Müsait" },
   dolu:   { bg: "bg-red-500/20 hover:bg-red-500/40 border-red-500/40 text-red-400",               label: "Dolu"   },
@@ -377,6 +395,8 @@ function PricesEditor({ token }) {
 function ScheduleEditor({ token }) {
   const [slots, setSlots] = useState({});
   const [status, setStatus] = useState("idle");
+  const [viewDate, setViewDate] = useState(() => { const t = new Date(); t.setDate(1); return t; });
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
     apiFetch("/api/admin/schedule", token)
@@ -385,12 +405,21 @@ function ScheduleEditor({ token }) {
       .catch(() => {});
   }, [token]);
 
+  const aktifGun = dateToGun_ADM(selectedDate);
   const getSlot = (gun, saat) => slots[gun]?.[saat] || "kapali";
 
-  const toggle = (gun, saat) => {
+  const toggle = (saat) => {
     setSlots((prev) => ({
       ...prev,
-      [gun]: { ...(prev[gun] || {}), [saat]: CYCLE[getSlot(gun, saat)] },
+      [aktifGun]: { ...(prev[aktifGun] || {}), [saat]: CYCLE[getSlot(aktifGun, saat)] },
+    }));
+    setStatus("idle");
+  };
+
+  const fillGun = (durum) => {
+    setSlots((prev) => ({
+      ...prev,
+      [aktifGun]: Object.fromEntries(SAATLER.map((s) => [s, durum])),
     }));
     setStatus("idle");
   };
@@ -402,79 +431,113 @@ function ScheduleEditor({ token }) {
     if (r.ok) setTimeout(() => setStatus("idle"), 2500);
   };
 
-  // Tüm günü veya saati toplu ayarla
-  const fillGun = (gun, durum) => {
-    setSlots((prev) => ({
-      ...prev,
-      [gun]: Object.fromEntries(SAATLER.map((s) => [s, durum])),
-    }));
-    setStatus("idle");
+  const today = new Date();
+  const days = calendarDays_ADM(viewDate.getFullYear(), viewDate.getMonth());
+
+  const gunDurumu = (gun) => {
+    const aktif = SAATLER.filter((s) => getSlot(gun, s) !== "kapali");
+    if (!aktif.length) return "yok";
+    return aktif.some((s) => getSlot(gun, s) === "bos") ? "bos" : "dolu";
   };
 
   return (
     <div>
-      {/* Açıklama */}
-      <div className="flex flex-wrap gap-3 mb-5">
-        {Object.entries(SLOT_STYLE).map(([k, v]) => (
-          <div key={k} className="flex items-center gap-2">
-            <div className={`w-4 h-4 rounded border ${v.bg}`} />
-            <span className="text-neutral-400 text-xs">{k === "kapali" ? "Kapalı" : v.label}</span>
+      <div className="flex flex-col md:flex-row gap-5">
+
+        {/* ── Takvim ── */}
+        <div className="w-full md:w-[38%] bg-neutral-900 border border-neutral-800 rounded-xl p-4 select-none">
+          <div className="flex items-center justify-between mb-4">
+            <button onClick={() => setViewDate((v) => new Date(v.getFullYear(), v.getMonth() - 1, 1))}
+              className="w-8 h-8 flex items-center justify-center rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors text-lg">‹</button>
+            <span className="text-white text-sm font-semibold">{AYLAR_ADM[viewDate.getMonth()]} {viewDate.getFullYear()}</span>
+            <button onClick={() => setViewDate((v) => new Date(v.getFullYear(), v.getMonth() + 1, 1))}
+              className="w-8 h-8 flex items-center justify-center rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors text-lg">›</button>
           </div>
-        ))}
-        <span className="text-neutral-600 text-xs ml-2">· Hücreye tıkla → durum değişir</span>
-      </div>
 
-      {/* Grid — yatay kaydırmalı */}
-      <div className="overflow-x-auto rounded-xl border border-neutral-800">
-        <table className="w-full border-collapse text-xs">
-          <thead>
-            <tr>
-              <th className="bg-neutral-900 text-neutral-500 font-medium px-3 py-2.5 text-left w-16 border-b border-r border-neutral-800">
-                Saat
-              </th>
-              {GUNLER.map((gun) => (
-                <th key={gun} className="bg-neutral-900 border-b border-r border-neutral-800 last:border-r-0 px-1 py-2">
-                  <div className="text-neutral-300 font-semibold mb-1.5">{gun.slice(0, 3)}</div>
-                  <div className="flex gap-1 justify-center">
-                    <button onClick={() => fillGun(gun, "bos")} title="Tümü müsait"
-                      className="w-5 h-5 rounded bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-400 text-[9px] transition-colors">✓</button>
-                    <button onClick={() => fillGun(gun, "dolu")} title="Tümü dolu"
-                      className="w-5 h-5 rounded bg-red-500/20 hover:bg-red-500/40 text-red-400 text-[9px] transition-colors">✗</button>
-                    <button onClick={() => fillGun(gun, "kapali")} title="Tümü kapalı"
-                      className="w-5 h-5 rounded bg-neutral-700/60 hover:bg-neutral-600/60 text-neutral-500 text-[9px] transition-colors">—</button>
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {SAATLER.map((saat) => (
-              <tr key={saat} className="group">
-                <td className="bg-neutral-900/50 text-neutral-500 font-mono px-3 py-1.5 border-b border-r border-neutral-800 whitespace-nowrap">
-                  {saat}
-                </td>
-                {GUNLER.map((gun) => {
-                  const durum = getSlot(gun, saat);
-                  const s = SLOT_STYLE[durum];
-                  return (
-                    <td key={gun} className="border-b border-r border-neutral-800 last:border-r-0 p-1">
-                      <button
-                        onClick={() => toggle(gun, saat)}
-                        title={`${gun} ${saat} — ${durum}`}
-                        className={`w-full h-7 rounded border transition-all duration-150 text-[9px] font-medium ${s.bg}`}
-                      >
-                        {s.label}
-                      </button>
-                    </td>
-                  );
-                })}
-              </tr>
+          <div className="grid grid-cols-7 mb-1">
+            {GUN_KISA_ADM.map((g) => (
+              <div key={g} className="text-center text-[10px] font-semibold text-neutral-600 py-1">{g}</div>
             ))}
-          </tbody>
-        </table>
+          </div>
+
+          <div className="grid grid-cols-7 gap-y-1">
+            {days.map(({ date, cur }, idx) => {
+              const gun = dateToGun_ADM(date);
+              const durum = gunDurumu(gun);
+              const isToday    = sameDay_ADM(date, today);
+              const isSelected = sameDay_ADM(date, selectedDate);
+              return (
+                <button key={idx}
+                  onClick={() => { if (!cur) return; setSelectedDate(date); setViewDate(new Date(date.getFullYear(), date.getMonth(), 1)); }}
+                  className={[
+                    "relative flex flex-col items-center justify-center h-9 w-full rounded-lg transition-all duration-100",
+                    !cur ? "opacity-20 cursor-default pointer-events-none" : "",
+                    isSelected && cur
+                      ? "bg-orange-500 text-black font-bold shadow-[0_0_12px_rgba(249,115,22,0.4)]"
+                      : isToday && cur
+                        ? "ring-1 ring-orange-500/50 text-white hover:bg-neutral-800 cursor-pointer"
+                        : cur
+                          ? "hover:bg-neutral-800 text-neutral-200 cursor-pointer"
+                          : "text-neutral-500",
+                  ].filter(Boolean).join(" ")}
+                >
+                  <span className="text-xs leading-none">{date.getDate()}</span>
+                  {cur && durum !== "yok" && (
+                    <span className={["mt-[2px] w-[5px] h-[5px] rounded-full", isSelected ? "bg-black/30" : durum === "bos" ? "bg-emerald-400" : "bg-red-500"].join(" ")} />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-4 pt-3 border-t border-neutral-800 flex items-center gap-5 text-[10px] text-neutral-600">
+            <span className="flex items-center gap-1.5"><span className="w-[5px] h-[5px] rounded-full bg-emerald-400" /> Müsait saat var</span>
+            <span className="flex items-center gap-1.5"><span className="w-[5px] h-[5px] rounded-full bg-red-500" /> Hepsi dolu</span>
+          </div>
+        </div>
+
+        {/* ── Saat grid ── */}
+        <div className="w-full md:w-[62%] bg-neutral-900 border border-neutral-800 rounded-xl p-5">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <p className="text-base font-semibold">
+                <span className="text-white">{selectedDate.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}</span>
+                <span className="text-neutral-500 ml-2">{aktifGun}</span>
+              </p>
+              <p className="text-neutral-600 text-xs mt-0.5">Tıkla → Kapalı › Müsait › Dolu › Kapalı</p>
+            </div>
+            <div className="flex gap-2 flex-shrink-0">
+              <button onClick={() => fillGun("bos")} title="Tümü müsait"
+                className="px-2.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/30 text-emerald-400 text-[10px] font-semibold transition-colors">Tümü Müsait</button>
+              <button onClick={() => fillGun("dolu")} title="Tümü dolu"
+                className="px-2.5 py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/30 text-red-400 text-[10px] font-semibold transition-colors">Tümü Dolu</button>
+              <button onClick={() => fillGun("kapali")} title="Tümü kapat"
+                className="px-2.5 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-500 text-[10px] font-semibold transition-colors">Temizle</button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-7 gap-1.5">
+            {SAATLER.map((saat) => {
+              const durum = getSlot(aktifGun, saat);
+              return (
+                <button key={saat} onClick={() => toggle(saat)} title={`${saat} — ${durum}`}
+                  className={[
+                    "py-2 rounded-lg border text-[11px] font-semibold transition-all text-center",
+                    durum === "bos"
+                      ? "bg-emerald-500/15 hover:bg-emerald-500/30 border-emerald-500/40 text-emerald-400"
+                      : durum === "dolu"
+                        ? "bg-red-500/15 hover:bg-red-500/30 border-red-500/40 text-red-400 line-through"
+                        : "bg-neutral-800/60 hover:bg-neutral-700/60 border-neutral-700/40 text-neutral-600",
+                  ].join(" ")}
+                >
+                  {saat}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
-      {/* Kaydet */}
       <button onClick={save} disabled={status === "saving"}
         className={`mt-5 w-full font-bold py-3.5 rounded-xl transition-all ${
           status === "saved" ? "bg-green-600 text-white"

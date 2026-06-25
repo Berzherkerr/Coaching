@@ -180,8 +180,9 @@ export default function Program() {
 
             {/* ── Saatler (sağ 62%) ── */}
             <div className="w-full md:w-[62%] bg-neutral-900 border border-neutral-800 rounded-xl p-5">
-              <p className="text-white font-semibold text-base mb-5">
-                {selectedDate.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })} {aktifGun}
+              <p className="text-base font-semibold mb-5">
+                <span className="text-white">{selectedDate.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}</span>
+                <span className="text-neutral-500 ml-2">{aktifGun}</span>
               </p>
 
               <div className="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-7 gap-1.5">
