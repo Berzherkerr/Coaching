@@ -133,7 +133,7 @@ export default function Program() {
                     <button key={idx}
                       onClick={() => { if (!cur) return; setSelectedDate(date); setViewDate(new Date(date.getFullYear(), date.getMonth(), 1)); }}
                       className={[
-                        "relative flex flex-col items-center justify-center h-9 w-full rounded-lg transition-all duration-100",
+                        "relative flex flex-col items-center justify-center h-9 w-full rounded-sm transition-all duration-100",
                         !cur ? "opacity-20 cursor-default pointer-events-none" : "",
                         isSelected && cur
                           ? "bg-orange-500 text-black font-bold shadow-[0_0_12px_rgba(249,115,22,0.4)]"
@@ -172,14 +172,14 @@ export default function Program() {
                   const isPastDate = selectedDate < new Date(today.getFullYear(), today.getMonth(), today.getDate());
                   if (isPastDate) return (
                     <span key={saat}
-                      className="w-full h-full rounded-lg border border-neutral-800/40 text-neutral-800 text-[11px] flex items-center justify-center">
+                      className="w-full h-full rounded-sm border border-neutral-800/40 text-neutral-800 text-[11px] flex items-center justify-center">
                       {saat}
                     </span>
                   );
                   return (
                     <button key={saat} onClick={() => handleBook(saat)}
                       className={[
-                        "w-full h-full rounded-lg border text-[11px] font-semibold transition-all flex items-center justify-center",
+                        "w-full h-full rounded-sm border text-[11px] font-semibold transition-all flex items-center justify-center",
                         durum === "bos"
                           ? "bg-emerald-500/10 hover:bg-emerald-500/25 border-emerald-500/30 text-emerald-400"
                           : durum === "dolu"
