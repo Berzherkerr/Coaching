@@ -183,11 +183,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews, ca
                 onTouchStart={onPointerDown} onTouchEnd={onPointerUp}
                 style={{ isolation: "isolate", touchAction: "pan-y" }}
               >
-                <div className="pointer-events-none absolute inset-y-0 left-0 w-24 z-10"
-                  style={{ background: "linear-gradient(to right, rgb(10,10,10) 0%, transparent 100%)" }} />
-                <div className="pointer-events-none absolute inset-y-0 right-0 w-24 z-10"
-                  style={{ background: "linear-gradient(to left, rgb(10,10,10) 0%, transparent 100%)" }} />
-                <div className="overflow-hidden">
+<div className="overflow-hidden">
                   <div ref={containerRef} className="flex" style={{ gap: `${GAP}px`, willChange: "transform", backfaceVisibility: "hidden" }}>
                     {[...reviews, ...reviews].map((r, i) => (
                       <div key={i} className="flex-shrink-0" style={{ width: CARD_W, height: CARD_H }}>

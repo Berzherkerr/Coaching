@@ -42,10 +42,18 @@ function Footer() {
         </div>
 
         {/* Sağ metin */}
-        <div className="w-full md:w-[45%] flex justify-center md:justify-end mt-2 md:mt-0">
+        <div className="w-full md:w-[45%] flex flex-col items-center md:items-end gap-1 mt-2 md:mt-0">
           <p className="italic text-center md:text-right">
-            &copy; 2025 İnanç Coaching
+            &copy; 2026 İnanç Coaching
           </p>
+          <a
+            href="/vergi-levhasi.png"
+            target="_blank"
+            rel="noreferrer"
+            className="text-neutral-500 hover:text-neutral-300 transition-colors underline underline-offset-2 text-xs"
+          >
+            Vergi Levhası
+          </a>
         </div>
       </div>
     </footer>
