@@ -179,30 +179,30 @@ export default function Program() {
             </div>
 
             {/* ── Saatler (sağ 62%) ── */}
-            <div className="w-full md:w-[62%] bg-neutral-900 border border-neutral-800 rounded-xl p-5">
-              <p className="text-base font-semibold mb-5">
+            <div className="w-full md:w-[62%] bg-neutral-900 border border-neutral-800 rounded-xl p-5 flex flex-col">
+              <p className="text-base font-semibold mb-4 flex-shrink-0">
                 <span className="text-white">{selectedDate.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}</span>
                 <span className="text-neutral-500 ml-2">{aktifGun}</span>
               </p>
 
-              <div className="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-7 gap-1.5">
+              <div className="flex-1 grid grid-cols-6 gap-1.5" style={{ gridAutoRows: "1fr" }}>
                 {SAATLER.map((saat) => {
                   const durum = getSlot(aktifGun, saat);
                   if (durum === "bos") return (
                     <button key={saat} onClick={() => handleBook(saat)}
-                      className="py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-400 text-[11px] font-semibold transition-all text-center">
+                      className="w-full h-full rounded-lg bg-emerald-500/10 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-400 text-[11px] font-semibold transition-all flex items-center justify-center">
                       {saat}
                     </button>
                   );
                   if (durum === "dolu") return (
                     <span key={saat}
-                      className="py-2 rounded-lg bg-red-500/8 border border-red-500/20 text-red-500/60 text-[11px] line-through text-center">
+                      className="w-full h-full rounded-lg border border-red-500/20 text-red-500/50 text-[11px] line-through flex items-center justify-center">
                       {saat}
                     </span>
                   );
                   return (
                     <span key={saat}
-                      className="py-2 rounded-lg border border-neutral-800/60 text-neutral-700 text-[11px] text-center">
+                      className="w-full h-full rounded-lg border border-neutral-800/50 text-neutral-700 text-[11px] flex items-center justify-center">
                       {saat}
                     </span>
                   );

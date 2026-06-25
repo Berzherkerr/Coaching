@@ -516,13 +516,13 @@ function ScheduleEditor({ token }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-7 gap-1.5">
+          <div className="flex-1 grid grid-cols-6 gap-1.5 mt-4" style={{ gridAutoRows: "1fr" }}>
             {SAATLER.map((saat) => {
               const durum = getSlot(aktifGun, saat);
               return (
                 <button key={saat} onClick={() => toggle(saat)} title={`${saat} — ${durum}`}
                   className={[
-                    "py-2 rounded-lg border text-[11px] font-semibold transition-all text-center",
+                    "w-full h-full rounded-lg border text-[11px] font-semibold transition-all flex items-center justify-center",
                     durum === "bos"
                       ? "bg-emerald-500/15 hover:bg-emerald-500/30 border-emerald-500/40 text-emerald-400"
                       : durum === "dolu"
