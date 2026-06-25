@@ -504,7 +504,6 @@ function ScheduleEditor({ token }) {
                 <span className="text-white">{selectedDate.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}</span>
                 <span className="text-neutral-500 ml-2">{aktifGun}</span>
               </p>
-              <p className="text-neutral-600 text-xs mt-0.5">Tıkla → Kapalı › Müsait › Dolu › Kapalı</p>
             </div>
             <div className="flex gap-2 flex-shrink-0">
               <button onClick={() => fillGun("bos")} title="Tümü müsait"
