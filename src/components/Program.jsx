@@ -83,7 +83,7 @@ export default function Program() {
   };
 
   return (
-    <section id="program" className="relative z-10 bg-neutral-950 pt-[5.78rem] pb-[4.62rem] px-4 sm:px-8 lg:px-20">
+    <section id="program" className="relative z-10 bg-neutral-950 pt-[5.78rem] pb-[4.62rem] px-4 sm:px-6 lg:px-0">
       <div className="max-w-6xl mx-auto">
         <MotionReveal>
           <div className="text-center mb-12">
@@ -101,7 +101,7 @@ export default function Program() {
           <div className="flex flex-col md:flex-row gap-5 items-stretch">
 
             {/* Takvim */}
-            <div className="w-full md:w-[38%] bg-neutral-900 border border-neutral-800 rounded-xl p-4 select-none flex flex-col">
+            <div className="w-full md:w-[38%] lg:w-[27rem] lg:flex-shrink-0 bg-neutral-900 border border-neutral-800 rounded-xl p-4 select-none flex flex-col">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <select
                   value={viewDate.getMonth()}
@@ -160,7 +160,7 @@ export default function Program() {
             </div>
 
             {/* Saatler */}
-            <div className="w-full md:w-[62%] bg-neutral-900 border border-neutral-800 rounded-xl p-5 flex flex-col">
+            <div className="w-full md:w-[62%] lg:w-auto lg:flex-1 lg:min-w-0 bg-neutral-900 border border-neutral-800 rounded-xl p-5 flex flex-col">
               <p className="text-base font-semibold mb-4 flex-shrink-0">
                 <span className="text-white">{selectedDate.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}</span>
                 <span className="text-neutral-500 ml-2">{dateToGun(selectedDate)}</span>
