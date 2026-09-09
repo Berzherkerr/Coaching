@@ -38,7 +38,7 @@ function ReviewCard({ r }) {
   const rawText = (r.text || "").trim();
   const shortText = rawText.length > 220 ? rawText.slice(0, 220).trimEnd() + "..." : rawText;
   return (
-    <article className="rounded-sm p-4 flex flex-col bg-neutral-900/90">
+    <article className="h-full rounded-sm p-4 flex flex-col bg-neutral-900/90">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           {r.profile_photo_url ? (
