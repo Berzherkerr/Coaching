@@ -95,7 +95,7 @@ export default function Fiyatlar() {
                 )}
 
                 {/* Desktop */}
-                <div className="hidden md:grid md:grid-cols-[35%_40%_25%] md:min-h-[110px]">
+                <div className="hidden md:grid md:grid-cols-[35%_1px_40%_1px_24%] md:min-h-[110px]">
                   {/* Başlık */}
                   <div className="flex flex-col justify-center px-7 py-6 gap-2">
                     <h3 className="text-[17px] lg:text-[18px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-snug">
@@ -105,6 +105,8 @@ export default function Fiyatlar() {
                       <p className="text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>
                     )}
                   </div>
+
+                  <div className="bg-neutral-800 self-stretch" />
 
                   {/* Özellikler */}
                   <div className="flex flex-col justify-center px-6 py-6">
@@ -118,6 +120,8 @@ export default function Fiyatlar() {
                       </ul>
                     )}
                   </div>
+
+                  <div className="bg-neutral-800 self-stretch" />
 
                   {/* Fiyat + Buton */}
                   <div className="flex flex-col items-center justify-center px-5 py-6 gap-3">
@@ -138,6 +142,7 @@ export default function Fiyatlar() {
                 <div className="md:hidden p-5 flex flex-col gap-3">
                   <h3 className="text-base font-semibold uppercase tracking-[0.1em] text-neutral-100 pt-1">{baslik}</h3>
                   {paket.tagline && <p className="text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>}
+                  {ozellikler.length > 0 && <div className="h-px bg-neutral-800" />}
                   {ozellikler.length > 0 && (
                     <ul className="flex flex-col gap-y-1.5 pt-1">
                       {ozellikler.map((satir, idx) => (
