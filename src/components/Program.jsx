@@ -88,10 +88,10 @@ export default function Program() {
         <MotionReveal>
           <div className="text-center mb-12">
             <RevealHeading as="h2" mode="word"
-              className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] tracking-[-0.02em]">
+              className="text-3xl sm:text-4xl font-extrabold text-white leading-[1.05] tracking-[-0.03em]">
               Haftalık Program
             </RevealHeading>
-            <p className="mt-4 text-base md:text-lg font-medium text-neutral-300 max-w-2xl mx-auto leading-relaxed">
+            <p className="mt-4 text-base md:text-lg text-neutral-400 max-w-2xl mx-auto leading-relaxed">
               Gün seç, müsait saati bul, WhatsApp üzerinden randevu al.
             </p>
           </div>

@@ -148,7 +148,7 @@ export default function GoogleReviews({ placeId, averageRating, totalReviews, ca
       <div className="max-w-6xl mx-auto">
         <MotionReveal>
           <header className="mb-8 text-center">
-            <RevealHeading as="h2" mode="word" className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] tracking-[-0.02em]">
+            <RevealHeading as="h2" mode="word" className="text-3xl sm:text-4xl font-extrabold text-white leading-[1.05] tracking-[-0.03em]">
               İnanç Coaching | Balıkesir
             </RevealHeading>
             <div className="mt-3 flex flex-wrap items-center justify-center gap-3">

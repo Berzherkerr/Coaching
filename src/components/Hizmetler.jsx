@@ -46,11 +46,11 @@ export default function Hizmetler() {
           <RevealHeading
             as="h2"
             mode="word"
-            className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] tracking-[-0.02em]"
+            className="text-3xl sm:text-4xl font-extrabold text-white leading-[1.05] tracking-[-0.03em]"
           >
             Hizmetler
           </RevealHeading>
-          <p className="mt-4 text-base md:text-lg font-medium text-neutral-300 max-w-4xl mx-auto leading-relaxed">
+          <p className="mt-4 text-base md:text-lg text-neutral-400 max-w-4xl mx-auto leading-relaxed">
             Sürdürülebilir bir sistem ile hem Balıkesir’de hem de online olarak
             seninle birlikte gelişiyoruz.
           </p>
@@ -124,7 +124,7 @@ export default function Hizmetler() {
                       <div className="text-4xl mb-1 group-hover-emoji-pulse-soft">
                         {item.icon}
                       </div>
-                      <h3 className="text-xl md:text-2xl font-semibold text-white leading-snug">
+                      <h3 className="text-xl md:text-2xl font-bold text-white leading-snug tracking-[-0.01em]">
                         {item.title}
                       </h3>
                       <p className="text-neutral-300/90 text-sm leading-relaxed font-normal max-w-[280px]">
