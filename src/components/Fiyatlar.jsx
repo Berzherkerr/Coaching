@@ -19,17 +19,17 @@ const VARSAYILAN = [
   {
     id: "uzaktan", title: "Uzaktan Eğitim", tagline: "Spora yeni başlayanlara uygun çözüm",
     fiyat: "3.000", sure: "ay", etiket: "YENİ BAŞLAYANLARA", renk: "blue",
-    ozellikler: ["Özel antrenman ve beslenme programı","Haftalık online değerlendirme ve takip","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi"],
+    ozellikler: ["Özel antrenman ve beslenme programı","Haftalık online değerlendirme ve takip","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi","📱 WhatsApp destek hattı"],
   },
   {
     id: "online", title: "Online Koçluk", tagline: "Canlı birebir seans ve geri bildirim",
     fiyat: "7.000", sure: "ay", etiket: "EN ÇOK TERCİH EDİLEN", renk: "purple",
-    ozellikler: ["Online birebir antrenman seansları","Seans sonrası değerlendirme ve düzenleme","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi"],
+    ozellikler: ["Online birebir antrenman seansları","Seans sonrası değerlendirme ve düzenleme","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi","📱 WhatsApp destek hattı"],
   },
   {
     id: "birebir", title: "Birebir Koçluk", tagline: "Balıkesir'de anlaşmalı salonlarda birebir çalışma",
     fiyat: "10.000", sure: "ay", etiket: "EN İYİ SONUÇ", renk: "amber",
-    ozellikler: ["Balıkesir'de salonda birebir antrenman","Anlık takip, analiz ve düzenli ölçüm","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi"],
+    ozellikler: ["Balıkesir'de salonda birebir antrenman","Anlık takip, analiz ve düzenli ölçüm","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi","📱 WhatsApp destek hattı"],
   },
 ];
 
@@ -121,9 +121,9 @@ export default function Fiyatlar() {
                           const { emoji, text } = splitEmoji(satir);
                           const isLastOdd = idx === ozellikler.length - 1 && ozellikler.length % 2 === 1;
                           return (
-                            <li key={idx} className={`flex items-start gap-2.5 ${isLastOdd ? "col-span-2 justify-self-center w-1/2" : ""}`}>
-                              {emoji && <span className="text-xl leading-none flex-shrink-0 mt-0.5">{emoji}</span>}
-                              <span className="text-[12px] text-neutral-300 leading-snug">{text || satir}</span>
+                            <li key={idx} className={`flex items-center gap-2.5 ${isLastOdd ? "col-span-2 justify-self-center w-1/2" : ""}`}>
+                              {emoji && <span className="text-lg leading-none flex-shrink-0">{emoji}</span>}
+                              <span className="text-[12px] text-neutral-300 leading-[1.35]">{text || satir}</span>
                             </li>
                           );
                         })}
