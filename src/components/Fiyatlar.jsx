@@ -86,17 +86,18 @@ export default function Fiyatlar() {
 
           return (
             <MotionReveal key={paket.id} delay={index * 80}>
-              <div className={`bg-neutral-900/95 border border-neutral-800 rounded-sm shadow-lg transition-all duration-300 ease-out hover:-translate-y-[2px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] ${tema.kart}`}>
+              <div className={`relative bg-neutral-900/95 border border-neutral-800 rounded-sm shadow-lg transition-all duration-300 ease-out hover:-translate-y-[2px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] ${tema.kart}`}>
+
+                {paket.etiket && (
+                  <div className={`${tema.etiket} absolute -top-3 right-4 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-md tracking-[0.12em] uppercase`}>
+                    {paket.etiket}
+                  </div>
+                )}
 
                 {/* Desktop */}
                 <div className="hidden md:grid md:grid-cols-[35%_40%_25%] md:min-h-[110px]">
-                  {/* Başlık + Etiket */}
+                  {/* Başlık */}
                   <div className="flex flex-col justify-center px-7 py-6 gap-2">
-                    {paket.etiket && (
-                      <span className={`${tema.etiket} self-start text-white text-[10px] font-semibold px-2.5 py-1 rounded-full tracking-[0.12em] uppercase`}>
-                        {paket.etiket}
-                      </span>
-                    )}
                     <h3 className="text-[17px] lg:text-[18px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-snug">
                       {baslik}
                     </h3>
@@ -135,12 +136,7 @@ export default function Fiyatlar() {
 
                 {/* Mobil */}
                 <div className="md:hidden p-5 flex flex-col gap-3">
-                  {paket.etiket && (
-                    <span className={`${tema.etiket} self-start text-white text-[10px] font-semibold px-2.5 py-1 rounded-full tracking-[0.12em] uppercase`}>
-                      {paket.etiket}
-                    </span>
-                  )}
-                  <h3 className="text-base font-semibold uppercase tracking-[0.1em] text-neutral-100">{baslik}</h3>
+                  <h3 className="text-base font-semibold uppercase tracking-[0.1em] text-neutral-100 pt-1">{baslik}</h3>
                   {paket.tagline && <p className="text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>}
                   {ozellikler.length > 0 && (
                     <ul className="flex flex-col gap-y-1.5 pt-1">
