@@ -118,11 +118,17 @@ export default function Fiyatlar() {
                 </div>
 
                 <div className="mt-5">
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">₺{paket.fiyat}</span>
-                    <span className="text-neutral-500 text-sm">/ {paket.sure}</span>
-                  </div>
-                  <p className="text-neutral-600 text-[11px] mt-0.5">K.D.V. dahildir</p>
+                  {paket.fiyat && String(paket.fiyat).trim() !== "0" && String(paket.fiyat).trim() !== "" ? (
+                    <>
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">₺{paket.fiyat}</span>
+                        <span className="text-neutral-500 text-sm">/ {paket.sure}</span>
+                      </div>
+                      <p className="text-neutral-600 text-[11px] mt-0.5">K.D.V. dahildir</p>
+                    </>
+                  ) : (
+                    <p className="text-neutral-500 text-sm italic">Fiyat bilgisi için iletişime geçin</p>
+                  )}
                 </div>
 
                 <ul className="mt-5 space-y-2.5 text-sm text-neutral-300/90 leading-relaxed flex-1">
