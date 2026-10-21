@@ -63,7 +63,7 @@ export default function Fiyatlar() {
   }, []);
 
   return (
-    <section id="fiyatlar" className="relative z-10 bg-neutral-950 pt-[8.09rem] px-4 sm:px-8 lg:px-20">
+    <section id="fiyatlar" className="relative z-10 bg-neutral-950 pt-[8.09rem] px-4 sm:px-6 lg:px-0">
       <MotionReveal>
         <div className="max-w-6xl mx-auto text-center mb-14">
           <RevealHeading as="h2" mode="word"
@@ -76,83 +76,74 @@ export default function Fiyatlar() {
         </div>
       </MotionReveal>
 
-      {(() => {
-        const n = paketler.length;
-        // Desktop sütun sayısı: 4 paket tek sıra, diğerleri 3
-        const lgCols = n === 4 ? 4 : n <= 2 ? n : 3;
-        const lgGridClass = lgCols === 4 ? "lg:grid-cols-4" : lgCols === 2 ? "lg:grid-cols-2" : lgCols === 1 ? "lg:grid-cols-1" : "lg:grid-cols-3";
-        // Simetri: son kart tekse ortala
-        const loneAtSm = n % 2 === 1;
-        const loneAtLg = n % lgCols === 1;
-        const lastItemClass = [
-          loneAtSm ? "sm:col-span-2 sm:justify-self-center sm:max-w-[calc(50%-1rem)]" : "",
-          loneAtSm ? "lg:col-span-1 lg:max-w-none lg:justify-self-stretch" : "",
-          loneAtLg ? `lg:col-start-${Math.floor(lgCols / 2) + 1}` : "",
-        ].filter(Boolean).join(" ");
-
-        return (
-      <div className={`grid grid-cols-1 sm:grid-cols-2 ${lgGridClass} gap-6 sm:gap-8 lg:gap-10 max-w-6xl mx-auto items-stretch auto-rows-[1fr]`}>
+      <div className="grid grid-cols-1 auto-rows-fr gap-6 lg:gap-7 max-w-6xl mx-auto">
         {paketler.map((paket, index) => {
           const tema = RENK_MAP[paket.renk] || RENK_MAP.blue;
+          const ozellikler = (paket.ozellikler || []).filter((s) => s && String(s).trim());
+          const baslik = (paket.title || "").trim() || "Paket";
+          const fiyatGoster = paket.fiyat && String(paket.fiyat).replace(/\s/g, "") !== "0" && String(paket.fiyat).trim() !== "";
 
           return (
-            <MotionReveal key={paket.id} delay={index * 80}
-              className={index === n - 1 ? lastItemClass : ""}>
+            <MotionReveal key={paket.id} delay={index * 80} className="h-full">
               <div
-                className={`relative bg-neutral-900/95 border border-neutral-800 ring-1 ring-transparent rounded-sm p-6 shadow-lg transition-all duration-300 ease-out hover:-translate-y-[3px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] flex flex-col h-full ${tema.kart}`}
+                className={`relative h-full bg-neutral-900/95 border border-neutral-800 ring-1 ring-transparent rounded-sm p-6 lg:p-7 shadow-lg transition-all duration-300 ease-out hover:-translate-y-[3px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] flex flex-col md:flex-row md:items-stretch gap-5 md:gap-5 lg:gap-8 ${tema.kart}`}
               >
                 {paket.etiket && (
-                  <div className={`${tema.etiket} absolute -top-3 right-3 text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow-md tracking-[0.12em] uppercase`}>
+                  <div className={`${tema.etiket} absolute -top-3 right-3 max-w-[calc(100%-1.5rem)] truncate text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow-md tracking-[0.12em] uppercase`}>
                     {paket.etiket}
                   </div>
                 )}
 
-                <div>
-                  <h3 className="text-[17px] sm:text-base lg:text-lg font-semibold uppercase tracking-[0.12em] text-neutral-100">
-                    {paket.title}
+                {/* Sol: başlık + açıklama */}
+                <div className="order-1 min-w-0 md:w-[11rem] lg:w-[14.5rem] md:flex-shrink-0">
+                  <h3 className="text-[19.5px] lg:text-[21px] font-semibold uppercase tracking-[0.12em] text-neutral-100 break-words hyphens-auto">
+                    {baslik}
                   </h3>
                   {paket.tagline && (
-                    <p className="mt-4 text-sm text-neutral-400 leading-relaxed">{paket.tagline}</p>
+                    <p className="mt-3 text-sm text-neutral-400 leading-relaxed break-words">{paket.tagline}</p>
                   )}
-                  <div className="mt-4 h-px bg-neutral-800" />
                 </div>
 
-                <div className="mt-5">
-                  {paket.fiyat && String(paket.fiyat).trim() !== "0" && String(paket.fiyat).trim() !== "" ? (
-                    <>
-                      <div className="flex items-baseline gap-1.5">
-                        <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">₺{paket.fiyat}</span>
-                        <span className="text-neutral-500 text-sm">/ {paket.sure}</span>
+                {/* Ayırıcı: mobilde yatay, geniş ekranda dikey */}
+                {ozellikler.length > 0 && (
+                  <div className="order-3 md:order-2 h-px w-full bg-neutral-800 md:h-auto md:w-px md:self-stretch md:flex-shrink-0" />
+                )}
+
+                {/* Orta: özellikler — kısa maddeler tek satırda kalır, uzun olanlar taşmadan alta sarar */}
+                {ozellikler.length > 0 && (
+                  <ul className="order-4 md:order-3 min-w-0 flex-1 flex flex-col justify-center gap-y-2.5 text-sm text-neutral-300/90 leading-relaxed">
+                    {ozellikler.map((satir, idx) => (
+                      <li key={idx} className="flex items-center gap-2 text-left">
+                        <span className="inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border border-neutral-600">
+                          <span className="h-2 w-2 rounded-full bg-neutral-400" />
+                        </span>
+                        <span className="min-w-0 break-words">{satir}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {/* Sağ: fiyat + buton */}
+                <div className="contents md:order-4 md:flex md:flex-col md:justify-center md:min-w-0 md:w-[9.5rem] lg:w-[12rem] md:flex-shrink-0 md:ml-auto">
+                  {fiyatGoster && (
+                    <div className="order-2 md:order-none min-w-0">
+                      <div className="flex flex-wrap items-baseline gap-x-1.5 md:justify-center">
+                        <span className="text-3xl font-black text-white tracking-tight break-all">₺{paket.fiyat}</span>
+                        {paket.sure && <span className="text-neutral-500 text-sm">/ {paket.sure}</span>}
                       </div>
-                      <p className="text-neutral-600 text-[11px] mt-0.5">K.D.V. dahildir</p>
-                    </>
-                  ) : (
-                    <p className="text-neutral-500 text-sm italic">Fiyat bilgisi için iletişime geçin</p>
+                      <p className="text-neutral-600 text-[11px] mt-0.5 md:text-center">K.D.V. dahildir</p>
+                    </div>
                   )}
+                  <button type="button" onClick={() => handleWhatsappClick(baslik)}
+                    className={`order-5 md:order-none mt-auto md:mt-4 w-full py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-semibold tracking-tight border border-neutral-700 bg-neutral-900/90 text-neutral-200 transition-colors duration-200 ${tema.btn}`}>
+                    Paketi Seç
+                  </button>
                 </div>
-
-                <ul className="mt-5 space-y-2.5 text-sm text-neutral-300/90 leading-relaxed flex-1">
-                  {(paket.ozellikler || []).filter((s) => s && String(s).trim()).map((satir, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-left">
-                      <span className="mt-[3px] inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border border-neutral-600">
-                        <span className="h-2 w-2 rounded-full bg-neutral-400" />
-                      </span>
-                      <span>{satir}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <button type="button" onClick={() => handleWhatsappClick(paket.title)}
-                  className={`mt-6 w-full py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-semibold tracking-tight border border-neutral-700 bg-neutral-900/90 text-neutral-200 transition-colors duration-200 ${tema.btn}`}>
-                  Paketi Seç
-                </button>
               </div>
             </MotionReveal>
           );
         })}
       </div>
-        );
-      })()}
     </section>
   );
 }
