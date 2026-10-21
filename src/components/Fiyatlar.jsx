@@ -95,42 +95,41 @@ export default function Fiyatlar() {
                 )}
 
                 {/* Desktop */}
-                <div className="hidden md:grid md:grid-cols-[35%_1px_40%_24%] md:min-h-[110px]">
-                  {/* Başlık */}
-                  <div className="flex flex-col justify-center px-7 py-6 gap-2">
-                    <h3 className="text-[17px] lg:text-[18px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-snug">
-                      {baslik}
-                    </h3>
-                    {paket.tagline && (
-                      <p className="text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>
-                    )}
+                <div className="hidden md:block">
+                  {/* Üst satır: başlık | özellikler | fiyat */}
+                  <div className="grid grid-cols-[30%_1px_1fr] min-h-[100px]">
+                    <div className="flex flex-col justify-center px-7 py-5 gap-1.5">
+                      <h3 className="text-[17px] lg:text-[18px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-snug">
+                        {baslik}
+                      </h3>
+                      {paket.tagline && (
+                        <p className="text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>
+                      )}
+                      {fiyatGoster && (
+                        <div className="mt-2">
+                          <span className="text-2xl font-black text-white tracking-tight">₺{paket.fiyat}</span>
+                          {paket.sure && <span className="text-[11px] text-neutral-600 ml-1.5">/ {paket.sure} · KDV dahil</span>}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="bg-neutral-800 self-stretch" />
+
+                    <div className="flex flex-col justify-center px-6 py-5">
+                      {ozellikler.length > 0 && (
+                        <ul className="flex flex-col gap-y-2">
+                          {ozellikler.map((satir, idx) => (
+                            <li key={idx} className="text-[13px] text-neutral-300 leading-snug">{satir}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="bg-neutral-800 self-stretch" />
-
-                  {/* Özellikler */}
-                  <div className="flex flex-col justify-center px-6 py-6">
-                    {ozellikler.length > 0 && (
-                      <ul className="flex flex-col gap-y-2">
-                        {ozellikler.map((satir, idx) => (
-                          <li key={idx} className="text-[13px] text-neutral-300 leading-snug">
-                            {satir}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-
-                  {/* Fiyat + Buton */}
-                  <div className="flex flex-col items-center justify-center px-5 py-6 gap-3">
-                    {fiyatGoster && (
-                      <div className="text-center">
-                        <div className="text-2xl lg:text-3xl font-black text-white tracking-tight">₺{paket.fiyat}</div>
-                        {paket.sure && <div className="text-[11px] text-neutral-600 mt-0.5">/ {paket.sure} · KDV dahil</div>}
-                      </div>
-                    )}
+                  {/* Alt bar: buton tam genişlik */}
+                  <div className="border-t border-neutral-800">
                     <button type="button" onClick={() => handleWhatsappClick(baslik)}
-                      className={`w-full py-2.5 rounded-sm text-xs font-semibold tracking-tight border border-neutral-700 bg-neutral-900 text-neutral-200 transition-colors duration-200 ${tema.btn}`}>
+                      className={`w-full py-3 text-xs font-semibold tracking-tight text-neutral-200 transition-colors duration-200 ${tema.btn}`}>
                       Paketi Seç
                     </button>
                   </div>
