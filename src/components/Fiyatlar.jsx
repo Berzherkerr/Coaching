@@ -100,7 +100,7 @@ export default function Fiyatlar() {
                 )}
 
                 {/* Desktop */}
-                <div className="hidden md:grid md:grid-cols-[28%_1px_1fr_1px_22%] md:min-h-[130px]">
+                <div className="hidden md:grid md:grid-cols-[28%_1px_1fr_22%] md:min-h-[130px]">
                   {/* Başlık */}
                   <div className="flex flex-col justify-center px-6 py-6 gap-2">
                     <h3 className="text-[16px] lg:text-[17px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-snug">
@@ -116,11 +116,12 @@ export default function Fiyatlar() {
                   {/* Özellik rozetleri */}
                   <div className="flex items-center px-5 py-5">
                     {ozellikler.length > 0 && (
-                      <ul className="grid grid-cols-2 gap-2 w-full">
+                      <ul className="grid grid-cols-2 gap-x-4 gap-y-3 w-full">
                         {ozellikler.map((satir, idx) => {
                           const { emoji, text } = splitEmoji(satir);
+                          const isLastOdd = idx === ozellikler.length - 1 && ozellikler.length % 2 === 1;
                           return (
-                            <li key={idx} className="flex items-start gap-2.5 bg-neutral-800/50 border border-neutral-700/40 rounded-sm px-3 py-2">
+                            <li key={idx} className={`flex items-start gap-2.5 ${isLastOdd ? "col-span-2 justify-self-center w-1/2" : ""}`}>
                               {emoji && <span className="text-xl leading-none flex-shrink-0 mt-0.5">{emoji}</span>}
                               <span className="text-[12px] text-neutral-300 leading-snug">{text || satir}</span>
                             </li>
@@ -130,17 +131,13 @@ export default function Fiyatlar() {
                     )}
                   </div>
 
-                  <div className="bg-neutral-800 self-stretch" />
-
                   {/* Fiyat + Buton */}
                   <div className="flex flex-col items-center justify-center px-4 py-6 gap-3">
-                    {fiyatGoster ? (
+                    {fiyatGoster && (
                       <div className="text-center">
                         <div className="text-2xl lg:text-3xl font-black text-white tracking-tight">₺{paket.fiyat}</div>
                         {paket.sure && <div className="text-[11px] text-neutral-600 mt-0.5">/ {paket.sure} · KDV dahil</div>}
                       </div>
-                    ) : (
-                      <p className="text-[11px] text-neutral-500 text-center leading-snug">Fiyat için iletişime geçin</p>
                     )}
                     <button type="button" onClick={() => handleWhatsappClick(baslik)}
                       className={`w-full py-2.5 rounded-sm text-xs font-semibold tracking-tight border border-neutral-700 bg-neutral-900/90 text-neutral-200 transition-colors duration-200 ${tema.btn}`}>
