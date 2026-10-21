@@ -96,7 +96,7 @@ export default function Fiyatlar() {
                 )}
 
                 {/* Sol: başlık + açıklama */}
-                <div className="order-1 min-w-0 md:w-[16rem] lg:w-[20rem] md:flex-shrink-0">
+                <div className="order-1 min-w-0 md:w-[35%] md:flex-shrink-0">
                   <h3 className="text-[19.5px] lg:text-[21px] font-semibold uppercase tracking-[0.12em] text-neutral-100 break-words hyphens-auto">
                     {baslik}
                   </h3>
@@ -112,7 +112,7 @@ export default function Fiyatlar() {
 
                 {/* Orta: özellikler — kısa maddeler tek satırda kalır, uzun olanlar taşmadan alta sarar */}
                 {ozellikler.length > 0 && (
-                  <ul className="order-4 md:order-3 min-w-0 flex-1 flex flex-col justify-center gap-y-2.5 text-sm text-neutral-300/90 leading-relaxed">
+                  <ul className="order-4 md:order-3 min-w-0 md:w-[40%] md:flex-shrink-0 flex flex-col justify-center gap-y-2.5 text-sm text-neutral-300/90 leading-relaxed">
                     {ozellikler.map((satir, idx) => (
                       <li key={idx} className="flex items-center gap-2 text-left">
                         <span className="inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border border-neutral-600">
@@ -125,7 +125,7 @@ export default function Fiyatlar() {
                 )}
 
                 {/* Sağ: fiyat + buton */}
-                <div className="contents md:order-4 md:flex md:flex-col md:justify-center md:min-w-0 md:w-[9.5rem] lg:w-[12rem] md:flex-shrink-0 md:ml-auto">
+                <div className="contents md:order-4 md:flex md:flex-col md:justify-center md:min-w-0 md:w-[25%] md:flex-shrink-0">
                   {fiyatGoster && (
                     <div className="order-2 md:order-none min-w-0">
                       <div className="flex flex-wrap items-baseline gap-x-1.5 md:justify-center">
