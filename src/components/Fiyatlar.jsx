@@ -96,7 +96,7 @@ export default function Fiyatlar() {
                 )}
 
                 {/* Sol: başlık + açıklama */}
-                <div className="order-1 min-w-0 md:w-[11rem] lg:w-[14.5rem] md:flex-shrink-0">
+                <div className="order-1 min-w-0 md:w-[16rem] lg:w-[20rem] md:flex-shrink-0">
                   <h3 className="text-[19.5px] lg:text-[21px] font-semibold uppercase tracking-[0.12em] text-neutral-100 break-words hyphens-auto">
                     {baslik}
                   </h3>
