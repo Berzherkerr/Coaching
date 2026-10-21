@@ -95,7 +95,7 @@ export default function Fiyatlar() {
                 )}
 
                 {/* Desktop */}
-                <div className="hidden md:grid md:grid-cols-[35%_1px_40%_1px_24%] md:min-h-[110px]">
+                <div className="hidden md:grid md:grid-cols-[35%_1px_40%_24%] md:min-h-[110px]">
                   {/* Başlık */}
                   <div className="flex flex-col justify-center px-7 py-6 gap-2">
                     <h3 className="text-[17px] lg:text-[18px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-snug">
@@ -120,8 +120,6 @@ export default function Fiyatlar() {
                       </ul>
                     )}
                   </div>
-
-                  <div className="bg-neutral-800 self-stretch" />
 
                   {/* Fiyat + Buton */}
                   <div className="flex flex-col items-center justify-center px-5 py-6 gap-3">
