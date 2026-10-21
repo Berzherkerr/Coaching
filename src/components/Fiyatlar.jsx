@@ -113,8 +113,7 @@ export default function Fiyatlar() {
                     {ozellikler.length > 0 && (
                       <ul className="flex flex-col gap-y-2">
                         {ozellikler.map((satir, idx) => (
-                          <li key={idx} className="flex items-center gap-2 text-[13px] text-neutral-300 leading-snug">
-                            <span className="w-1 h-1 rounded-full bg-neutral-600 flex-shrink-0" />
+                          <li key={idx} className="text-[13px] text-neutral-300 leading-snug">
                             {satir}
                           </li>
                         ))}
