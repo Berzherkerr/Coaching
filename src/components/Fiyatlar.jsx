@@ -145,18 +145,16 @@ export default function Fiyatlar() {
                       ))}
                     </ul>
                   )}
-                  <div className="flex items-center justify-between gap-4 pt-2">
-                    {fiyatGoster ? (
-                      <div>
-                        <div className="text-2xl font-black text-white tracking-tight">₺{paket.fiyat}</div>
-                        {paket.sure && <div className="text-[11px] text-neutral-600">/ {paket.sure} · KDV dahil</div>}
-                      </div>
-                    ) : <div />}
-                    <button type="button" onClick={() => handleWhatsappClick(baslik)}
-                      className={`flex-shrink-0 px-5 py-2.5 rounded-sm text-xs font-semibold tracking-tight border border-neutral-700 bg-neutral-900 text-neutral-200 transition-colors duration-200 ${tema.btn}`}>
-                      Paketi Seç
-                    </button>
-                  </div>
+                  {fiyatGoster && (
+                    <div className="pt-1">
+                      <div className="text-2xl font-black text-white tracking-tight">₺{paket.fiyat}</div>
+                      {paket.sure && <div className="text-[11px] text-neutral-600">/ {paket.sure} · KDV dahil</div>}
+                    </div>
+                  )}
+                  <button type="button" onClick={() => handleWhatsappClick(baslik)}
+                    className={`w-full py-3 rounded-sm text-sm font-semibold tracking-tight border border-neutral-700 bg-neutral-900 text-neutral-200 transition-colors duration-200 ${tema.btn}`}>
+                    Paketi Seç
+                  </button>
                 </div>
 
               </div>
