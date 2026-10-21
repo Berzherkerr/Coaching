@@ -19,17 +19,17 @@ const VARSAYILAN = [
   {
     id: "uzaktan", title: "Uzaktan Eğitim", tagline: "Spora yeni başlayanlara uygun çözüm",
     fiyat: "3.000", sure: "ay", etiket: "YENİ BAŞLAYANLARA", renk: "blue",
-    ozellikler: ["Özel antrenman ve beslenme programı","Haftalık online değerlendirme ve takip","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi","📱 WhatsApp destek hattı"],
+    ozellikler: ["Özel antrenman ve beslenme programı","Haftalık online değerlendirme ve takip","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi"],
   },
   {
     id: "online", title: "Online Koçluk", tagline: "Canlı birebir seans ve geri bildirim",
     fiyat: "7.000", sure: "ay", etiket: "EN ÇOK TERCİH EDİLEN", renk: "purple",
-    ozellikler: ["Online birebir antrenman seansları","Seans sonrası değerlendirme ve düzenleme","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi","📱 WhatsApp destek hattı"],
+    ozellikler: ["Online birebir antrenman seansları","Seans sonrası değerlendirme ve düzenleme","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi"],
   },
   {
     id: "birebir", title: "Birebir Koçluk", tagline: "Balıkesir'de anlaşmalı salonlarda birebir çalışma",
     fiyat: "10.000", sure: "ay", etiket: "EN İYİ SONUÇ", renk: "amber",
-    ozellikler: ["Balıkesir'de salonda birebir antrenman","Anlık takip, analiz ve düzenli ölçüm","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi","📱 WhatsApp destek hattı"],
+    ozellikler: ["Balıkesir'de salonda birebir antrenman","Anlık takip, analiz ve düzenli ölçüm","Kişiye özel vücut analizi","Hedef belirleme ve planlama","Beslenme ve Antrenman takibi"],
   },
 ];
 
@@ -56,9 +56,12 @@ export default function Fiyatlar() {
           .map((kv) => {
             if (!kv || !kv.id) return null;
             const def = VARSAYILAN.find((x) => x.id === kv.id) || {};
-            const ozellikler = Array.isArray(kv.ozellikler)
-              ? kv.ozellikler.filter((s) => s && String(s).trim())
-              : (def.ozellikler || []);
+            const defItems = def.ozellikler || [];
+            const kvItems = Array.isArray(kv.ozellikler)
+              ? kv.ozellikler.filter((s) => s && String(s).trim() && !/whatsapp destek/i.test(s))
+              : null;
+            const base = (kvItems && kvItems.length > 0) ? kvItems : defItems;
+            const ozellikler = base.filter((s) => !/whatsapp destek/i.test(s));
             return { ...def, ...kv, ozellikler };
           })
           .filter(Boolean);
@@ -72,7 +75,7 @@ export default function Fiyatlar() {
       <MotionReveal>
         <div className="max-w-6xl mx-auto text-center mb-14">
           <RevealHeading as="h2" mode="word"
-            className="text-[2.15rem] sm:text-[2.875rem] font-bold text-white leading-[1.1] tracking-[-0.02em]">
+            className="text-[2.2rem] sm:text-[2.6rem] md:text-[2.875rem] font-bold text-white leading-[1.1] tracking-[-0.02em]">
             Fiyatlandırma ve Paketler
           </RevealHeading>
           <p className="mt-4 text-base md:text-lg font-medium text-neutral-300 max-w-2xl mx-auto leading-relaxed">
@@ -81,7 +84,7 @@ export default function Fiyatlar() {
         </div>
       </MotionReveal>
 
-      <div className="grid grid-cols-1 auto-rows-fr gap-6 lg:gap-7 max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 auto-rows-fr gap-[18px] lg:gap-5 max-w-6xl mx-auto">
         {paketler.map((paket, index) => {
           const tema = RENK_MAP[paket.renk] || RENK_MAP.blue;
           const ozellikler = (paket.ozellikler || []).filter((s) => s && String(s).trim());
@@ -100,35 +103,36 @@ export default function Fiyatlar() {
                 )}
 
                 {/* Desktop */}
-                <div className="hidden md:grid md:grid-cols-[28%_1px_1fr_22%] md:min-h-[130px]">
+                <div className="hidden md:grid md:grid-cols-[28%_1px_1fr_22%] md:h-[171px]">
                   {/* Başlık */}
-                  <div className="flex flex-col justify-center px-6 py-6 gap-2">
-                    <h3 className="text-[16px] lg:text-[17px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-snug">
+                  <div className="flex flex-col justify-center px-6 py-5 gap-3">
+                    <h3 className="text-[16px] lg:text-[17px] font-bold uppercase tracking-[0.08em] text-white leading-tight">
                       {baslik}
                     </h3>
                     {paket.tagline && (
-                      <p className="text-[12px] text-neutral-500 leading-relaxed">{paket.tagline}</p>
+                      <p className="text-[13px] text-neutral-400 leading-snug">{paket.tagline}</p>
                     )}
                   </div>
 
                   <div className="bg-neutral-800 self-stretch" />
 
                   {/* Özellik rozetleri */}
-                  <div className="flex items-center px-5 py-5">
-                    {ozellikler.length > 0 && (
-                      <ul className="grid grid-cols-2 gap-x-4 gap-y-3 w-full">
-                        {ozellikler.map((satir, idx) => {
-                          const { emoji, text } = splitEmoji(satir);
-                          const isLastOdd = idx === ozellikler.length - 1 && ozellikler.length % 2 === 1;
-                          return (
-                            <li key={idx} className={`flex items-center gap-2.5 ${isLastOdd ? "col-span-2 justify-self-center w-1/2" : ""}`}>
-                              {emoji && <span className="text-lg leading-none flex-shrink-0">{emoji}</span>}
-                              <span className="text-[12px] text-neutral-300 leading-[1.35]">{text || satir}</span>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    )}
+                  <div className="flex items-center px-5 py-4">
+                    <ul className="grid grid-cols-2 gap-x-[6px] gap-y-[14px] w-full">
+                      {Array.from({ length: 6 }).map((_, idx) => {
+                        const satir = ozellikler[idx];
+                        if (!satir) return <li key={idx} />;
+                        const { emoji, text } = splitEmoji(satir);
+                        return (
+                          <li key={idx} className="flex items-center gap-2">
+                            <span className="w-[18px] flex-shrink-0 flex items-center justify-center">
+                              {emoji && <span className="text-[15px] leading-none">{emoji}</span>}
+                            </span>
+                            <span className="text-[13px] text-neutral-300 leading-[1.35]">{text || satir}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
                   </div>
 
                   {/* Fiyat + Buton */}
@@ -148,21 +152,23 @@ export default function Fiyatlar() {
 
                 {/* Mobil */}
                 <div className="md:hidden p-5 flex flex-col gap-3">
-                  <h3 className="text-base font-semibold uppercase tracking-[0.1em] text-neutral-100 pt-1">{baslik}</h3>
-                  {paket.tagline && <p className="text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>}
+                  <div className="pt-1 flex flex-col gap-1.5">
+                    <h3 className="text-[19px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-tight">{baslik}</h3>
+                    {paket.tagline && <p className="text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>}
+                    {fiyatGoster && (
+                      <div className="flex items-baseline gap-2 mt-1">
+                        <span className="text-2xl font-black text-white tracking-tight">₺{paket.fiyat}</span>
+                        {paket.sure && <span className="text-[11px] text-neutral-500">/ {paket.sure} · KDV dahil</span>}
+                      </div>
+                    )}
+                  </div>
                   {ozellikler.length > 0 && <div className="h-px bg-neutral-800" />}
                   {ozellikler.length > 0 && (
-                    <ul className="flex flex-col gap-y-1.5 pt-1">
+                    <ul className="flex flex-col gap-y-1.5">
                       {ozellikler.map((satir, idx) => (
                         <li key={idx} className="text-[13px] text-neutral-300 leading-snug">{satir}</li>
                       ))}
                     </ul>
-                  )}
-                  {fiyatGoster && (
-                    <div className="pt-1">
-                      <div className="text-2xl font-black text-white tracking-tight">₺{paket.fiyat}</div>
-                      {paket.sure && <div className="text-[11px] text-neutral-600">/ {paket.sure} · KDV dahil</div>}
-                    </div>
                   )}
                   <button type="button" onClick={() => handleWhatsappClick(baslik)}
                     className={`w-full py-3 rounded-sm text-sm font-semibold tracking-tight border border-neutral-700 bg-neutral-900 text-neutral-200 transition-colors duration-200 ${tema.btn}`}>
