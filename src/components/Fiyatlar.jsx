@@ -81,6 +81,7 @@ export default function Fiyatlar() {
           const tema = RENK_MAP[paket.renk] || RENK_MAP.blue;
           const ozellikler = (paket.ozellikler || []).filter((s) => s && String(s).trim());
           const baslik = (paket.title || "").trim() || "Paket";
+          const fiyatGoster = paket.fiyat && String(paket.fiyat).replace(/\s/g, "") !== "0" && String(paket.fiyat).trim() !== "";
 
           return (
             <MotionReveal key={paket.id} delay={index * 80} className="h-full">
@@ -124,13 +125,15 @@ export default function Fiyatlar() {
 
                 {/* Sağ: fiyat + buton */}
                 <div className="contents md:order-4 md:flex md:flex-col md:justify-center md:min-w-0 md:w-[9.5rem] lg:w-[12rem] md:flex-shrink-0 md:ml-auto">
-                  <div className="order-2 md:order-none min-w-0">
-                    <div className="flex flex-wrap items-baseline gap-x-1.5 md:justify-center">
-                      <span className="text-3xl font-black text-white tracking-tight break-all">₺{paket.fiyat}</span>
-                      {paket.sure && <span className="text-neutral-500 text-sm">/ {paket.sure}</span>}
+                  {fiyatGoster && (
+                    <div className="order-2 md:order-none min-w-0">
+                      <div className="flex flex-wrap items-baseline gap-x-1.5 md:justify-center">
+                        <span className="text-3xl font-black text-white tracking-tight break-all">₺{paket.fiyat}</span>
+                        {paket.sure && <span className="text-neutral-500 text-sm">/ {paket.sure}</span>}
+                      </div>
+                      <p className="text-neutral-600 text-[11px] mt-0.5 md:text-center">K.D.V. dahildir</p>
                     </div>
-                    <p className="text-neutral-600 text-[11px] mt-0.5 md:text-center">K.D.V. dahildir</p>
-                  </div>
+                  )}
                   <button type="button" onClick={() => handleWhatsappClick(baslik)}
                     className={`order-5 md:order-none mt-auto md:mt-4 w-full py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-semibold tracking-tight border border-neutral-700 bg-neutral-900/90 text-neutral-200 transition-colors duration-200 ${tema.btn}`}>
                     Paketi Seç
