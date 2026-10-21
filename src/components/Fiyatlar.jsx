@@ -97,7 +97,7 @@ export default function Fiyatlar() {
                 {/* Desktop */}
                 <div className="hidden md:grid md:grid-cols-[35%_40%_25%] md:min-h-[110px]">
                   {/* Başlık */}
-                  <div className="flex flex-col justify-start px-7 pt-6 pb-6 gap-2">
+                  <div className="flex flex-col justify-center px-7 py-6 gap-2">
                     <h3 className="text-[17px] lg:text-[18px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-snug">
                       {baslik}
                     </h3>
