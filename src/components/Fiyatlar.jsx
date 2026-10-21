@@ -85,61 +85,90 @@ export default function Fiyatlar() {
           const fiyatGoster = fiyatStr.length > 0;
 
           return (
-            <MotionReveal key={paket.id} delay={index * 80} className="h-full">
-              <div
-                className={`relative h-full bg-neutral-900/95 border border-neutral-800 ring-1 ring-transparent rounded-sm p-6 lg:p-7 shadow-lg transition-all duration-300 ease-out hover:-translate-y-[3px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] flex flex-col md:flex-row md:items-stretch gap-5 md:gap-5 lg:gap-8 ${tema.kart}`}
-              >
+            <MotionReveal key={paket.id} delay={index * 80}>
+              <div className={`relative bg-neutral-900/95 border border-neutral-800 rounded-sm shadow-lg transition-all duration-300 ease-out hover:-translate-y-[2px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] overflow-hidden ${tema.kart}`}>
+
                 {paket.etiket && (
-                  <div className={`${tema.etiket} absolute -top-3 right-3 max-w-[calc(100%-1.5rem)] truncate text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow-md tracking-[0.12em] uppercase`}>
+                  <div className={`${tema.etiket} absolute top-4 right-4 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-md tracking-[0.12em] uppercase`}>
                     {paket.etiket}
                   </div>
                 )}
 
-                {/* Sol: başlık + açıklama */}
-                <div className="order-1 min-w-0 md:w-[35%] md:flex-shrink-0">
-                  <h3 className="text-[19.5px] lg:text-[21px] font-semibold uppercase tracking-[0.12em] text-neutral-100 break-words hyphens-auto">
-                    {baslik}
-                  </h3>
-                  {paket.tagline && (
-                    <p className="mt-3 text-sm text-neutral-400 leading-relaxed break-words">{paket.tagline}</p>
-                  )}
-                </div>
+                {/* Desktop: 3 kolon grid */}
+                <div className="hidden md:grid md:grid-cols-[35%_1px_40%_1px_24%] md:min-h-[110px]">
+                  {/* Başlık */}
+                  <div className="flex flex-col justify-center px-7 py-6">
+                    <h3 className="text-[17px] lg:text-[18px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-snug pr-20">
+                      {baslik}
+                    </h3>
+                    {paket.tagline && (
+                      <p className="mt-2 text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>
+                    )}
+                  </div>
 
-                {/* Ayırıcı: mobilde yatay, geniş ekranda dikey */}
-                {ozellikler.length > 0 && (
-                  <div className="order-3 md:order-2 h-px w-full bg-neutral-800 md:h-auto md:w-px md:self-stretch md:flex-shrink-0" />
-                )}
+                  <div className="bg-neutral-800/70 self-stretch" />
 
-                {/* Orta: özellikler — kısa maddeler tek satırda kalır, uzun olanlar taşmadan alta sarar */}
-                {ozellikler.length > 0 && (
-                  <ul className="order-4 md:order-3 min-w-0 md:w-[40%] md:flex-shrink-0 flex flex-col justify-center gap-y-2.5 text-sm text-neutral-300/90 leading-relaxed">
-                    {ozellikler.map((satir, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-left">
-                        <span className="inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border border-neutral-600">
-                          <span className="h-2 w-2 rounded-full bg-neutral-400" />
-                        </span>
-                        <span className="min-w-0 break-words">{satir}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                  {/* Özellikler */}
+                  <div className="flex flex-col justify-center px-6 py-6">
+                    {ozellikler.length > 0 && (
+                      <ul className="flex flex-col gap-y-2">
+                        {ozellikler.map((satir, idx) => (
+                          <li key={idx} className="flex items-center gap-2 text-[13px] text-neutral-300 leading-snug">
+                            <span className="w-1 h-1 rounded-full bg-neutral-600 flex-shrink-0" />
+                            {satir}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
 
-                {/* Sağ: fiyat + buton */}
-                <div className="contents md:order-4 md:flex md:flex-col md:justify-center md:min-w-0 md:w-[25%] md:flex-shrink-0">
-                  {fiyatGoster && (
-                    <div className="order-2 md:order-none min-w-0">
-                      <div className="flex flex-wrap items-baseline gap-x-1.5 md:justify-center">
-                        <span className="text-3xl font-black text-white tracking-tight break-all">₺{paket.fiyat}</span>
-                        {paket.sure && <span className="text-neutral-500 text-sm">/ {paket.sure}</span>}
+                  <div className="bg-neutral-800/70 self-stretch" />
+
+                  {/* Fiyat + Buton */}
+                  <div className="flex flex-col items-center justify-center px-5 py-6 gap-3">
+                    {fiyatGoster && (
+                      <div className="text-center">
+                        <div className="text-2xl lg:text-3xl font-black text-white tracking-tight">₺{paket.fiyat}</div>
+                        {paket.sure && <div className="text-[11px] text-neutral-600 mt-0.5">/ {paket.sure} · KDV dahil</div>}
                       </div>
-                      <p className="text-neutral-600 text-[11px] mt-0.5 md:text-center">K.D.V. dahildir</p>
-                    </div>
-                  )}
-                  <button type="button" onClick={() => handleWhatsappClick(baslik)}
-                    className={`order-5 md:order-none mt-auto md:mt-4 w-full py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-semibold tracking-tight border border-neutral-700 bg-neutral-900/90 text-neutral-200 transition-colors duration-200 ${tema.btn}`}>
-                    Paketi Seç
-                  </button>
+                    )}
+                    <button type="button" onClick={() => handleWhatsappClick(baslik)}
+                      className={`w-full py-2.5 rounded-sm text-xs font-semibold tracking-tight border border-neutral-700 bg-neutral-900 text-neutral-200 transition-colors duration-200 ${tema.btn}`}>
+                      Paketi Seç
+                    </button>
+                  </div>
                 </div>
+
+                {/* Mobil: dikey yığın */}
+                <div className="md:hidden p-5 flex flex-col gap-4">
+                  <div>
+                    <h3 className="text-base font-semibold uppercase tracking-[0.1em] text-neutral-100 pr-24">{baslik}</h3>
+                    {paket.tagline && <p className="mt-1.5 text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>}
+                  </div>
+                  {ozellikler.length > 0 && (
+                    <ul className="flex flex-col gap-y-2 border-t border-neutral-800 pt-4">
+                      {ozellikler.map((satir, idx) => (
+                        <li key={idx} className="flex items-center gap-2 text-[13px] text-neutral-300 leading-snug">
+                          <span className="w-1 h-1 rounded-full bg-neutral-600 flex-shrink-0" />
+                          {satir}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <div className="flex items-center justify-between gap-4 border-t border-neutral-800 pt-4">
+                    {fiyatGoster ? (
+                      <div>
+                        <div className="text-2xl font-black text-white tracking-tight">₺{paket.fiyat}</div>
+                        {paket.sure && <div className="text-[11px] text-neutral-600">/ {paket.sure} · KDV dahil</div>}
+                      </div>
+                    ) : <div />}
+                    <button type="button" onClick={() => handleWhatsappClick(baslik)}
+                      className={`flex-shrink-0 px-5 py-2.5 rounded-sm text-xs font-semibold tracking-tight border border-neutral-700 bg-neutral-900 text-neutral-200 transition-colors duration-200 ${tema.btn}`}>
+                      Paketi Seç
+                    </button>
+                  </div>
+                </div>
+
               </div>
             </MotionReveal>
           );
