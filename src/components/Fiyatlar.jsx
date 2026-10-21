@@ -81,7 +81,8 @@ export default function Fiyatlar() {
           const tema = RENK_MAP[paket.renk] || RENK_MAP.blue;
           const ozellikler = (paket.ozellikler || []).filter((s) => s && String(s).trim());
           const baslik = (paket.title || "").trim() || "Paket";
-          const fiyatGoster = paket.fiyat && String(paket.fiyat).replace(/\s/g, "") !== "0" && String(paket.fiyat).trim() !== "";
+          const fiyatStr = String(paket.fiyat ?? "").replace(/[\s.,]/g, "").replace(/^0+$/, "");
+          const fiyatGoster = fiyatStr.length > 0;
 
           return (
             <MotionReveal key={paket.id} delay={index * 80} className="h-full">
