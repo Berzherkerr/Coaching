@@ -86,27 +86,24 @@ export default function Fiyatlar() {
 
           return (
             <MotionReveal key={paket.id} delay={index * 80}>
-              <div className={`relative bg-neutral-900/95 border border-neutral-800 rounded-sm shadow-lg transition-all duration-300 ease-out hover:-translate-y-[2px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] overflow-hidden ${tema.kart}`}>
+              <div className={`bg-neutral-900/95 border border-neutral-800 rounded-sm shadow-lg transition-all duration-300 ease-out hover:-translate-y-[2px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] ${tema.kart}`}>
 
-                {paket.etiket && (
-                  <div className={`${tema.etiket} absolute top-4 right-4 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-md tracking-[0.12em] uppercase`}>
-                    {paket.etiket}
-                  </div>
-                )}
-
-                {/* Desktop: 3 kolon grid */}
-                <div className="hidden md:grid md:grid-cols-[35%_1px_40%_1px_24%] md:min-h-[110px]">
-                  {/* Başlık */}
-                  <div className="flex flex-col justify-center px-7 py-6">
-                    <h3 className="text-[17px] lg:text-[18px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-snug pr-20">
+                {/* Desktop */}
+                <div className="hidden md:grid md:grid-cols-[35%_40%_25%] md:min-h-[110px]">
+                  {/* Başlık + Etiket */}
+                  <div className="flex flex-col justify-center px-7 py-6 gap-2">
+                    {paket.etiket && (
+                      <span className={`${tema.etiket} self-start text-white text-[10px] font-semibold px-2.5 py-1 rounded-full tracking-[0.12em] uppercase`}>
+                        {paket.etiket}
+                      </span>
+                    )}
+                    <h3 className="text-[17px] lg:text-[18px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-snug">
                       {baslik}
                     </h3>
                     {paket.tagline && (
-                      <p className="mt-2 text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>
+                      <p className="text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>
                     )}
                   </div>
-
-                  <div className="bg-neutral-800/70 self-stretch" />
 
                   {/* Özellikler */}
                   <div className="flex flex-col justify-center px-6 py-6">
@@ -120,8 +117,6 @@ export default function Fiyatlar() {
                       </ul>
                     )}
                   </div>
-
-                  <div className="bg-neutral-800/70 self-stretch" />
 
                   {/* Fiyat + Buton */}
                   <div className="flex flex-col items-center justify-center px-5 py-6 gap-3">
@@ -138,23 +133,23 @@ export default function Fiyatlar() {
                   </div>
                 </div>
 
-                {/* Mobil: dikey yığın */}
-                <div className="md:hidden p-5 flex flex-col gap-4">
-                  <div>
-                    <h3 className="text-base font-semibold uppercase tracking-[0.1em] text-neutral-100 pr-24">{baslik}</h3>
-                    {paket.tagline && <p className="mt-1.5 text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>}
-                  </div>
+                {/* Mobil */}
+                <div className="md:hidden p-5 flex flex-col gap-3">
+                  {paket.etiket && (
+                    <span className={`${tema.etiket} self-start text-white text-[10px] font-semibold px-2.5 py-1 rounded-full tracking-[0.12em] uppercase`}>
+                      {paket.etiket}
+                    </span>
+                  )}
+                  <h3 className="text-base font-semibold uppercase tracking-[0.1em] text-neutral-100">{baslik}</h3>
+                  {paket.tagline && <p className="text-[13px] text-neutral-500 leading-relaxed">{paket.tagline}</p>}
                   {ozellikler.length > 0 && (
-                    <ul className="flex flex-col gap-y-2 border-t border-neutral-800 pt-4">
+                    <ul className="flex flex-col gap-y-1.5 pt-1">
                       {ozellikler.map((satir, idx) => (
-                        <li key={idx} className="flex items-center gap-2 text-[13px] text-neutral-300 leading-snug">
-                          <span className="w-1 h-1 rounded-full bg-neutral-600 flex-shrink-0" />
-                          {satir}
-                        </li>
+                        <li key={idx} className="text-[13px] text-neutral-300 leading-snug">{satir}</li>
                       ))}
                     </ul>
                   )}
-                  <div className="flex items-center justify-between gap-4 border-t border-neutral-800 pt-4">
+                  <div className="flex items-center justify-between gap-4 pt-2">
                     {fiyatGoster ? (
                       <div>
                         <div className="text-2xl font-black text-white tracking-tight">₺{paket.fiyat}</div>
