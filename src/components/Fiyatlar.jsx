@@ -67,7 +67,7 @@ export default function Fiyatlar() {
       <MotionReveal>
         <div className="max-w-6xl mx-auto text-center mb-14">
           <RevealHeading as="h2" mode="word"
-            className="text-3xl sm:text-4xl font-bold text-white leading-[1.1] tracking-[-0.02em]">
+            className="text-[2.15rem] sm:text-[2.875rem] font-bold text-white leading-[1.1] tracking-[-0.02em]">
             Fiyatlandırma ve Paketler
           </RevealHeading>
           <p className="mt-4 text-base md:text-lg font-medium text-neutral-300 max-w-2xl mx-auto leading-relaxed">
@@ -89,7 +89,7 @@ export default function Fiyatlar() {
               <div className={`relative bg-neutral-900/95 border border-neutral-800 rounded-sm shadow-lg transition-all duration-300 ease-out hover:-translate-y-[2px] hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)] ${tema.kart}`}>
 
                 {paket.etiket && (
-                  <div className={`${tema.etiket} absolute -top-3 right-4 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-md tracking-[0.12em] uppercase`}>
+                  <div className={`${tema.etiket} absolute -top-3 left-4 text-white text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-md tracking-[0.12em] uppercase`}>
                     {paket.etiket}
                   </div>
                 )}
@@ -97,7 +97,7 @@ export default function Fiyatlar() {
                 {/* Desktop */}
                 <div className="hidden md:grid md:grid-cols-[35%_40%_25%] md:min-h-[110px]">
                   {/* Başlık */}
-                  <div className="flex flex-col justify-center px-7 py-6 gap-2">
+                  <div className="flex flex-col justify-start px-7 pt-6 pb-6 gap-2">
                     <h3 className="text-[17px] lg:text-[18px] font-semibold uppercase tracking-[0.1em] text-neutral-100 leading-snug">
                       {baslik}
                     </h3>
