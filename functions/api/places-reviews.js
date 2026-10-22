@@ -53,7 +53,7 @@ export async function onRequest({ env }) {
       total: r.user_ratings_total,
       count: reviews.length,
       reviews,
-    }), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=900" } });
+    }), { headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
   } catch (e) {
     return new Response(JSON.stringify({ error: String(e) }), {
       status: 500,
