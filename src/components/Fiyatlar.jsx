@@ -140,7 +140,7 @@ export default function Fiyatlar() {
                     {fiyatGoster && (
                       <div className="text-center">
                         <div className="text-2xl lg:text-3xl font-black text-white tracking-tight">₺{paket.fiyat}</div>
-                        {paket.sure && <div className="text-sm text-neutral-500 mt-0.5">/ {paket.sure} · KDV dahil</div>}
+                        {paket.sure && <div className="text-base text-neutral-400 mt-0.5">/ {paket.sure} · KDV dahil</div>}
                       </div>
                     )}
                     <button type="button" onClick={() => handleWhatsappClick(baslik)}
@@ -158,7 +158,7 @@ export default function Fiyatlar() {
                     {fiyatGoster && (
                       <div className="flex items-baseline gap-2 mt-1">
                         <span className="text-2xl font-black text-white tracking-tight">₺{paket.fiyat}</span>
-                        {paket.sure && <span className="text-sm text-neutral-500">/ {paket.sure} · KDV dahil</span>}
+                        {paket.sure && <span className="text-base text-neutral-400">/ {paket.sure} · KDV dahil</span>}
                       </div>
                     )}
                   </div>
