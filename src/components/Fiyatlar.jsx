@@ -129,7 +129,7 @@ export default function Fiyatlar() {
                     <div className="order-2 md:order-none min-w-0">
                       <div className="flex flex-wrap items-baseline gap-x-1.5 md:justify-center">
                         <span className="text-3xl font-black text-white tracking-tight break-all">₺{paket.fiyat}</span>
-                        {paket.sure && <span className="text-neutral-500 text-sm">/ {paket.sure}</span>}
+                        {paket.sure && <span className="text-neutral-500 text-base">/ {paket.sure}</span>}
                       </div>
                       <p className="text-neutral-600 text-[11px] mt-0.5 md:text-center">K.D.V. dahildir</p>
                     </div>
